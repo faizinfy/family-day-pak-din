@@ -8,7 +8,8 @@
 <meta name="theme-color" content="#120c2b">
 <meta property="og:title" content="Family Day Pak Din 2026 ✨ Arabian Nights">
 <meta property="og:description" content="8–9 November 2026 · Kimi Chalet, Lekir. Jom meriahkan!">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -59,12 +60,10 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     text-align: center; padding: 48px 16px 64px;
   }
-  .moon {
-    width: 92px; height: 92px; border-radius: 50%;
-    box-shadow: 18px -6px 0 0 var(--gold);
-    transform: translateX(-9px) rotate(-10deg);
-    filter: drop-shadow(0 0 24px rgba(232, 196, 118, .45));
-    margin-bottom: 28px;
+  .logo {
+    width: min(220px, 58vw); height: auto; aspect-ratio: 1;
+    filter: drop-shadow(0 0 28px rgba(80, 160, 255, .45)) drop-shadow(0 10px 30px rgba(0, 0, 0, .5));
+    margin-bottom: 24px;
     animation: float 6s ease-in-out infinite;
   }
   @keyframes float { 0%,100% { translate: 0 0 } 50% { translate: 0 -8px } }
@@ -313,7 +312,7 @@
 <div class="stars" id="stars" aria-hidden="true"></div>
 
 <header class="hero">
-  <div class="moon" aria-hidden="true"></div>
+  <img class="logo" src="assets/logo.webp" width="220" height="220" alt="Logo Family Day Keluarga Pakdin, 8 &amp; 9 November 2026">
   <p class="salam">Assalamualaikum semua 🤗</p>
   <p class="eyebrow">Jemputan Keluarga</p>
   <h1>Family Day<br>Pak Din<span class="year">2026</span></h1>
