@@ -158,13 +158,52 @@
   }
   .note.gold { background: rgba(232, 196, 118, .08); border-color: var(--card-border); }
 
-  .cats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
-  .cats div {
-    text-align: center; padding: 14px 8px; border-radius: 14px;
-    background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .08);
+  /* Games */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; text-align: center; }
+  .stats div { padding: 14px 6px; border-radius: 14px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .08); }
+  .stats b { display: block; font-family: "Cormorant Garamond", serif; font-size: 2.2rem; font-weight: 600; line-height: 1; color: var(--gold-2); }
+  .stats small { color: var(--muted); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+  .card .card-title { margin: 0; font-weight: 600; color: var(--gold-2); font-size: 1.05rem; }
+  .card .hint { margin-top: 2px; color: var(--muted); font-size: .85rem; }
+  .gtabs {
+    display: flex; gap: 8px; overflow-x: auto; margin: 16px -20px 0; padding: 2px 20px 6px;
+    scrollbar-width: none; scroll-snap-type: x proximity;
   }
-  .cats .e { font-size: 1.7rem; display: block; }
-  .cats b { font-weight: 500; font-size: .9rem; }
+  .gtabs::-webkit-scrollbar { display: none; }
+  .gtab {
+    flex: none; scroll-snap-align: start; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border-radius: 999px; font: inherit; font-size: .85rem; font-weight: 500;
+    color: var(--text); background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .12);
+    transition: .25s;
+  }
+  .gtab[aria-selected="true"] { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night); border-color: transparent; }
+  .gmeta { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 12px; }
+  .gmeta span { font-size: .78rem; padding: 4px 10px; border-radius: 999px; background: rgba(232, 196, 118, .1); color: var(--gold-2); }
+  .game { border: 1px solid rgba(255, 255, 255, .1); border-radius: 16px; background: rgba(0, 0, 0, .15); }
+  .game + .game { margin-top: 10px; }
+  .game summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 14px;
+  }
+  .game summary::-webkit-details-marker { display: none; }
+  .game .ge { width: 42px; height: 42px; flex: none; border-radius: 12px; display: grid; place-items: center; font-size: 1.35rem; background: rgba(232, 196, 118, .1); }
+  .game .gt { flex: 1; min-width: 0; }
+  .game .gt b { display: block; font-weight: 500; line-height: 1.3; }
+  .game .gt small { color: var(--muted); font-size: .78rem; }
+  .game .chev { color: var(--gold); transition: transform .25s; }
+  .game[open] .chev { transform: rotate(180deg); }
+  .game ol { list-style: none; padding: 0 14px 14px 68px; display: grid; gap: 8px; font-size: .88rem; }
+  .game ol li { position: relative; }
+  .game ol li::before { content: "•"; position: absolute; left: -14px; color: var(--gold); }
+  .game ol li.win { padding: 8px 12px; margin-left: -12px; border-radius: 10px; background: rgba(232, 196, 118, .12); color: var(--gold-2); }
+  .game ol li.win::before { content: ""; }
+  .ajk { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .ajk span { padding: 6px 14px; border-radius: 999px; font-size: .88rem; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .1); }
+  .more { margin-top: 16px; border-top: 1px dashed rgba(232, 196, 118, .2); padding-top: 14px; }
+  .more summary { cursor: pointer; font-size: .92rem; color: var(--gold-2); }
+  .kit { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 12px; margin-top: 12px; font-size: .86rem; }
+  .card .budget { margin-top: 14px; font-size: .92rem; }
+  .card .updated { margin-top: 14px; font-size: .75rem; color: var(--muted); text-align: right; }
 
   /* Potluck */
   .menu { list-style: none; margin-top: 4px; }
@@ -260,8 +299,9 @@
   .reveal.in { opacity: 1; transform: none; }
 
   @media (min-width: 600px) {
-    .cats { grid-template-columns: repeat(4, 1fr); }
     .card { padding: 28px; }
+    .gtabs { margin: 16px -28px 0; padding: 2px 28px 6px; }
+    .kit { grid-template-columns: repeat(3, 1fr); }
     .tab { font-size: .9rem; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -316,18 +356,41 @@
     <div class="sec-head">
       <div class="num">2</div>
       <h2>Acara Games 🎯</h2>
-      <p class="sub">Terbuka kepada 4 kategori</p>
+      <p class="sub">5 kategori mengikut umur</p>
     </div>
     <div class="card">
       <div style="text-align:center"><span class="time-pill">⏰ Bermula 3.00 petang</span></div>
-      <div class="cats">
-        <div><span class="e">👴🏻</span><b>Warga Emas</b></div>
-        <div><span class="e">🧔🏻</span><b>Dewasa</b></div>
-        <div><span class="e">🧑🏻</span><b>Muda-Mudi</b></div>
-        <div><span class="e">👧🏻</span><b>Kanak-kanak</b></div>
+      <div class="stats">
+        <div><b>60</b><small>Peserta</small></div>
+        <div><b>10</b><small>Permainan</small></div>
+        <div><b>48</b><small>Hadiah</small></div>
       </div>
       <div class="note gold"><span>👟</span><span>Sila bersedia dengan pakaian yang sesuai untuk aktiviti fizikal.</span></div>
       <div class="note"><span>📌</span><span><b>Kanak-kanak</b> disarankan memakai <b>seluar panjang</b> dan <b>kasut sukan</b>.</span></div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">🎮 Permainan &amp; Peraturan</p>
+      <p class="hint">Pilih kategori, kemudian tekan permainan untuk lihat peraturan.</p>
+      <div class="gtabs" id="gtabs" role="tablist"></div>
+      <div id="gpanels"></div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">❇️ AJK Permainan</p>
+      <div class="ajk">
+        <span>Asmawati</span><span>Zamri</span><span>Keluarga Zamri</span>
+      </div>
+      <details class="more">
+        <summary>🧰 Peralatan permainan &amp; bajet</summary>
+        <ul class="kit">
+          <li>🎈 Belon</li><li>📣 Wisel</li><li>🐥 Itik plastik</li><li>⚽️ Bola</li><li>🪣 Besin / baldi</li>
+          <li>🥛 Paper cups</li><li>📎 Pengepit baju</li><li>🧺 Kain pelikat</li><li>🔖 Sticker pemenang</li><li>🗒️ Papan A4</li>
+          <li>📃 Kertas</li><li>🖍️ Pen marker</li><li>🍬 Gula-gula</li><li>🍥 Tepung</li><li>🍽️ Paper plates</li>
+        </ul>
+        <p class="budget">💸 Jumlah bajet: <b>RM200</b></p>
+      </details>
+      <p class="updated">Dikemaskini 24.09.26</p>
     </div>
   </section>
 
@@ -474,6 +537,91 @@
       el('m').textContent = pad(m); el('s').textContent = pad(s);
     }
     const t = setInterval(tick, 1000); tick();
+  })();
+
+  // Games: edit this list to update categories, games & rules.
+  // The last rule of each game is highlighted as the winning condition.
+  const GAMES = [
+    { id: 'emas', e: '👴🏻', name: 'Warga Emas', pax: 8, prizes: 3, fmt: 'Individu', games: [
+      { e: '🎙️', name: 'Teka Suara', fmt: 'Individu', rules: [
+        'Teka suara yang didengarkan oleh penyumbang suara.',
+        'Jika tekaan salah, terus terkeluar.',
+        'Jika tiada pemenang, diteruskan satu lagi round.',
+        'Jika seri, diteruskan satu lagi round untuk tentukan kedudukan pemenang.',
+        'Penyumbang suara mestilah bukan famili kepada peserta.',
+        '🏆 3 peserta yang paling banyak meneka suara dikira pemenang.' ] } ] },
+    { id: 'dewasa', e: '🧔🏻', name: 'Dewasa', pax: 15, prizes: 6, fmt: 'Couple games', games: [
+      { e: '🎈', name: 'Rally Pass Belon Berisi Air', fmt: 'Berpasangan · 2 orang/team', rules: [
+        '1 team 2 peserta.',
+        'Pass belon kepada partner.',
+        'Jarak berubah selangkah jauh dari partner.',
+        'Team akan tersingkir bila belon air pecah.',
+        '🏆 3 team yang terakhir bertahan adalah pemenang.' ] },
+      { e: '🪑', name: 'Musical Chair', fmt: 'Individu', rules: MUSICAL('kerusi') } ] },
+    { id: 'muda', e: '🧑🏻', name: 'Muda-Mudi', pax: 30, prizes: 9, fmt: '6 orang/team', games: [
+      { e: '🎈', name: 'Rally Pass Belon', fmt: '5 team · rawak', rules: [
+        'Peserta dibahagikan kepada 5 team secara rawak.',
+        'Belon di-pass dari tangan belakang kepada peserta di belakang dan seterusnya sehingga akhir.',
+        'Peserta akhir pula pass belon bawah kaki kepada peserta seterusnya.',
+        'Peserta kena pastikan belon tidak pecah ketika passing.',
+        'Peserta terakhir yang dapat belon kena pecahkan belon atas kerusi yang disediakan.',
+        'Jika belon pecah, team akan tersingkir.' ] },
+      { e: '⚽️', name: 'Pass Bola Guna Kain Pelikat', fmt: '5 team · rawak', rules: [
+        'Peserta dibahagikan kepada 5 team secara rawak.',
+        'Setiap team diberikan kain pelikat.',
+        'Bola mesti di-pass menggunakan kain pelikat kepada peserta seterusnya sehingga akhir.',
+        'Peserta kena pastikan bola tidak jatuh. Jika jatuh, sila ulang semula hingga berjaya.',
+        '🏆 3 team yang paling pantas passing bola kepada peserta terakhir adalah pemenang.' ] },
+      { e: '🪑', name: 'Musical Chair', fmt: 'Individu', rules: MUSICAL('kerusi') } ] },
+    { id: 'kanak', e: '👧🏻', name: 'Sek Ren / Tadika', pax: 9, prizes: 27, fmt: 'Individu', games: [
+      { e: '🥤', name: 'Susun Paper Cups', fmt: 'Individu', rules: [
+        'Paper cups dan penyepit baju disediakan untuk setiap peserta.',
+        'Peserta diminta susun semua paper cups menggunakan penyepit baju.',
+        '🏆 3 peserta yang terpantas dikira pemenang.' ] },
+      { e: '🍭', name: 'Cari Gula-gula dalam Tepung', fmt: 'Individu', rules: [
+        'Gula-gula diletakkan atas paper plate dan ditutup dengan tepung, disediakan untuk setiap peserta.',
+        'Peserta diminta kumpul gula-gula menggunakan mulut, dengan tangan diletak di belakang.',
+        '🏆 3 peserta yang terpantas dikira pemenang.' ] },
+      { e: '🐥', name: 'Tangkap Itik dalam Kolam', fmt: 'Individu', rules: [
+        'Itik plastik diletakkan dalam kolam mandi.',
+        'Peserta mesti tangkap itik dan masukkan dalam bekas.',
+        'Peserta mesti ditemani oleh ibu/bapa sepanjang berada dalam kolam mandi.',
+        '🏆 3 peserta yang dapat itik terbanyak adalah pemenang.' ] } ] },
+    { id: 'adik', e: '👫', name: 'Adik-beradik', pax: 10, prizes: 3, fmt: 'Individu · pilihan', games: [
+      { e: '🩴', name: 'Musical Chair / Sandals', fmt: 'Individu', rules: MUSICAL('kerusi/sandals') } ] },
+  ];
+  function MUSICAL(item) {
+    return [
+      `${item[0].toUpperCase() + item.slice(1)} disediakan kurang dari jumlah peserta.`,
+      'Peserta mesti terus berjalan sewaktu muzik dimainkan.',
+      `Peserta berebut ${item} untuk duduk sebaik muzik berhenti.`,
+      '🏆 3 peserta yang terakhir adalah pemenang.' ];
+  }
+
+  (function () {
+    const tabs = document.getElementById('gtabs'), panels = document.getElementById('gpanels');
+    tabs.innerHTML = GAMES.map((c, i) =>
+      `<button class="gtab" role="tab" aria-selected="${i === 0}" data-g="${c.id}">${c.e} ${c.name}</button>`).join('');
+    panels.innerHTML = GAMES.map((c, i) => `
+      <div class="gpanel" id="g-${c.id}" role="tabpanel" ${i ? 'hidden' : ''}>
+        <div class="gmeta">
+          <span>👥 ${c.pax} peserta</span><span>🎮 ${c.games.length} permainan</span>
+          <span>🏅 ${c.prizes} hadiah</span><span>${c.fmt}</span>
+        </div>
+        ${c.games.map(g => `
+          <details class="game">
+            <summary><span class="ge">${g.e}</span>
+              <span class="gt"><b>${g.name}</b><small>${g.fmt}</small></span>
+              <span class="chev">▾</span></summary>
+            <ol>${g.rules.map(r => r.startsWith('🏆') ? `<li class="win">${r}</li>` : `<li>${r}</li>`).join('')}</ol>
+          </details>`).join('')}
+      </div>`).join('');
+    tabs.addEventListener('click', e => {
+      const b = e.target.closest('.gtab'); if (!b) return;
+      b.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      tabs.querySelectorAll('.gtab').forEach(t => t.setAttribute('aria-selected', t === b));
+      panels.querySelectorAll('.gpanel').forEach(p => p.hidden = p.id !== 'g-' + b.dataset.g);
+    });
   })();
 
   // Gift exchange names + tabs
