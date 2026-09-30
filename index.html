@@ -222,6 +222,27 @@
   }
   .menu b { font-weight: 500; display: block; }
   .menu small { color: var(--muted); font-size: .85rem; }
+  /* AJK */
+  .chair { text-align: center; }
+  .chair .e { font-size: 2rem; }
+  .chair small { display: block; color: var(--muted); font-size: .74rem; letter-spacing: .18em; text-transform: uppercase; margin-top: 6px; }
+  .chair b { display: block; font-family: "Cormorant Garamond", serif; font-weight: 600; font-size: 1.9rem; color: var(--gold-2); line-height: 1.2; }
+  .roles { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-top: 14px; }
+  .roles li {
+    display: flex; gap: 12px; align-items: flex-start; padding: 14px;
+    border-radius: 16px; background: var(--card); border: 1px solid var(--card-border);
+    backdrop-filter: blur(6px);
+  }
+  .roles .e {
+    width: 42px; height: 42px; flex: none; border-radius: 12px;
+    display: grid; place-items: center; font-size: 1.35rem;
+    background: rgba(232, 196, 118, .1);
+  }
+  .roles .rt { min-width: 0; }
+  .roles .rt > b { display: block; font-weight: 500; font-size: .92rem; color: var(--gold-2); line-height: 1.3; }
+  .roles .ajk { margin-top: 6px; gap: 6px; }
+  .roles .ajk span { padding: 4px 10px; font-size: .82rem; }
+  .roles .rt > small { display: block; margin-top: 4px; color: var(--muted); font-size: .76rem; }
   .rules { list-style: none; margin-top: 14px; display: grid; gap: 8px; font-size: .9rem; }
   .rules li { display: flex; gap: 10px; }
 
@@ -478,6 +499,35 @@
         <span>💃 Siapa paling bergaya?</span>
       </div>
     </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="reveal">
+    <div class="sec-head">
+      <div class="num">6</div>
+      <h2>AJK Family Day 🤝</h2>
+      <p class="sub">Barisan jawatankuasa Family Day Pak Din 2026</p>
+    </div>
+    <div class="card chair">
+      <span class="e">🎖️</span>
+      <small>Pengerusi</small>
+      <b>Osman</b>
+    </div>
+    <ul class="roles">
+      <li><span class="e">📋</span><div class="rt"><b>Urus Setia</b><div class="ajk"><span>Keluarga Azila</span><span>Keluarga Osman</span></div></div></li>
+      <li><span class="e">🤝</span><div class="rt"><b>Protokol</b><div class="ajk"><span>Azila</span><span>Kak Long</span></div></div></li>
+      <li><span class="e">🛡️</span><div class="rt"><b>Kebersihan, Keselamatan &amp; Kecemasan (3K)</b><div class="ajk"><span>Keluarga Heidi</span></div></div></li>
+      <li><span class="e">🤾</span><div class="rt"><b>Sukaneka / Aktiviti</b><div class="ajk"><span>Keluarga Asmawati &amp; Zamri</span></div></div></li>
+      <li><span class="e">🍛</span><div class="rt"><b>Penyelia Sajian 🍹</b><div class="ajk"><span>Keluarga Nor Lida</span><span>Keluarga Hanim</span></div></div></li>
+      <li><span class="e">🎁</span><div class="rt"><b>Hadiah &amp; Cenderamata</b><div class="ajk"><span>Keluarga Roslina</span><span>Keluarga Rohana</span></div></div></li>
+      <li><span class="e">🎤</span><div class="rt"><b>Pengacara Majlis</b><div class="ajk"><span>Hanis</span><span>Hadira</span></div></div></li>
+      <li><span class="e">🎀</span><div class="rt"><b>Deco Majlis</b><div class="ajk"><span>Liana</span><span>Emy</span></div><small>Keluarga Kak Mar</small></div></li>
+      <li><span class="e">📸</span><div class="rt"><b>Photographer &amp; Videographer</b><div class="ajk"><span>Haziq</span><span>Hadif</span></div></div></li>
+      <li><span class="e">👘</span><div class="rt"><b>Designer Baju / Banner</b><div class="ajk"><span>Syahirah</span></div></div></li>
+      <li><span class="e">☎️</span><div class="rt"><b>Urusan Vendor</b><div class="ajk"><span>Syafiqah</span></div></div></li>
+      <li><span class="e">📱</span><div class="rt"><b>Apps</b><div class="ajk"><span>Paeh</span></div></div></li>
+      <li><span class="e">💻</span><div class="rt"><b>IT / Teknikal</b><div class="ajk"><span>Syamin</span><span>Paeh</span></div></div></li>
+    </ul>
   </section>
 
   <!-- CTA -->
