@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cabutan Bertuah · Family Day Pak Din 2026</title>
+<meta name="description" content="Lucky Draw, Tukar-Tukar Hadiah & Special Lucky Draw · Family Day Pak Din 2026">
+<meta name="theme-color" content="#120c2b">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #120c2b;
+    --card: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(232, 196, 118, 0.22);
+    --gold: #e8c476;
+    --gold-2: #f6dfa4;
+    --gold-deep: #b98a3e;
+    --text: #f3ecdc;
+    --muted: #b9b0cc;
+    --accent: #d9677a;
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "Poppins", system-ui, sans-serif; font-weight: 300;
+    color: var(--text); background: var(--night);
+    background-image:
+      radial-gradient(ellipse at 50% -10%, #3a2470 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 60%, rgba(185, 138, 62, 0.12) 0%, transparent 45%),
+      radial-gradient(ellipse at 0% 90%, rgba(217, 103, 122, 0.10) 0%, transparent 45%);
+    background-attachment: fixed;
+    line-height: 1.6; min-height: 100svh; overflow-x: hidden;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; opacity: .6; animation: twinkle 3s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100% { opacity: .15 } 50% { opacity: .9 } }
+
+  .wrap { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 0 16px 56px; }
+
+  /* Top bar */
+  .top { display: flex; justify-content: space-between; align-items: center; padding: 16px 0 0; }
+  .top a, .top button {
+    font-size: .82rem; color: var(--muted); text-decoration: none; background: none; border: 0;
+    padding: 6px 2px;
+  }
+  .top a:hover, .top button:hover { color: var(--gold); }
+  .top span { display: flex; gap: 14px; }
+
+  header { text-align: center; padding: 22px 0 8px; }
+  .eyebrow { font-size: .72rem; letter-spacing: .35em; text-transform: uppercase; color: var(--gold); }
+  h1 {
+    font-family: "Cinzel Decorative", serif; font-size: clamp(1.9rem, 8vw, 3rem); line-height: 1.15; margin-top: 6px;
+    background: linear-gradient(180deg, var(--gold-2), var(--gold) 55%, var(--gold-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+
+  /* Main tabs */
+  .mtabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 22px; }
+  .mtab {
+    padding: 12px 6px; border-radius: 16px; text-align: center;
+    background: var(--card); border: 1px solid var(--card-border); transition: .25s;
+  }
+  .mtab .i { display: block; font-size: 1.4rem; line-height: 1.2; }
+  .mtab b { display: block; font-weight: 500; font-size: .84rem; line-height: 1.3; margin-top: 2px; }
+  .mtab[aria-selected="true"] { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night); border-color: transparent; }
+
+  /* Sub tabs */
+  .stabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
+  .stab {
+    padding: 8px 14px; border-radius: 999px; font-size: .85rem; font-weight: 500;
+    background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .12); transition: .25s;
+  }
+  .stab[aria-selected="true"] { background: rgba(232, 196, 118, .18); border-color: var(--gold); color: var(--gold-2); }
+  .stabs:empty { display: none; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 22px 20px; backdrop-filter: blur(6px);
+    margin-top: 16px;
+  }
+
+  /* Stage */
+  .stage { text-align: center; padding: 28px 20px 24px; }
+  .pool-label { font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+  .pool-note { font-size: .8rem; color: var(--muted); margin-top: 2px; }
+  .screen {
+    position: relative; margin: 18px auto 0; min-height: 132px; max-width: 520px;
+    display: grid; place-items: center; padding: 18px; border-radius: 18px;
+    background: rgba(0, 0, 0, .25); border: 1px solid var(--card-border);
+    overflow: hidden;
+  }
+  .screen::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at 50% 120%, rgba(232, 196, 118, .18), transparent 60%);
+  }
+  .name {
+    position: relative; font-family: "Cormorant Garamond", serif; font-weight: 600;
+    font-size: clamp(2rem, 9vw, 3.4rem); line-height: 1.1; color: var(--gold-2);
+    word-break: break-word;
+  }
+  .name.idle { font-size: 1.3rem; font-style: italic; color: var(--muted); font-weight: 500; }
+  .name.rolling { color: var(--text); opacity: .85; }
+  .name.win { animation: pop .6s cubic-bezier(.2, 1.6, .4, 1); text-shadow: 0 0 30px rgba(232, 196, 118, .55); }
+  @keyframes pop { 0% { transform: scale(.6); opacity: 0 } 100% { transform: scale(1); opacity: 1 } }
+  .badge { position: relative; display: block; font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+
+  .draw {
+    margin-top: 20px; padding: 14px 40px; border: 0; border-radius: 999px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night);
+    font-weight: 600; font-size: 1.1rem; letter-spacing: .04em;
+    box-shadow: 0 8px 30px rgba(232, 196, 118, .25); transition: transform .15s, opacity .2s;
+  }
+  .draw:hover:not(:disabled) { transform: translateY(-2px); }
+  .draw:disabled { opacity: .45; cursor: not-allowed; }
+  .count { margin-top: 12px; font-size: .85rem; color: var(--muted); }
+  .count b { color: var(--gold-2); font-weight: 500; }
+
+  /* Winners + pool */
+  .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .card-title { font-weight: 600; color: var(--gold-2); font-size: 1rem; }
+  .link-btn { background: none; border: 0; font-size: .8rem; color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+  .link-btn:hover { color: var(--accent); }
+  .winners { list-style: none; margin-top: 12px; display: grid; gap: 8px; counter-reset: w; }
+  .winners li {
+    counter-increment: w; display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px; border-radius: 12px; background: rgba(232, 196, 118, .08);
+  }
+  .winners li::before {
+    content: counter(w); flex: none; width: 28px; height: 28px; border-radius: 50%;
+    display: grid; place-items: center; font-size: .8rem; font-weight: 600;
+    border: 1px solid var(--gold); color: var(--gold);
+  }
+  .winners li span { flex: 1; font-weight: 500; }
+  .winners li button { background: none; border: 0; color: var(--muted); font-size: .8rem; padding: 2px 6px; }
+  .winners li button:hover { color: var(--accent); }
+  .empty { margin-top: 10px; font-size: .88rem; color: var(--muted); }
+
+  .pool { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .pool span {
+    padding: 5px 12px; border-radius: 999px; font-size: .84rem;
+    background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .1); transition: .3s;
+  }
+  .pool span.out { opacity: .3; text-decoration: line-through; }
+  .pool span.hot { background: rgba(232, 196, 118, .3); border-color: var(--gold); }
+
+  /* Confetti */
+  .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 5; overflow: hidden; }
+  .confetti i {
+    position: absolute; top: -12px; width: 8px; height: 14px; border-radius: 2px;
+    animation: fall linear forwards;
+  }
+  @keyframes fall { to { transform: translate3d(var(--dx), 105vh, 0) rotate(var(--r)); } }
+
+  /* Projector mode */
+  body.big .wrap { max-width: 1100px; }
+  body.big .name { font-size: clamp(3rem, 9vw, 6rem); }
+  body.big .screen { min-height: 220px; max-width: 900px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before { animation: none !important; transition: none !important; }
+    .confetti { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<div class="wrap">
+  <nav class="top">
+    <a href="./">← Laman utama</a>
+    <span>
+      <button id="snd" type="button" aria-pressed="true">🔊 Bunyi</button>
+      <button id="fs" type="button">⛶ Skrin penuh</button>
+    </span>
+  </nav>
+
+  <header>
+    <p class="eyebrow">Family Day Pak Din 2026</p>
+    <h1>Cabutan Bertuah</h1>
+    <p class="sub">🐪 Arabian Nights · Kimi Chalet, Lekir ✨</p>
+  </header>
+
+  <div class="mtabs" role="tablist" id="mtabs"></div>
+  <div class="stabs" role="tablist" id="stabs"></div>
+
+  <section class="card stage" aria-live="polite">
+    <p class="pool-label" id="poolLabel"></p>
+    <p class="pool-note" id="poolNote"></p>
+    <div class="screen"><div class="name idle" id="name">Tekan “Cabut!” untuk mula</div></div>
+    <button class="draw" id="draw" type="button">🎲 Cabut!</button>
+    <p class="count" id="count"></p>
+  </section>
+
+  <section class="card">
+    <div class="row">
+      <p class="card-title" id="winTitle">🏆 Pemenang</p>
+      <button class="link-btn" id="reset" type="button">↺ Reset</button>
+    </div>
+    <ol class="winners" id="winners"></ol>
+    <p class="empty" id="empty">Belum ada cabutan.</p>
+  </section>
+
+  <section class="card">
+    <p class="card-title">👥 Senarai Peserta <span id="poolCount" style="color:var(--muted);font-weight:400"></span></p>
+    <div class="pool" id="pool"></div>
+  </section>
+</div>
+
+<div class="confetti" id="confetti"></div>
+
+<script src="assets/names.js"></script>
+<script>
+  // Stars
+  (function () {
+    const box = document.getElementById('stars');
+    for (let i = 0; i < 70; i++) {
+      const s = document.createElement('span');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.animationDelay = Math.random() * 3 + 's';
+      box.appendChild(s);
+    }
+  })();
+
+  // Sound — synthesized with Web Audio, no files
+  const SND_KEY = 'fd-lucky-draw-sound';
+  const sound = (function () {
+    let ctx, on = true;
+    try { on = localStorage.getItem(SND_KEY) !== 'off'; } catch (e) {}
+    function ac() {
+      if (!ctx) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; ctx = new A(); }
+      if (ctx.state === 'suspended') ctx.resume();
+      return ctx;
+    }
+    function note(freq, start, dur, type, vol) {
+      const c = ac(); if (!c) return;
+      const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + start;
+      o.type = type; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(c.destination);
+      o.start(t); o.stop(t + dur + 0.05);
+    }
+    return {
+      get on() { return on; },
+      toggle() { on = !on; try { localStorage.setItem(SND_KEY, on ? 'on' : 'off'); } catch (e) {} if (on) ac(); return on; },
+      unlock() { if (on) ac(); },
+      // short blip per name while rolling; pitch rises as it slows
+      tick(p) { if (on) note(520 + p * 380, 0, 0.06, 'square', 0.05); },
+      // Hijaz flourish (D Eb F# G A) then a bright chord
+      win() {
+        if (!on) return;
+        [293.66, 311.13, 369.99, 392, 440, 392, 369.99, 440].forEach((f, i) => note(f * 2, i * 0.075, 0.22, 'triangle', 0.16));
+        [587.33, 739.99, 880, 1174.66].forEach(f => note(f, 0.62, 1.4, 'triangle', 0.12));
+        [1760, 2349.32, 2637.02, 3520].forEach((f, i) => note(f, 0.7 + i * 0.07, 0.5, 'sine', 0.04));
+      },
+      undo() { if (on) { note(392, 0, 0.12, 'sine', 0.1); note(293.66, 0.1, 0.2, 'sine', 0.1); } }
+    };
+  })();
+
+  // Draws & pools
+  const sib = new Set(FD.siblings);
+  const DRAWS = [
+    { id: 'lucky', i: '🎟️', name: 'Lucky Draw', win: '🏆 Pemenang', pools: [
+      { id: 'lucky', name: '10 Keluarga', names: FD.families.map(n => 'Keluarga ' + n) } ] },
+    { id: 'gift', i: '🎁', name: 'Tukar Hadiah', win: '🎁 Urutan Cabutan', pools: [
+      { id: 'gift-dewasa', name: 'Dewasa', note: 'Lebih 30 tahun', names: FD.gift.dewasa },
+      { id: 'gift-muda', name: 'Muda-Mudi', note: '13 – 30 tahun', names: FD.gift.muda },
+      { id: 'gift-kanak', name: 'Kanak-kanak', note: '12 tahun ke bawah', names: FD.gift.kanak } ] },
+    { id: 'special', i: '✨', name: 'Special Lucky Draw', win: '🏆 Pemenang', pools: [
+      { id: 'sp-dm', name: 'Dewasa & Muda-Mudi', note: 'Tidak termasuk adik-beradik',
+        names: FD.gift.dewasa.filter(n => !sib.has(n)).concat(FD.gift.muda) },
+      { id: 'sp-kanak', name: 'Kanak-kanak', note: '12 tahun ke bawah', names: FD.gift.kanak } ] }
+  ];
+
+  const KEY = 'fd-lucky-draw-v1';
+  let state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+
+  let draw = DRAWS[0], pool = draw.pools[0], rolling = false;
+  const $ = id => document.getElementById(id);
+  const won = () => (state[pool.id] = state[pool.id] || []);
+  const left = () => pool.names.filter(n => !won().includes(n));
+  const rand = n => { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; };
+
+  function tabs(box, items, current, cls, onPick, label) {
+    box.innerHTML = '';
+    if (items.length < 2) return;
+    items.forEach(it => {
+      const b = document.createElement('button');
+      b.className = cls; b.type = 'button'; b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', it === current);
+      b.innerHTML = label(it);
+      b.onclick = () => { if (!rolling) onPick(it); };
+      box.appendChild(b);
+    });
+  }
+
+  function render() {
+    tabs($('mtabs'), DRAWS, draw, 'mtab', d => { draw = d; pool = d.pools[0]; idle(); render(); },
+      d => `<span class="i">${d.i}</span><b>${d.name}</b>`);
+    tabs($('stabs'), draw.pools, pool, 'stab', p => { pool = p; idle(); render(); }, p => p.name);
+
+    $('poolLabel').textContent = draw.name + (draw.pools.length > 1 ? ' · ' + pool.name : '');
+    $('poolNote').textContent = pool.note || '';
+    const w = won(), l = left();
+    $('count').innerHTML = `Baki <b>${l.length}</b> / ${pool.names.length} · Dicabut <b>${w.length}</b>`;
+    $('draw').disabled = rolling || !l.length;
+    $('draw').textContent = l.length ? '🎲 Cabut!' : '✅ Semua telah dicabut';
+
+    $('winTitle').textContent = draw.win;
+    $('winners').innerHTML = w.map((n, i) =>
+      `<li><span>${n}</span><button type="button" data-i="${i}" title="Batal cabutan ini">✕</button></li>`).join('');
+    $('empty').hidden = w.length > 0;
+    $('reset').hidden = !w.length;
+
+    $('poolCount').textContent = `(${pool.names.length})`;
+    $('pool').innerHTML = pool.names.map(n => `<span class="${w.includes(n) ? 'out' : ''}">${n}</span>`).join('');
+  }
+
+  function idle() {
+    const el = $('name');
+    el.className = 'name idle';
+    el.textContent = 'Tekan “Cabut!” untuk mula';
+  }
+
+  function roll() {
+    const l = left();
+    if (rolling || !l.length) return;
+    rolling = true; render();
+    sound.unlock();
+    const el = $('name'), chips = [...$('pool').children];
+    const winner = l[rand(l.length)];
+    let t = 0, delay = 50;
+    const total = l.length === 1 ? 600 : 3200;
+    (function tick() {
+      const n = l.length === 1 ? winner : l[rand(l.length)];
+      el.className = 'name rolling';
+      el.textContent = n;
+      chips.forEach(c => c.classList.toggle('hot', c.textContent === n));
+      sound.tick(Math.min(t / total, 1));
+      t += delay;
+      if (t < total) { delay = Math.min(delay * 1.07, 320); setTimeout(tick, delay); }
+      else {
+        chips.forEach(c => c.classList.remove('hot'));
+        won().push(winner); save();
+        rolling = false;
+        render();
+        el.className = 'name win';
+        el.innerHTML = `<span class="badge">🎉 ${draw.id === 'gift' ? 'Giliran #' + won().length : 'Tahniah!'} 🎉</span>${winner}`;
+        confetti();
+        sound.win();
+      }
+    })();
+  }
+
+  function confetti() {
+    const box = $('confetti'), colors = ['#e8c476', '#f6dfa4', '#d9677a', '#b98a3e', '#ffffff', '#8f7cf0'];
+    for (let i = 0; i < 90; i++) {
+      const c = document.createElement('i');
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[i % colors.length];
+      c.style.setProperty('--dx', (Math.random() * 160 - 80) + 'px');
+      c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg');
+      c.style.animationDuration = 2 + Math.random() * 2 + 's';
+      c.style.animationDelay = Math.random() * .4 + 's';
+      box.appendChild(c);
+      c.addEventListener('animationend', () => c.remove());
+    }
+  }
+
+  $('draw').onclick = roll;
+  document.addEventListener('keydown', e => {
+    if ((e.code === 'Space' || e.code === 'Enter') && e.target === document.body) { e.preventDefault(); roll(); }
+  });
+  $('winners').onclick = e => {
+    const i = e.target.dataset.i;
+    if (i == null || rolling) return;
+    const n = won()[i];
+    if (!confirm(`Batalkan cabutan “${n}”? Nama ini akan dimasukkan semula.`)) return;
+    won().splice(i, 1); save(); render(); sound.undo();
+  };
+  function sndLabel() {
+    $('snd').textContent = sound.on ? '🔊 Bunyi' : '🔇 Senyap';
+    $('snd').setAttribute('aria-pressed', sound.on);
+  }
+  $('snd').onclick = () => { sound.toggle(); sndLabel(); };
+  sndLabel();
+  $('reset').onclick = () => {
+    if (rolling) return;
+    if (!confirm(`Reset semua cabutan untuk ${$('poolLabel').textContent}?`)) return;
+    state[pool.id] = []; save(); idle(); render();
+  };
+  $('fs').onclick = () => {
+    document.body.classList.toggle('big');
+    const on = document.body.classList.contains('big');
+    try { on ? document.documentElement.requestFullscreen?.() : document.exitFullscreen?.(); } catch (e) {}
+  };
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) document.body.classList.remove('big');
+  });
+
+  render();
+</script>
+</body>
+</html>

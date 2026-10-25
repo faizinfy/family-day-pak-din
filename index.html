@@ -465,15 +465,15 @@
 
       <div class="panel" id="p-dewasa" role="tabpanel">
         <p class="panel-meta">👨🏻‍🦳🧕🏻 Lebih 30 tahun</p>
-        <div class="names" data-list="Asma,Azila,Cae,Wan Nyah,Kak Long,Along,Mak Uda,Pak Uda,Ana,Paeh,Dayah,Mirul,Emy,Rahim,Ain,Heidi,Aya,Mak Lang,Pak Lang,Hanim,Hisham,Azim,Syuhada,Naim,Abg Man,Kak Mah,Syahirah,Syahir,Illiyana,Zamri,Ayu,Kay,Lea,Mak Long,Rahmat"></div>
+        <div class="names"></div>
       </div>
       <div class="panel" id="p-muda" role="tabpanel" hidden>
         <p class="panel-meta">🧑🏻👱🏻‍♀️ 13 – 30 tahun</p>
-        <div class="names" data-list="Syafiqah,Syamim,Hadif,Haziq,Iqa,Aleesya,Haqimy,Hanis,Hadirah,Syafiq,Hairul,Aiman,Farina,Azib,Aqeela"></div>
+        <div class="names"></div>
       </div>
       <div class="panel" id="p-kanak" role="tabpanel" hidden>
         <p class="panel-meta">👧🏻👦🏻👶🏻 12 tahun ke bawah</p>
-        <div class="names" data-list="Medina,Aralyn,Aaira,Ayana,Matteen,Ilyas,Husna,Hafiya,Haikal,Ayyash,I'zan,Il'man"></div>
+        <div class="names"></div>
       </div>
 
       <input class="search" id="search" type="search" placeholder="🔍 Cari nama anda…" autocomplete="off">
@@ -554,6 +554,7 @@
   <small>🌙 <a class="map-link" href="https://maps.app.goo.gl/2Rq2wtzf6Q33gLzk6?g_st=ic" target="_blank" rel="noopener">Kimi Chalet, Lekir</a> · 8–9 November 2026</small>
 </footer>
 
+<script src="assets/names.js"></script>
 <script>
   // Stars
   (function () {
@@ -680,9 +681,9 @@
   // Gift exchange names + tabs
   (function () {
     document.querySelectorAll('.names').forEach(box => {
-      const list = box.dataset.list.split(',');
-      box.innerHTML = list.map(n => `<span>${n}</span>`).join('');
       const key = box.parentElement.id.replace('p-', '');
+      const list = FD.gift[key];
+      box.innerHTML = list.map(n => `<span>${n}</span>`).join('');
       document.getElementById('c-' + key).textContent = '(' + list.length + ')';
     });
     const tabs = document.querySelectorAll('.tab');
