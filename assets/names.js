@@ -3,7 +3,7 @@
 window.FD = {
   // Tukar-Tukar Hadiah participants, by category
   gift: {
-    dewasa: ['Asma', 'Azila', 'Cae', 'Wan Nyah', 'Kak Long', 'Along', 'Mak Uda', 'Pak Uda', 'Ana', 'Paeh', 'Dayah', 'Mirul', 'Emy', 'Rahim', 'Ain', 'Heidi', 'Aya', 'Mak Lang', 'Pak Lang', 'Hanim', 'Hisham', 'Azim', 'Syuhada', 'Naim', 'Abg Man', 'Kak Mah', 'Syahirah', 'Syahir', 'Illiyana', 'Zamri', 'Ayu', 'Kay', 'Lea', 'Mak Long', 'Rahmat'],
+    dewasa: ['Asma', 'Azila', "Ca'e", 'Wan Nyah', 'Kak Long', 'Along', 'Mak Uda', 'Pak Uda', 'Ana', 'Paeh', 'Dayah', 'Mirul', 'Emy', 'Rahim', 'Ain', 'Heidi', 'Aya', 'Mak Lang', 'Pak Lang', 'Hanim', 'Hisham', 'Azim', 'Syuhada', 'Naim', 'Abg Man', 'Kak Mah', 'Syahirah', 'Syahir', 'Illiyana', 'Zamri', 'Ayu', 'Kay', "Le'a", 'Mak Long', 'Rahmat'],
     muda: ['Syafiqah', 'Syamim', 'Hadif', 'Haziq', 'Iqa', 'Aleesya', 'Haqimy', 'Hanis', 'Hadirah', 'Syafiq', 'Hairul', 'Aiman', 'Farina', 'Azib', 'Aqeela'],
     kanak: ['Medina', 'Aralyn', 'Aaira', 'Ayana', 'Matteen', 'Ilyas', 'Husna', 'Hafiya', 'Haikal', 'Ayyash', "I'zan", "Il'man"]
   },

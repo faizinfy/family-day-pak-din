@@ -122,6 +122,14 @@
   .draw:disabled { opacity: .45; cursor: not-allowed; }
   .count { margin-top: 12px; font-size: .85rem; color: var(--muted); }
   .count b { color: var(--gold-2); font-weight: 500; }
+  .vhint { margin-top: 6px; font-size: .76rem; color: var(--muted); }
+  .vhint select, .vhint button {
+    margin-left: 4px; padding: 4px 10px; border-radius: 999px; font-size: .78rem;
+    background: rgba(0, 0, 0, .3); color: var(--text); border: 1px solid var(--card-border);
+  }
+  .vhint select option { background: var(--night); }
+  .vhint button:hover { border-color: var(--gold); color: var(--gold-2); }
+  .vhint.warn { color: var(--accent); max-width: 420px; margin-left: auto; margin-right: auto; }
 
   /* Winners + pool */
   .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
@@ -134,7 +142,7 @@
     padding: 10px 12px; border-radius: 12px; background: rgba(232, 196, 118, .08);
   }
   .winners li::before {
-    content: counter(w); flex: none; width: 28px; height: 28px; border-radius: 50%;
+    content: attr(data-n); flex: none; width: 28px; height: 28px; border-radius: 50%;
     display: grid; place-items: center; font-size: .8rem; font-weight: 600;
     border: 1px solid var(--gold); color: var(--gold);
   }
@@ -159,10 +167,26 @@
   }
   @keyframes fall { to { transform: translate3d(var(--dx), 105vh, 0) rotate(var(--r)); } }
 
+  /* Desktop layout: draw on the left, Pemenang on the right */
+  .wrap { max-width: 1280px; padding: 0 32px 48px; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start; margin-top: 8px; }
+  .main > .mtabs { margin-top: 14px; }
+  .side {
+    position: sticky; top: 16px; margin-top: 14px;
+    max-height: calc(100vh - 32px); display: flex; flex-direction: column;
+  }
+  .side .winners { overflow-y: auto; padding-right: 4px; }
+  .side-sub { font-size: .8rem; color: var(--muted); margin-top: 2px; }
+  .side .winners li { font-size: 1.05rem; }
+  .side .winners li:last-child { background: rgba(232, 196, 118, .2); outline: 1px solid var(--gold); }
+  .screen { max-width: none; min-height: 200px; }
+  .name { font-size: clamp(2.6rem, 5vw, 4.4rem); }
+
   /* Projector mode */
-  body.big .wrap { max-width: 1100px; }
-  body.big .name { font-size: clamp(3rem, 9vw, 6rem); }
-  body.big .screen { min-height: 220px; max-width: 900px; }
+  body.big .wrap { max-width: none; }
+  body.big .name { font-size: clamp(3.4rem, 7vw, 6.5rem); }
+  body.big .screen { min-height: 280px; }
+  body.big .layout { grid-template-columns: minmax(0, 1fr) 440px; }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before { animation: none !important; transition: none !important; }
@@ -188,30 +212,36 @@
     <p class="sub">🐪 Arabian Nights · Kimi Chalet, Lekir ✨</p>
   </header>
 
-  <div class="mtabs" role="tablist" id="mtabs"></div>
-  <div class="stabs" role="tablist" id="stabs"></div>
+  <div class="layout">
+    <div class="main">
+      <div class="mtabs" role="tablist" id="mtabs"></div>
+      <div class="stabs" role="tablist" id="stabs"></div>
 
-  <section class="card stage" aria-live="polite">
-    <p class="pool-label" id="poolLabel"></p>
-    <p class="pool-note" id="poolNote"></p>
-    <div class="screen"><div class="name idle" id="name">Tekan “Cabut!” untuk mula</div></div>
-    <button class="draw" id="draw" type="button">🎲 Cabut!</button>
-    <p class="count" id="count"></p>
-  </section>
+      <section class="card stage" aria-live="polite">
+        <p class="pool-label" id="poolLabel"></p>
+        <p class="pool-note" id="poolNote"></p>
+        <div class="screen"><div class="name idle" id="name">Tekan “Cabut!” untuk mula</div></div>
+        <button class="draw" id="draw" type="button">🎲 Cabut!</button>
+        <p class="count" id="count"></p>
+        <div class="vhint" id="vhint" hidden></div>
+      </section>
 
-  <section class="card">
-    <div class="row">
-      <p class="card-title" id="winTitle">🏆 Pemenang</p>
-      <button class="link-btn" id="reset" type="button">↺ Reset</button>
+      <section class="card">
+        <p class="card-title">👥 Senarai Peserta <span id="poolCount" style="color:var(--muted);font-weight:400"></span></p>
+        <div class="pool" id="pool"></div>
+      </section>
     </div>
-    <ol class="winners" id="winners"></ol>
-    <p class="empty" id="empty">Belum ada cabutan.</p>
-  </section>
 
-  <section class="card">
-    <p class="card-title">👥 Senarai Peserta <span id="poolCount" style="color:var(--muted);font-weight:400"></span></p>
-    <div class="pool" id="pool"></div>
-  </section>
+    <aside class="card side">
+      <div class="row">
+        <p class="card-title" id="winTitle">🏆 Pemenang</p>
+        <button class="link-btn" id="reset" type="button">↺ Reset</button>
+      </div>
+      <p class="side-sub" id="winSub"></p>
+      <ol class="winners" id="winners"></ol>
+      <p class="empty" id="empty">Belum ada cabutan.</p>
+    </aside>
+  </div>
 </div>
 
 <div class="confetti" id="confetti"></div>
@@ -230,6 +260,26 @@
       box.appendChild(s);
     }
   })();
+
+  // Malay voices: Edge has "Microsoft Yasmin/Osman Online (Natural)", Android has Google Malay,
+  // Chrome desktop has "Google Bahasa Indonesia". Natural/online voices sound best.
+  // The viewer can pick any of them from the dropdown; the choice is remembered on this device.
+  const VOICE_KEY = 'fd-lucky-draw-voice';
+  function malayVoices() {
+    if (!window.speechSynthesis) return [];
+    const score = v => {
+      const l = v.lang.toLowerCase();
+      const base = l.startsWith('ms') ? 20 : l.startsWith('id') ? 10 : 0;
+      return base && base + (/natural|online|google/i.test(v.name) ? 5 : 0);
+    };
+    return speechSynthesis.getVoices().filter(score).sort((a, b) => score(b) - score(a));
+  }
+  function pickVoice() {
+    const list = malayVoices();
+    let chosen = null;
+    try { chosen = localStorage.getItem(VOICE_KEY); } catch (e) {}
+    return list.find(v => v.name === chosen) || list[0] || null;
+  }
 
   // Sound — synthesized with Web Audio, no files
   const SND_KEY = 'fd-lucky-draw-sound';
@@ -264,7 +314,35 @@
         [587.33, 739.99, 880, 1174.66].forEach(f => note(f, 0.62, 1.4, 'triangle', 0.12));
         [1760, 2349.32, 2637.02, 3520].forEach((f, i) => note(f, 0.7 + i * 0.07, 0.5, 'sine', 0.04));
       },
-      undo() { if (on) { note(392, 0, 0.12, 'sine', 0.1); note(293.66, 0.1, 0.2, 'sine', 0.1); } }
+      undo() { if (on) { note(392, 0, 0.12, 'sine', 0.1); note(293.66, 0.1, 0.2, 'sine', 0.1); } },
+      // read text aloud with the best Malay voice the browser has (else Indonesian).
+      // Resolves when speech ends (or straight away when muted), so callers can wait on it.
+      say(text, delay) {
+        return new Promise(resolve => {
+          if (!on || !window.speechSynthesis) return resolve();
+          const speak = () => {
+            const u = new SpeechSynthesisUtterance(text);
+            const voice = pickVoice();
+            if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = 'ms-MY';
+            u.rate = 0.9;
+            let done = false;
+            const finish = () => { if (!done) { done = true; resolve(); } };
+            u.onend = u.onerror = finish;
+            setTimeout(finish, 1500 + text.length * 110); // some browsers never fire onend
+            speechSynthesis.cancel();
+            speechSynthesis.speak(u);
+          };
+          delay ? setTimeout(speak, delay) : speak(); // speak synchronously inside a tap for iOS
+        });
+      },
+      // iOS only allows speech that starts inside a tap, so prime it on the Cabut! tap
+      unlockSpeech() {
+        if (!on || !window.speechSynthesis) return;
+        speechSynthesis.getVoices();
+        const u = new SpeechSynthesisUtterance(' ');
+        u.volume = 0;
+        speechSynthesis.speak(u);
+      }
     };
   })();
 
@@ -292,6 +370,9 @@
   const $ = id => document.getElementById(id);
   const won = () => (state[pool.id] = state[pool.id] || []);
   const left = () => pool.names.filter(n => !won().includes(n));
+  // Lucky Draw prizes count down: 1st family drawn wins hadiah #10, last wins #1
+  const prizeNo = i => draw.id === 'lucky' ? pool.names.length - i : 0;
+  const malayNum = n => ['kosong', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'lapan', 'sembilan', 'sepuluh'][n] || String(n);
   const rand = n => { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; };
 
   function tabs(box, items, current, cls, onPick, label) {
@@ -320,8 +401,9 @@
     $('draw').textContent = l.length ? '🎲 Cabut!' : '✅ Semua telah dicabut';
 
     $('winTitle').textContent = draw.win;
+    $('winSub').textContent = $('poolLabel').textContent;
     $('winners').innerHTML = w.map((n, i) =>
-      `<li><span>${n}</span><button type="button" data-i="${i}" title="Batal cabutan ini">✕</button></li>`).join('');
+      `<li data-n="${prizeNo(i) || i + 1}"><span>${n}</span><button type="button" data-i="${i}" title="Batal cabutan ini">✕</button></li>`).join('');
     $('empty').hidden = w.length > 0;
     $('reset').hidden = !w.length;
 
@@ -342,9 +424,23 @@
     sound.unlock();
     const el = $('name'), chips = [...$('pool').children];
     const winner = l[rand(l.length)];
+    const prize = prizeNo(won().length);
     let t = 0, delay = 50;
     const total = l.length === 1 ? 600 : 3200;
-    (function tick() {
+
+    // Lucky Draw & Special: announce the prize first, then spin once the voice is done
+    const intro = prize ? { badge: `🎁 Hadiah #${prize} 🎁`, say: `Pemenang hadiah nombor ${malayNum(prize)}` }
+      : draw.id === 'special' ? { badge: '✨ Hadiah Istimewa ✨', say: 'Pemenang hadiah istimewa' } : null;
+    if (intro) {
+      el.className = 'name win';
+      el.innerHTML = `<span class="badge">${intro.badge}</span>Siapakah pemenangnya?`;
+      sound.say(intro.say).then(() => setTimeout(tick, 250));
+    } else {
+      sound.unlockSpeech();
+      tick();
+    }
+
+    function tick() {
       const n = l.length === 1 ? winner : l[rand(l.length)];
       el.className = 'name rolling';
       el.textContent = n;
@@ -355,14 +451,18 @@
       else {
         chips.forEach(c => c.classList.remove('hot'));
         won().push(winner); save();
+        const n = won().length;
         rolling = false;
         render();
         el.className = 'name win';
-        el.innerHTML = `<span class="badge">🎉 ${draw.id === 'gift' ? 'Giliran #' + won().length : 'Tahniah!'} 🎉</span>${winner}`;
+        const badge = prize ? 'Hadiah #' + prize : draw.id === 'gift' ? 'Giliran #' + n : 'Tahniah!';
+        el.innerHTML = `<span class="badge">🎉 ${badge} 🎉</span>${winner}`;
         confetti();
         sound.win();
+        const spoken = winner.replace(/\bAbg\b/g, 'Abang');
+        sound.say('Tahniah kepada ' + spoken, 1300);
       }
-    })();
+    }
   }
 
   function confetti() {
@@ -395,7 +495,34 @@
     $('snd').textContent = sound.on ? '🔊 Bunyi' : '🔇 Senyap';
     $('snd').setAttribute('aria-pressed', sound.on);
   }
-  $('snd').onclick = () => { sound.toggle(); sndLabel(); };
+  $('snd').onclick = () => { if (!sound.toggle() && window.speechSynthesis) speechSynthesis.cancel(); sndLabel(); };
+  // Voices load asynchronously; offer a dropdown of Malay/Indonesian voices, or a hint if there's none
+  const voiceLabel = v => v.name.replace(/^(Microsoft|Google)\s+/, '').replace(/\s*-\s*/, ' · ')
+    .replace(/\s*\((Natural)\)/, '') + (/^ms/i.test(v.lang) ? ' 🇲🇾' : ' 🇮🇩');
+  function voiceHint() {
+    const el = $('vhint');
+    if (!window.speechSynthesis) { el.textContent = '🗣️ Pelayar ini tidak boleh membaca nama.'; el.hidden = false; return; }
+    const list = malayVoices(), cur = pickVoice();
+    el.hidden = false;
+    el.classList.toggle('warn', !list.length);
+    if (!list.length) {
+      el.textContent = '🗣️ Tiada suara Bahasa Melayu dalam pelayar ini — buka laman ini di Microsoft Edge atau Google Chrome untuk sebutan Melayu.';
+      return;
+    }
+    el.innerHTML = '<label for="voice">🗣️ Suara</label> <select id="voice"></select> <button type="button" id="vtest">▶ Cuba</button>';
+    $('voice').innerHTML = list.map(v =>
+      `<option value="${v.name.replace(/"/g, '&quot;')}"${v === cur ? ' selected' : ''}>${voiceLabel(v)}</option>`).join('');
+    $('voice').onchange = e => { try { localStorage.setItem(VOICE_KEY, e.target.value); } catch (err) {} };
+    $('vtest').onclick = () => {
+      if (!sound.on) { sound.toggle(); sndLabel(); }
+      sound.say('Tahniah kepada Keluarga Osman');
+    };
+  }
+  if (window.speechSynthesis) {
+    speechSynthesis.getVoices();
+    speechSynthesis.addEventListener?.('voiceschanged', voiceHint);
+  }
+  setTimeout(voiceHint, 600);
   sndLabel();
   $('reset').onclick = () => {
     if (rolling) return;
