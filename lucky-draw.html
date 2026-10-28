@@ -686,17 +686,17 @@
     $('pool').innerHTML = pool.names.map(n => `<span class="${w.includes(n) ? 'out' : ''}">${n}</span>`).join('');
   }
 
-  // Prize bar: shows the prize being drawn / just won; otherwise the next prize to be drawn
-  let barPrize = null;
+  // Prize bar: follows Baki — the prize number always equals the families left to draw
+  // (during a draw that's the prize being drawn; afterwards it moves on to the next one)
   const prizeInfo = n => FD.prizes[n - 1] || { name: 'Hadiah #' + n, img: '' };
   const winnerOf = n => { const i = pool.names.length - n; return draw.id === 'lucky' ? won()[i] || '' : ''; };
   function renderPrizeBar() {
     const bar = $('prizeBar');
-    const n = draw.id === 'lucky' ? (barPrize || (left().length ? pool.names.length - won().length : 0)) : 0;
+    const n = draw.id === 'lucky' ? left().length : 0;
     bar.hidden = !n;
     if (!n) return;
-    const p = prizeInfo(n), who = winnerOf(n);
-    const label = who ? `Hadiah #${n} · ${who}` : barPrize ? `Hadiah #${n}` : `Hadiah seterusnya · #${n}`;
+    const p = prizeInfo(n);
+    const label = rolling ? `Sedang dicabut · Hadiah #${n}` : `Hadiah seterusnya · #${n}`;
     bar.dataset.p = n;
     bar.innerHTML = `<span class="thumb" ${p.img ? `style="background-image:url('${p.img}')"` : ''}>${p.img ? '' : '🎁'}</span>
       <span class="pt"><small>${label}</small><b>${p.name}</b></span><span class="view">🖼️ Lihat hadiah</span>`;
@@ -731,7 +731,6 @@
   }, true);
 
   function idle() {
-    barPrize = null;
     const el = $('name');
     el.className = 'name idle';
     el.textContent = 'Tekan “Cabut!” untuk mula';
@@ -755,7 +754,6 @@
     if (intro) {
       el.className = 'name win';
       el.innerHTML = `<span class="badge">${intro.badge}</span>Siapakah pemenangnya?`;
-      if (prize) { barPrize = prize; renderPrizeBar(); }
       sound.say(intro.say).then(() => setTimeout(tick, 250));
     } else {
       sound.unlockSpeech();
