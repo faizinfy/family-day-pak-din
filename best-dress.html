@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Best Dress · Family Day Pak Din 2026</title>
+<meta name="description" content="Pemenang Best Dress – Arabian Nights · Family Day Pak Din 2026">
+<meta name="theme-color" content="#120c2b">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #120c2b;
+    --card: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(232, 196, 118, 0.22);
+    --gold: #e8c476;
+    --gold-2: #f6dfa4;
+    --gold-deep: #b98a3e;
+    --text: #f3ecdc;
+    --muted: #b9b0cc;
+    --accent: #d9677a;
+    --velvet: #5b1630;
+    --velvet-2: #8a2445;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Poppins", system-ui, sans-serif; font-weight: 300;
+    color: var(--text); background: var(--night);
+    background-image:
+      radial-gradient(ellipse at 50% -10%, #3a2470 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 60%, rgba(185, 138, 62, 0.12) 0%, transparent 45%),
+      radial-gradient(ellipse at 0% 90%, rgba(217, 103, 122, 0.10) 0%, transparent 45%);
+    background-attachment: fixed;
+    min-height: 100vh; overflow-x: hidden; line-height: 1.5;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; opacity: .6; animation: twinkle 3s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100% { opacity: .15 } 50% { opacity: .9 } }
+
+  /* Desktop presentation: exactly one screen, no scrolling */
+  html, body { height: 100%; overflow: hidden; }
+  .wrap { position: relative; z-index: 1; height: 100vh; padding: 14px 32px 28px; display: flex; flex-direction: column; }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .top a, .top button { font-size: .85rem; color: var(--muted); text-decoration: none; background: none; border: 0; padding: 6px 2px; }
+  .top a:hover, .top button:hover { color: var(--gold); }
+  .top span { display: flex; gap: 16px; }
+
+  header { text-align: center; margin-top: 4px; }
+  .eyebrow { font-size: .78rem; letter-spacing: .35em; text-transform: uppercase; color: var(--gold); }
+  h1 {
+    font-family: "Cinzel Decorative", serif; font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.1; margin-top: 6px;
+    background: linear-gradient(180deg, var(--gold-2), var(--gold) 55%, var(--gold-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 1.4rem; color: var(--muted); margin-top: 4px; }
+
+  /* Stage */
+  .stage {
+    position: relative; flex: 1; min-height: 0; margin-top: 2.2vh;
+    border-radius: 28px; overflow: hidden;
+    border: 1px solid var(--card-border);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(246, 223, 164, .22), transparent 60%),
+      radial-gradient(ellipse at 50% 100%, rgba(232, 196, 118, .15), transparent 55%),
+      rgba(0, 0, 0, .25);
+    display: grid; place-items: center;
+  }
+  /* spotlight */
+  .stage::before {
+    content: ""; position: absolute; left: 50%; top: -10%; width: 70%; height: 120%;
+    transform: translateX(-50%);
+    background: conic-gradient(from 180deg at 50% 0%, transparent 160deg, rgba(246, 223, 164, .14) 175deg, rgba(246, 223, 164, .2) 180deg, rgba(246, 223, 164, .14) 185deg, transparent 200deg);
+    opacity: 0; transition: opacity 1.2s ease; pointer-events: none;
+  }
+  .stage.lit::before { opacity: 1; }
+
+  /* Winner card (behind the curtains) */
+  .winner { position: relative; text-align: center; padding: 40px 24px; }
+  .crown { font-size: clamp(3rem, 10vh, 7rem); line-height: 1; display: inline-block; opacity: 0; transform: translateY(-160px) rotate(-20deg); }
+  .winner .label { font-size: clamp(.9rem, 1.8vh, 1.3rem); letter-spacing: .35em; text-transform: uppercase; color: var(--gold); margin-top: 14px; opacity: 0; }
+  .winner .name {
+    font-family: "Cinzel Decorative", serif; font-size: clamp(3rem, min(8vw, 13vh), 9rem); line-height: 1.1; margin-top: 1vh;
+    background: linear-gradient(180deg, #fff6d8, var(--gold-2) 40%, var(--gold) 70%, var(--gold-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 28px rgba(232, 196, 118, .45));
+    opacity: 0; transform: scale(.3); display: inline-block; white-space: nowrap;
+  }
+  .winner .note { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: clamp(1.4rem, 3.4vh, 2.4rem); color: var(--muted); margin-top: 6px; opacity: 0; }
+  .winner .prize {
+    display: inline-flex; gap: 10px; align-items: center; margin-top: 22px; padding: 10px 26px; border-radius: 999px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night); font-weight: 600; font-size: clamp(1.2rem, 2.8vh, 2rem);
+    opacity: 0; transform: translateY(20px);
+  }
+  .revealed .crown { animation: crownDrop 1s cubic-bezier(.3, 1.6, .5, 1) .3s forwards, bob 3s ease-in-out 1.4s infinite; }
+  .revealed .label { animation: fadeUp .7s ease .7s forwards; }
+  .revealed .name { animation: nameIn 1.1s cubic-bezier(.2, 1.4, .4, 1) .9s forwards, glow 2.4s ease-in-out 2.2s infinite; }
+  .revealed .note { animation: fadeUp .7s ease 1.6s forwards; }
+  .revealed .prize { animation: fadeUp .7s ease 1.9s forwards; }
+  @keyframes crownDrop { to { opacity: 1; transform: none; } }
+  @keyframes bob { 50% { transform: translateY(-8px) rotate(3deg); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  @keyframes nameIn { 0% { opacity: 0; transform: scale(.3); letter-spacing: .5em; } 100% { opacity: 1; transform: scale(1); letter-spacing: normal; } }
+  @keyframes glow { 50% { filter: drop-shadow(0 0 50px rgba(246, 223, 164, .8)); } }
+
+  /* Curtains */
+  .curtain {
+    position: absolute; top: 0; bottom: 0; width: 51%; z-index: 3;
+    background:
+      repeating-linear-gradient(90deg, rgba(0, 0, 0, .28) 0 14px, rgba(255, 255, 255, .05) 14px 28px, rgba(0, 0, 0, .12) 28px 44px),
+      linear-gradient(180deg, var(--velvet-2), var(--velvet));
+    box-shadow: inset 0 -40px 60px rgba(0, 0, 0, .4);
+    transition: transform 2.2s cubic-bezier(.7, 0, .2, 1);
+  }
+  .curtain.l { left: 0; border-right: 3px solid var(--gold-deep); }
+  .curtain.r { right: 0; border-left: 3px solid var(--gold-deep); }
+  .curtain::after { /* gold fringe */
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 18px;
+    background: repeating-linear-gradient(90deg, var(--gold) 0 4px, var(--gold-deep) 4px 8px);
+    opacity: .85;
+  }
+  .valance {
+    position: absolute; top: 0; left: 0; right: 0; height: 48px; z-index: 4;
+    background: linear-gradient(180deg, var(--velvet), var(--velvet-2));
+    border-bottom: 3px solid var(--gold);
+    -webkit-mask: radial-gradient(28px 24px at 28px 48px, transparent 98%, #000) 0 0 / 56px 100%;
+            mask: radial-gradient(28px 24px at 28px 48px, transparent 98%, #000) 0 0 / 56px 100%;
+  }
+  .open .curtain.l { transform: translateX(-100%); }
+  .open .curtain.r { transform: translateX(100%); }
+
+  /* Pre-reveal: lamp + button over the curtains */
+  .front {
+    position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; text-align: center;
+    transition: opacity .6s ease;
+  }
+  .front.gone { opacity: 0; pointer-events: none; }
+  .lamp { font-size: clamp(5rem, 14vh, 10rem); line-height: 1; display: inline-block; filter: drop-shadow(0 0 30px rgba(232, 196, 118, .5)); }
+  .lamp.rub { animation: rub .18s ease-in-out infinite; }
+  @keyframes rub { 0%,100% { transform: rotate(-8deg) translateX(-4px); } 50% { transform: rotate(8deg) translateX(4px); } }
+  .q { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: clamp(1.8rem, 4.4vh, 3rem); color: var(--gold-2); margin-top: 14px; }
+  .reveal-btn {
+    margin-top: 26px; padding: 16px 44px; border: 0; border-radius: 999px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night);
+    font-weight: 600; font-size: 1.25rem; letter-spacing: .04em;
+    box-shadow: 0 10px 34px rgba(232, 196, 118, .3); transition: transform .15s;
+    animation: breathe 2.4s ease-in-out infinite;
+  }
+  .reveal-btn:hover { transform: translateY(-2px); }
+  @keyframes breathe { 50% { box-shadow: 0 10px 50px rgba(232, 196, 118, .55); } }
+  .count {
+    position: absolute; inset: 0; z-index: 6; display: grid; place-items: center; pointer-events: none;
+    font-family: "Cinzel Decorative", serif; font-size: clamp(9rem, 32vh, 22rem); color: var(--gold-2);
+    text-shadow: 0 0 40px rgba(232, 196, 118, .6);
+  }
+  .count span { animation: countPop 1s ease forwards; }
+  @keyframes countPop { 0% { opacity: 0; transform: scale(2.2); } 25% { opacity: 1; transform: scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: scale(.7); } }
+
+  /* Smoke from the lamp */
+  .smoke { position: absolute; z-index: 6; width: 70px; height: 70px; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle, rgba(220, 210, 255, .55), rgba(220, 210, 255, 0) 70%);
+    animation: smoke 2.2s ease-out forwards; }
+  @keyframes smoke { from { opacity: .9; transform: translate(0, 0) scale(.4); } to { opacity: 0; transform: translate(var(--dx), -260px) scale(3); } }
+
+  .again { position: absolute; left: 0; right: 0; bottom: 30px; z-index: 7; text-align: center; }
+  .again button { background: none; border: 0; color: var(--muted); font-size: .85rem; text-decoration: underline; text-underline-offset: 3px; }
+  .again button:hover { color: var(--gold); }
+
+  /* Confetti */
+  .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 20; overflow: hidden; }
+  .confetti i { position: absolute; top: -14px; width: 9px; height: 15px; border-radius: 2px; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translate3d(var(--dx), 105vh, 0) rotate(var(--r)); } }
+
+  /* Hidden edit button — invisible, bottom-left corner */
+  .ghost { position: fixed; left: 0; bottom: 0; width: 56px; height: 56px; z-index: 30; opacity: 0; border: 0; background: none; cursor: default; }
+
+  /* Edit dialog */
+  dialog {
+    margin: auto; width: min(460px, calc(100% - 32px)); border-radius: 20px; padding: 26px;
+    background: #1c1442; color: var(--text); border: 1px solid var(--card-border);
+  }
+  dialog::backdrop { background: rgba(5, 3, 15, .7); backdrop-filter: blur(4px); }
+  dialog h2 { font-family: "Cormorant Garamond", serif; color: var(--gold-2); font-size: 1.6rem; }
+  dialog p { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+  dialog label { display: block; font-size: .8rem; color: var(--muted); margin-top: 16px; }
+  dialog input {
+    width: 100%; margin-top: 6px; padding: 11px 14px; border-radius: 12px; font: inherit; font-size: 1rem;
+    background: rgba(0, 0, 0, .3); color: var(--text); border: 1px solid var(--card-border); outline: none;
+  }
+  dialog input:focus { border-color: var(--gold); }
+  .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+  .dlg-actions button { padding: 10px 20px; border-radius: 999px; border: 1px solid var(--card-border); background: none; }
+  .dlg-actions .primary { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night); font-weight: 600; border: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; }
+  }
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<div class="wrap">
+  <nav class="top">
+    <a href="./">← Laman utama</a>
+    <span>
+      <button id="snd" type="button">🔊 Bunyi</button>
+      <button id="fs" type="button">⛶ Skrin penuh</button>
+    </span>
+  </nav>
+
+  <header>
+    <p class="eyebrow">Family Day Pak Din 2026</p>
+    <h1>Best Dress</h1>
+    <p class="sub">🐪 Arabian Nights ✨</p>
+  </header>
+
+  <section class="stage" id="stage" aria-live="polite">
+    <div class="winner">
+      <div class="crown">👑</div>
+      <p class="label">Pemenang Best Dress</p>
+      <div class="name" id="wName"></div>
+      <p class="note" id="wNote"></p>
+      <div class="prize">💵 RM200 CASH 💵</div>
+    </div>
+
+    <div class="curtain l"></div>
+    <div class="curtain r"></div>
+    <div class="valance"></div>
+
+    <div class="front" id="front">
+      <div>
+        <div class="lamp" id="lamp">🪔</div>
+        <p class="q">Siapakah yang paling Arabian malam ini?</p>
+        <button class="reveal-btn" id="reveal" type="button">✨ Dedahkan Pemenang ✨</button>
+      </div>
+    </div>
+    <div class="count" id="count"></div>
+    <div class="again"><button id="again" type="button" hidden>↺ Tutup semula tirai</button></div>
+  </section>
+</div>
+
+<div class="confetti" id="confetti"></div>
+
+<!-- Hidden: click the invisible bottom-left corner (or press Shift+E) to set the winner -->
+<button class="ghost" id="ghost" type="button" aria-label="Kemaskini pemenang" tabindex="-1"></button>
+
+<dialog id="dlg">
+  <form method="dialog" id="form">
+    <h2>👑 Kemaskini Pemenang</h2>
+    <p>Disimpan pada peranti ini sahaja — tidak kelihatan kepada orang lain.</p>
+    <label for="inName">Nama pemenang</label>
+    <input id="inName" autocomplete="off" required placeholder="cth. Mak Uda">
+    <label for="inNote">Keterangan (pilihan)</label>
+    <input id="inNote" autocomplete="off" placeholder="cth. Keluarga Rohana">
+    <div class="dlg-actions">
+      <button type="button" id="cancel">Batal</button>
+      <button type="submit" class="primary">Simpan</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+  const $ = id => document.getElementById(id);
+
+  // Stars
+  (function () {
+    const box = $('stars');
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('span');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.animationDelay = Math.random() * 3 + 's';
+      box.appendChild(s);
+    }
+  })();
+
+  // Winner — kept in this browser only
+  const KEY = 'fd-best-dress-winner';
+  let winner = { name: '', note: '' };
+  try { winner = Object.assign(winner, JSON.parse(localStorage.getItem(KEY)) || {}); } catch (e) {}
+  const saveWinner = () => { try { localStorage.setItem(KEY, JSON.stringify(winner)); } catch (e) {} };
+
+  // Sound (shares the mute + voice choice with the Lucky Draw page)
+  const SND_KEY = 'fd-lucky-draw-sound', VOICE_KEY = 'fd-lucky-draw-voice';
+  let soundOn = true, ctx;
+  try { soundOn = localStorage.getItem(SND_KEY) !== 'off'; } catch (e) {}
+  function ac() {
+    if (!ctx) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; ctx = new A(); }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  function note(freq, start, dur, type, vol) {
+    const c = soundOn && ac(); if (!c) return;
+    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + start;
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(c.destination);
+    o.start(t); o.stop(t + dur + 0.05);
+  }
+  const sfx = {
+    shimmer() { for (let i = 0; i < 14; i++) note(880 * Math.pow(2, i / 12), i * 0.07, 0.3, 'sine', 0.05); },
+    count(n) { note(n === 1 ? 784 : 587, 0, 0.35, 'triangle', 0.18); },
+    whoosh() { [220, 247, 277, 311, 349, 392].forEach((f, i) => note(f, i * 0.12, 0.5, 'sawtooth', 0.025)); },
+    fanfare() {
+      [293.66, 311.13, 369.99, 392, 440, 392, 369.99, 440].forEach((f, i) => note(f * 2, i * 0.08, 0.24, 'triangle', 0.17));
+      [587.33, 739.99, 880, 1174.66].forEach(f => note(f, 0.68, 1.8, 'triangle', 0.12));
+      [1760, 2349.32, 2637.02, 3520].forEach((f, i) => note(f, 0.75 + i * 0.08, 0.6, 'sine', 0.045));
+    }
+  };
+  function pickVoice() {
+    if (!window.speechSynthesis) return null;
+    const score = v => {
+      const l = v.lang.toLowerCase();
+      const base = l.startsWith('ms') ? 20 : l.startsWith('id') ? 10 : 0;
+      return base && base + (/natural|online|google/i.test(v.name) ? 5 : 0);
+    };
+    const list = speechSynthesis.getVoices().filter(score).sort((a, b) => score(b) - score(a));
+    let chosen = null;
+    try { chosen = localStorage.getItem(VOICE_KEY); } catch (e) {}
+    return list.find(v => v.name === chosen) || list[0] || null;
+  }
+  function say(text) {
+    if (!soundOn || !window.speechSynthesis) return;
+    const u = new SpeechSynthesisUtterance(text);
+    const v = pickVoice();
+    if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'ms-MY';
+    u.rate = 0.9;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }
+  if (window.speechSynthesis) speechSynthesis.getVoices();
+
+  // Reveal sequence: rub the lamp + smoke → 3-2-1 → curtains open → crown, name, confetti, fanfare, voice
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  let busy = false;
+
+  async function reveal() {
+    if (busy) return;
+    if (!winner.name) return openEdit();
+    busy = true;
+    goFullscreen();
+    ac(); // unlock audio inside the click
+    if (window.speechSynthesis) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); }
+
+    $('wName').textContent = winner.name;
+    $('wNote').textContent = winner.note || '';
+    fitName();
+    $('reveal').disabled = true;
+    $('lamp').classList.add('rub');
+    sfx.shimmer();
+    for (let i = 0; i < 6; i++) setTimeout(puff, i * 220);
+    await wait(1700);
+
+    $('front').classList.add('gone');
+    for (const n of [3, 2, 1]) {
+      $('count').innerHTML = `<span>${n}</span>`;
+      sfx.count(n);
+      await wait(1000);
+    }
+    $('count').innerHTML = '';
+
+    const stage = $('stage');
+    stage.classList.add('open', 'lit');
+    sfx.whoosh();
+    await wait(900);
+    stage.classList.add('revealed');
+    await wait(800);
+    sfx.fanfare();
+    confetti(160);
+    setTimeout(() => confetti(90), 1400);
+    await wait(1600);
+    say('Tahniah kepada ' + winner.name.replace(/\bAbg\b/g, 'Abang') + '. Pemenang Best Dress, Arabian Nights!');
+    $('again').hidden = false;
+    busy = false;
+  }
+
+  // Keep the name on one line and the whole winner card inside the stage, whatever the screen size
+  // (layout sizes ignore the scale animation, so this measures the final size)
+  function fitName() {
+    const el = $('wName'), stage = $('stage'), card = document.querySelector('.winner');
+    el.style.fontSize = '';
+    let fs = parseFloat(getComputedStyle(el).fontSize);
+    const maxW = stage.clientWidth * 0.88, maxH = stage.clientHeight - 70;
+    while (fs > 28 && (el.offsetWidth > maxW || card.offsetHeight > maxH)) {
+      fs *= 0.94;
+      el.style.fontSize = fs + 'px';
+    }
+  }
+  addEventListener('resize', () => { if ($('wName').textContent) fitName(); });
+
+  function puff() {
+    const r = $('lamp').getBoundingClientRect(), s = $('stage').getBoundingClientRect();
+    const p = document.createElement('div');
+    p.className = 'smoke';
+    p.style.left = (r.left - s.left + r.width * 0.65 - 35) + 'px';
+    p.style.top = (r.top - s.top - 10) + 'px';
+    p.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+    $('stage').appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }
+
+  function confetti(n) {
+    const box = $('confetti'), colors = ['#e8c476', '#f6dfa4', '#d9677a', '#b98a3e', '#ffffff', '#8f7cf0'];
+    for (let i = 0; i < n; i++) {
+      const c = document.createElement('i');
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[i % colors.length];
+      c.style.setProperty('--dx', (Math.random() * 200 - 100) + 'px');
+      c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg');
+      c.style.animationDuration = 2.4 + Math.random() * 2.2 + 's';
+      c.style.animationDelay = Math.random() * .5 + 's';
+      box.appendChild(c);
+      c.addEventListener('animationend', () => c.remove());
+    }
+  }
+
+  function resetStage() {
+    if (busy) return;
+    $('stage').classList.remove('open', 'lit', 'revealed');
+    $('front').classList.remove('gone');
+    $('lamp').classList.remove('rub');
+    $('reveal').disabled = false;
+    $('again').hidden = true;
+    if (window.speechSynthesis) speechSynthesis.cancel();
+  }
+
+  // Hidden editor
+  function openEdit() {
+    if (busy) return;
+    $('inName').value = winner.name;
+    $('inNote').value = winner.note || '';
+    $('dlg').showModal();
+    $('inName').focus();
+  }
+  $('form').addEventListener('submit', () => {
+    winner = { name: $('inName').value.trim(), note: $('inNote').value.trim() };
+    saveWinner();
+    resetStage(); // a new name always starts from closed curtains
+  });
+  $('cancel').onclick = () => $('dlg').close();
+  $('ghost').onclick = openEdit;
+  document.addEventListener('keydown', e => {
+    if (e.shiftKey && (e.key === 'E' || e.key === 'e') && !$('dlg').open) { e.preventDefault(); openEdit(); }
+  });
+
+  $('reveal').onclick = reveal;
+  $('again').onclick = resetStage;
+
+  // Sound + fullscreen toggles
+  function sndLabel() { $('snd').textContent = soundOn ? '🔊 Bunyi' : '🔇 Senyap'; }
+  $('snd').onclick = () => {
+    soundOn = !soundOn;
+    try { localStorage.setItem(SND_KEY, soundOn ? 'on' : 'off'); } catch (e) {}
+    if (!soundOn && window.speechSynthesis) speechSynthesis.cancel();
+    sndLabel();
+  };
+  sndLabel();
+  function goFullscreen() {
+    if (document.fullscreenElement) return;
+    try { document.documentElement.requestFullscreen()?.catch(() => {}); } catch (e) {}
+  }
+  $('fs').onclick = () => {
+    if (document.fullscreenElement) { try { document.exitFullscreen(); } catch (e) {} } else goFullscreen();
+  };
+  function fsLabel() { $('fs').textContent = document.fullscreenElement ? '⤢ Keluar skrin penuh' : '⛶ Skrin penuh'; }
+  document.addEventListener('fullscreenchange', fsLabel);
+</script>
+</body>
+</html>
