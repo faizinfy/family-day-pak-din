@@ -19,7 +19,7 @@ Halaman cabutan & dedah pemenang direka untuk **skrin desktop / projektor** (skr
 
 - **Nama peserta, keluarga & hadiah Lucky Draw** — `assets/names.js` (dikongsi oleh `index.html` dan `lucky-draw.html`).
 - **Permainan & peraturan** — senarai `GAMES` dalam `index.html`.
-- **Senarai permainan untuk skrin pemenang** — senarai `GAMES` dalam `game-prizes.html`.
+- **Senarai permainan untuk skrin pemenang** — senarai `GAMES` dalam `game-prizes.html` (tambah `team: 'Team'` atau `team: 'Berpasangan'` untuk benarkan beberapa nama setiap tempat).
 - **Gambar hadiah** — `assets/prizes/prize-01` hingga `prize-10`.
 
 ## Kawalan tersembunyi (hari acara)
@@ -27,7 +27,7 @@ Halaman cabutan & dedah pemenang direka untuk **skrin desktop / projektor** (skr
 | Halaman | Cara | Fungsi |
 |---|---|---|
 | `/best-dress` | `Shift+E` atau klik sudut kiri bawah | Masukkan nama pemenang Best Dress |
-| `/game-prizes` | `Shift+E` atau klik sudut kiri bawah | Masukkan nama pemenang 🥇🥈🥉 bagi semua permainan |
+| `/game-prizes` | `Shift+E` atau klik sudut kiri bawah | Masukkan nama pemenang 🥇🥈🥉 bagi semua permainan. Permainan team & berpasangan boleh ada beberapa nama: pilih / taip nama dan tekan `Enter` (atau pisahkan dengan koma), `×` untuk buang |
 | `/game-prizes` | `Space` · `←` `→` | Dedah tempat seterusnya · tukar permainan |
 | `/lucky-draw` | `Space` / `Enter` | Cabut |
 
