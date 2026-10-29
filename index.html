@@ -222,6 +222,9 @@
   }
   .menu b { font-weight: 500; display: block; }
   .menu small { color: var(--muted); font-size: .85rem; }
+  .order small { display: block; }
+  .order small + small { color: var(--gold); font-size: .8rem; }
+  .order .e { font-family: "Cormorant Garamond", serif; font-weight: 600; color: var(--gold-2); }
   /* AJK */
   .chair { text-align: center; }
   .chair .e { font-size: 2rem; }
@@ -401,6 +404,19 @@
     </div>
 
     <div class="card">
+      <p class="card-title">📋 Susunan Permainan &amp; PIC</p>
+      <ul class="menu order">
+        <li><span class="e">1</span><div><b>👧🏻 Sek Ren / Tadika</b><small>Susun Paper Cups · Cari Gula-gula dalam Tepung</small><small>PIC: Aiman / Rina / Haiqal</small></div></li>
+        <li><span class="e">2</span><div><b>🧑🏻 Muda-Mudi</b><small>Rally Pass Belon · Pass Bola Guna Kain Pelikat</small><small>PIC: Khairul</small></div></li>
+        <li><span class="e">3</span><div><b>🧔🏻 Dewasa</b><small>Rally Pass Belon Berisi Air</small><small>PIC: Syafiq</small></div></li>
+        <li><span class="e">4</span><div><b>👴🏻 Warga Emas</b><small>Teka Suara</small><small>PIC: Zamri / Ayu</small></div></li>
+        <li><span class="e">5</span><div><b>🪑 Musical Chair</b><small>Muda-Mudi · Dewasa · Adik-beradik</small><small>PIC: Syafiq / Khairul / Asma</small></div></li>
+        <li><span class="e">6</span><div><b>👧🏻 Sek Ren / Tadika</b><small>Tangkap Itik dalam Kolam</small><small>PIC: Aiman / Rina / Haiqal</small></div></li>
+      </ul>
+      <div class="note gold"><span>🎁</span><span><b>Perhatian!</b> Ada <b>hadiah misteri</b> menanti anda!</span></div>
+    </div>
+
+    <div class="card">
       <p class="card-title">❇️ AJK Permainan</p>
       <div class="ajk">
         <span>Asmawati</span><span>Zamri</span><span>Keluarga Zamri</span>
@@ -411,10 +427,11 @@
           <li>🎈 Belon</li><li>📣 Wisel</li><li>🐥 Itik plastik</li><li>⚽️ Bola</li><li>🪣 Besin / baldi</li>
           <li>🥛 Paper cups</li><li>📎 Pengepit baju</li><li>🧺 Kain pelikat</li><li>🔖 Sticker pemenang</li><li>🗒️ Papan A4</li>
           <li>📃 Kertas</li><li>🖍️ Pen marker</li><li>🍬 Gula-gula</li><li>🍥 Tepung</li><li>🍽️ Paper plates</li>
+          <li>🛍️ Plastik beg</li>
         </ul>
-        <p class="budget">💸 Jumlah bajet: <b>RM200</b></p>
+        <p class="budget">💸 Jumlah bajet: <b>RM250</b></p>
       </details>
-      <p class="updated">Dikemaskini 24.09.26</p>
+      <p class="updated">Dikemaskini 29.10.26</p>
     </div>
   </section>
 
@@ -596,7 +613,7 @@
   // Games: edit this list to update categories, games & rules.
   // The last rule of each game is highlighted as the winning condition.
   const GAMES = [
-    { id: 'emas', e: '👴🏻', name: 'Warga Emas', pax: 8, prizes: 3, fmt: 'Individu', games: [
+    { id: 'emas', e: '👴🏻', name: 'Warga Emas', pax: 8, prizes: 3, fmt: 'Individu', pic: 'Zamri / Ayu', games: [
       { e: '🎙️', name: 'Teka Suara', fmt: 'Individu', rules: [
         'Teka suara yang didengarkan oleh penyumbang suara.',
         'Jika tekaan salah, terus terkeluar.',
@@ -604,15 +621,15 @@
         'Jika seri, diteruskan satu lagi round untuk tentukan kedudukan pemenang.',
         'Penyumbang suara mestilah bukan famili kepada peserta.',
         '🏆 3 peserta yang paling banyak meneka suara dikira pemenang.' ] } ] },
-    { id: 'dewasa', e: '🧔🏻', name: 'Dewasa', pax: 15, prizes: 6, fmt: 'Couple games', games: [
+    { id: 'dewasa', e: '🧔🏻', name: 'Dewasa', pax: 15, prizes: 6, fmt: 'Couple games', pic: 'Syafiq', games: [
       { e: '🎈', name: 'Rally Pass Belon Berisi Air', fmt: 'Berpasangan · 2 orang/team', rules: [
-        '1 team 2 peserta.',
+        '1 team 2 peserta (pasangan berkahwin).',
         'Pass belon kepada partner.',
         'Jarak berubah selangkah jauh dari partner.',
         'Team akan tersingkir bila belon air pecah.',
         '🏆 3 team yang terakhir bertahan adalah pemenang.' ] },
       { e: '🪑', name: 'Musical Chair', fmt: 'Individu', rules: MUSICAL('kerusi') } ] },
-    { id: 'muda', e: '🧑🏻', name: 'Muda-Mudi', pax: 30, prizes: 9, fmt: '10 orang/team · 3 team', games: [
+    { id: 'muda', e: '🧑🏻', name: 'Muda-Mudi', pax: 30, prizes: 9, fmt: '10 orang/team · 3 team', pic: 'Khairul', games: [
       { e: '🎈', name: 'Rally Pass Belon', fmt: '3 team · rawak', rules: [
         'Peserta dibahagikan kepada 3 team secara rawak.',
         'Belon di-pass dari tangan belakang kepada peserta di belakang dan seterusnya sehingga akhir.',
@@ -627,7 +644,7 @@
         'Peserta kena pastikan bola tidak jatuh. Jika jatuh, sila ulang semula hingga berjaya.',
         '🏆 3 team yang paling pantas passing bola kepada peserta terakhir adalah pemenang.' ] },
       { e: '🪑', name: 'Musical Chair', fmt: 'Individu', rules: MUSICAL('kerusi') } ] },
-    { id: 'kanak', e: '👧🏻', name: 'Sek Ren / Tadika', pax: 9, prizes: 27, fmt: 'Individu', games: [
+    { id: 'kanak', e: '👧🏻', name: 'Sek Ren / Tadika', pax: 9, prizes: 27, fmt: 'Individu', pic: 'Aiman / Rina / Haiqal', games: [
       { e: '🥤', name: 'Susun Paper Cups', fmt: 'Individu', rules: [
         'Paper cups dan penyepit baju disediakan untuk setiap peserta.',
         'Peserta diminta susun semua paper cups menggunakan penyepit baju.',
@@ -641,7 +658,7 @@
         'Peserta mesti tangkap itik dan masukkan dalam bekas.',
         'Peserta mesti ditemani oleh ibu/bapa sepanjang berada dalam kolam mandi.',
         '🏆 3 peserta yang dapat itik terbanyak adalah pemenang.' ] } ] },
-    { id: 'adik', e: '👫', name: 'Adik-beradik', pax: 10, prizes: 3, fmt: 'Individu · pilihan', games: [
+    { id: 'adik', e: '👫', name: 'Adik-beradik', pax: 10, prizes: 3, fmt: 'Individu · pilihan', pic: 'Asma', games: [
       { e: '🩴', name: 'Musical Chair / Sandals', fmt: 'Individu', rules: MUSICAL('kerusi/sandals') } ] },
   ];
   function MUSICAL(item) {
@@ -660,7 +677,7 @@
       <div class="gpanel" id="g-${c.id}" role="tabpanel" ${i ? 'hidden' : ''}>
         <div class="gmeta">
           <span>👥 ${c.pax} peserta</span><span>🎮 ${c.games.length} permainan</span>
-          <span>🏅 ${c.prizes} hadiah</span><span>${c.fmt}</span>
+          <span>🏅 ${c.prizes} hadiah</span><span>${c.fmt}</span><span>🧑‍🏫 PIC: ${c.pic}</span>
         </div>
         ${c.games.map(g => `
           <details class="game">
