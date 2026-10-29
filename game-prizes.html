@@ -116,6 +116,13 @@
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
   .p1 .face .name { font-size: clamp(1.9rem, 6.4vh, 4.4rem); filter: drop-shadow(0 0 22px rgba(232, 196, 118, .45)); }
+  /* a whole team: smaller names that wrap */
+  .face .name.many, .p1 .face .name.many {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .2em .9em;
+    font-family: "Poppins", sans-serif; font-weight: 500; font-size: clamp(.85rem, 2.1vh, 1.4rem); line-height: 1.3;
+    background: none; color: var(--gold-2); -webkit-text-fill-color: currentColor;
+  }
+  .p1 .face .name.many { font-size: clamp(.95rem, 2.4vh, 1.6rem); }
   .p1.shown .face .name { animation: glow 2.4s ease-in-out 1s infinite; }
   @keyframes glow { 50% { filter: drop-shadow(0 0 44px rgba(246, 223, 164, .8)); } }
 
@@ -180,6 +187,16 @@
     background: rgba(0, 0, 0, .3); color: var(--text); border: 1px solid var(--card-border); outline: none;
   }
   dialog input:focus { border-color: var(--gold); }
+  .eg .lbl { font-size: .74rem; color: var(--muted); }
+  .tags {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: 4px; padding: 5px; min-height: 42px; cursor: text;
+    border-radius: 10px; background: rgba(0, 0, 0, .3); border: 1px solid var(--card-border);
+  }
+  .tags:focus-within { border-color: var(--gold); }
+  .tag { display: inline-flex; align-items: center; gap: 2px; padding: 2px 3px 2px 10px; border-radius: 999px; font-size: .82rem; background: rgba(232, 196, 118, .16); color: var(--gold-2); }
+  .tag button { width: 20px; height: 20px; border: 0; border-radius: 50%; background: none; color: var(--muted); line-height: 1; }
+  .tag button:hover { color: var(--accent); }
+  dialog .tags input { flex: 1; min-width: 100px; width: auto; margin: 0; padding: 4px 6px; border: 0; background: none; font-size: .9rem; }
   .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 26px 20px; border-top: 1px solid rgba(232, 196, 118, .15); }
   .dlg-actions button { padding: 10px 20px; border-radius: 999px; border: 1px solid var(--card-border); background: none; }
   .dlg-actions .primary { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night); font-weight: 600; border: 0; }
@@ -252,9 +269,9 @@
   const GAMES = [
     { id: 'cups', e: '🥤', name: 'Susun Paper Cups', cat: 'Sek Ren / Tadika' },
     { id: 'gula', e: '🍭', name: 'Cari Gula-gula dalam Tepung', cat: 'Sek Ren / Tadika' },
-    { id: 'belon', e: '🎈', name: 'Rally Pass Belon', cat: 'Muda-Mudi' },
-    { id: 'bola', e: '⚽️', name: 'Pass Bola Guna Kain Pelikat', cat: 'Muda-Mudi' },
-    { id: 'belon-air', e: '🎈', name: 'Rally Pass Belon Berisi Air', cat: 'Dewasa' },
+    { id: 'belon', e: '🎈', name: 'Rally Pass Belon', cat: 'Muda-Mudi', team: 'Team' },
+    { id: 'bola', e: '⚽️', name: 'Pass Bola Guna Kain Pelikat', cat: 'Muda-Mudi', team: 'Team' },
+    { id: 'belon-air', e: '🎈', name: 'Rally Pass Belon Berisi Air', cat: 'Dewasa', team: 'Berpasangan' },
     { id: 'suara', e: '🎙️', name: 'Teka Suara', cat: 'Warga Emas' },
     { id: 'mc-muda', e: '🪑', name: 'Musical Chair', cat: 'Muda-Mudi' },
     { id: 'mc-dewasa', e: '🪑', name: 'Musical Chair', cat: 'Dewasa' },
@@ -280,12 +297,14 @@
     }
   })();
 
-  // Winners — kept in this browser only: { gameId: ['1st', '2nd', '3rd'] }
+  // Winners — kept in this browser only: { gameId: [1st, 2nd, 3rd] }
+  // each place is a name, or a list of names for team / berpasangan games
   const KEY = 'fd-game-prizes';
   let winners = {};
   try { winners = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
   const saveWinners = () => { try { localStorage.setItem(KEY, JSON.stringify(winners)); } catch (e) {} };
-  const namesOf = g => (winners[g.id] || []).map(s => (s || '').trim());
+  const placeOf = (g, p) => [].concat((winners[g.id] || [])[p] || []).map(s => s.trim()).filter(Boolean);
+  const joinNames = l => l.length < 2 ? l.join('') : l.slice(0, -1).join(', ') + ' dan ' + l[l.length - 1];
 
   // How many places are revealed per game (3rd first, then 2nd, then 1st)
   const shown = {};
@@ -351,8 +370,8 @@
     }).join('');
   }
   function render() {
-    const g = GAMES[cur], names = namesOf(g), n = shown[g.id] || 0;
-    $('gCat').textContent = g.cat;
+    const g = GAMES[cur], n = shown[g.id] || 0;
+    $('gCat').textContent = g.cat + (g.team ? ' · ' + g.team : '');
     $('gName').innerHTML = `<span class="e">${g.e}</span> ${g.name}`;
     // podium order on screen: 2nd, 1st, 3rd
     $('podium').innerHTML = [1, 0, 2].map(p => {
@@ -360,7 +379,7 @@
       return `<div class="place ${P.cls}${isShown ? ' shown' : ''}">
         <div class="slot"><div class="flip">
           <div class="face front"><span class="q">?</span></div>
-          <div class="face back"><span class="name">${esc(names[p] || '—')}</span></div>
+          <div class="face back">${nameHtml(placeOf(g, p))}</div>
         </div></div>
         <div class="block"><span class="medal">${P.medal}</span><span class="rank">${P.rank}</span></div>
       </div>`;
@@ -371,12 +390,16 @@
     renderChips();
   }
   const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  // 1–2 names in the big title font (a couple reads "A & B"); a whole team as a list
+  const nameHtml = l => !l.length ? '<span class="name">—</span>'
+    : l.length < 3 ? `<span class="name">${l.map(esc).join(' &amp; ')}</span>`
+    : `<span class="name many">${l.map(s => `<span>${esc(s)}</span>`).join('')}</span>`;
 
   // Reveal the next place: 3rd → 2nd → 1st
   async function revealNext() {
-    const g = GAMES[cur], names = namesOf(g), n = shown[g.id] || 0;
+    const g = GAMES[cur], n = shown[g.id] || 0;
     if (busy || n >= 3) return;
-    if (!names.some(Boolean)) return openEdit(g.id);
+    if (![0, 1, 2].some(p => placeOf(g, p).length)) return openEdit(g.id);
     busy = true;
     goFullscreen();
     ac(); // unlock audio inside the click
@@ -386,7 +409,7 @@
     document.querySelector('.podium .' + PLACES[p].cls).classList.add('shown'); // flip the card in place
     $('go').disabled = true;
     await wait(700);
-    const who = names[p] || '';
+    const who = joinNames(placeOf(g, p));
     if (p === 0) {
       sfx.fanfare();
       confetti(170);
@@ -438,10 +461,12 @@
   function openEdit(focusId) {
     if (busy || $('dlg').open) return;
     $('dlgBody').innerHTML = GAMES.map((g, gi) => {
-      const names = namesOf(g);
-      return `<div class="eg" id="eg-${g.id}"><h3>${gi + 1}. ${g.e} ${g.name}<small>${g.cat}</small></h3><div class="row">${
-        PLACES.map((P, p) => `<label>${P.medal} ${P.rank}
-          <input data-g="${g.id}" data-p="${p}" list="people" autocomplete="off" value="${esc(names[p] || '')}"></label>`).join('')
+      return `<div class="eg" id="eg-${g.id}"><h3>${gi + 1}. ${g.e} ${g.name}<small>${g.cat}${g.team ? ` · ${g.team} — pilih beberapa nama` : ''}</small></h3><div class="row">${
+        PLACES.map((P, p) => g.team
+          ? `<div class="lbl">${P.medal} ${P.rank}<div class="tags" data-g="${g.id}" data-p="${p}">${
+              placeOf(g, p).map(tagHtml).join('')}<input list="people" autocomplete="off" placeholder="Tambah nama…"></div></div>`
+          : `<label>${P.medal} ${P.rank}
+          <input data-g="${g.id}" data-p="${p}" list="people" autocomplete="off" value="${esc(placeOf(g, p)[0] || '')}"></label>`).join('')
       }</div></div>`;
     }).join('');
     $('dlg').showModal();
@@ -449,13 +474,42 @@
     sec.scrollIntoView({ block: 'start' });
     sec.querySelector('input').focus();
   }
+  // Team / berpasangan places: names become tags — pick from the list, press Enter, or type with commas
+  const tagHtml = n => `<span class="tag" data-n="${esc(n)}">${esc(n)}<button type="button" aria-label="Buang ${esc(n)}">×</button></span>`;
+  function addTags(inp) {
+    const box = inp.parentNode, have = [...box.querySelectorAll('.tag')].map(t => t.dataset.n);
+    inp.value.split(',').map(s => s.trim()).filter(s => s && !have.includes(s)).forEach(s => {
+      inp.insertAdjacentHTML('beforebegin', tagHtml(s)); have.push(s);
+    });
+    inp.value = '';
+  }
+  const tagInput = t => t.matches && t.matches('.tags input');
+  $('dlgBody').addEventListener('click', e => {
+    const x = e.target.closest('.tag button');
+    if (x) x.parentNode.remove();
+    else if (e.target.classList.contains('tags')) e.target.querySelector('input').focus();
+  });
+  $('dlgBody').addEventListener('keydown', e => {
+    if (!tagInput(e.target)) return;
+    if (e.key === 'Enter') { e.preventDefault(); addTags(e.target); }
+    else if (e.key === 'Backspace' && !e.target.value) e.target.previousElementSibling?.remove();
+  });
+  $('dlgBody').addEventListener('input', e => {
+    // a datalist pick arrives without a typing inputType
+    if (tagInput(e.target) && (!e.inputType || e.inputType === 'insertReplacementText' || e.target.value.includes(','))) addTags(e.target);
+  });
+  $('dlgBody').addEventListener('focusout', e => { if (tagInput(e.target)) addTags(e.target); });
+
   $('form').addEventListener('submit', () => {
     const next = {};
-    $('dlgBody').querySelectorAll('input').forEach(inp => {
-      (next[inp.dataset.g] = next[inp.dataset.g] || ['', '', ''])[+inp.dataset.p] = inp.value.trim();
+    GAMES.forEach(g => next[g.id] = ['', '', '']);
+    $('dlgBody').querySelectorAll('input[data-g]').forEach(inp => { next[inp.dataset.g][+inp.dataset.p] = inp.value.trim(); });
+    $('dlgBody').querySelectorAll('.tags').forEach(box => {
+      addTags(box.querySelector('input'));
+      next[box.dataset.g][+box.dataset.p] = [...box.querySelectorAll('.tag')].map(t => t.dataset.n);
     });
     // a game whose names changed goes back to hidden
-    GAMES.forEach(g => { if ((winners[g.id] || []).join('|') !== next[g.id].join('|')) shown[g.id] = 0; });
+    GAMES.forEach(g => { if (JSON.stringify(winners[g.id] || null) !== JSON.stringify(next[g.id])) shown[g.id] = 0; });
     winners = next;
     saveWinners();
     render();
@@ -463,6 +517,7 @@
   $('clear').onclick = () => {
     if (!confirm('Padam semua nama pemenang?')) return;
     $('dlgBody').querySelectorAll('input').forEach(inp => inp.value = '');
+    $('dlgBody').querySelectorAll('.tag').forEach(t => t.remove());
   };
   $('cancel').onclick = () => $('dlg').close();
   $('ghost').onclick = () => openEdit();
