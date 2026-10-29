@@ -23,9 +23,5 @@ window.FD = {
     { name: 'PERYSMITH High Speed Blender EasyCooking Series PS3250', img: 'assets/prizes/prize-08.jpg' },
     { name: 'PENSONIC Coffee Machine PCM-1902', img: 'assets/prizes/prize-09.jpg' },
     { name: 'PENSONIC Bread Toaster PT-929', img: 'assets/prizes/prize-10.jpg' }
-  ],
-
-  // Adik-beradik (anak Pak Din) as named in the Dewasa list above —
-  // excluded from the Special Lucky Draw (Dewasa & Muda-Mudi)
-  siblings: ['Abg Man', 'Azila', 'Heidi', 'Asma', 'Zamri', 'Mak Long', 'Hanim', 'Mak Lang', 'Mak Uda', 'Kak Mah']
+  ]
 };

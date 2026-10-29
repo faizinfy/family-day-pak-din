@@ -167,6 +167,7 @@
     border-radius: 16px; text-align: left; background: rgba(232, 196, 118, .08); border: 1px solid var(--card-border);
     transition: border-color .2s, background .2s;
   }
+  .prize-bar[hidden] { display: none; } /* family Lucky Draw only */
   .prize-bar:hover { border-color: var(--gold); background: rgba(232, 196, 118, .14); }
   .prize-bar .thumb {
     width: 64px; height: 64px; flex: none; border-radius: 12px; background: #fff center / contain no-repeat;
@@ -618,7 +619,6 @@
   })();
 
   // Draws & pools
-  const sib = new Set(FD.siblings);
   const DRAWS = [
     { id: 'lucky', i: '🎟️', name: 'Lucky Draw', win: '🏆 Pemenang', pools: [
       { id: 'lucky', name: '10 Keluarga', names: FD.families.map(n => 'Keluarga ' + n) } ] },
@@ -627,9 +627,8 @@
       { id: 'gift-muda', name: 'Muda-Mudi', note: '13 – 30 tahun', names: FD.gift.muda },
       { id: 'gift-kanak', name: 'Kanak-kanak', note: '12 tahun ke bawah', names: FD.gift.kanak } ] },
     { id: 'special', i: '✨', name: 'Special Lucky Draw', win: '🏆 Pemenang', pools: [
-      { id: 'sp-dm', name: 'Dewasa & Muda-Mudi', note: 'Tidak termasuk adik-beradik',
-        names: FD.gift.dewasa.filter(n => !sib.has(n)).concat(FD.gift.muda) },
-      { id: 'sp-kanak', name: 'Kanak-kanak', note: '12 tahun ke bawah', names: FD.gift.kanak } ] }
+      { id: 'sp-all', name: 'Semua Peserta', note: 'Semua peserta layak · Dewasa, Muda-Mudi & Kanak-kanak',
+        names: FD.gift.dewasa.concat(FD.gift.muda, FD.gift.kanak) } ] }
   ];
 
   const KEY = 'fd-lucky-draw-v1';
