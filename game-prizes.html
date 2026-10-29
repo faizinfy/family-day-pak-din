@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pemenang Permainan · Family Day Pak Din 2026</title>
+<meta name="description" content="Pemenang tempat pertama, kedua & ketiga bagi semua permainan · Family Day Pak Din 2026">
+<meta name="theme-color" content="#120c2b">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #120c2b;
+    --card: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(232, 196, 118, 0.22);
+    --gold: #e8c476;
+    --gold-2: #f6dfa4;
+    --gold-deep: #b98a3e;
+    --text: #f3ecdc;
+    --muted: #b9b0cc;
+    --accent: #d9677a;
+    --silver: #d7dbe6;
+    --bronze: #d49a6a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Poppins", system-ui, sans-serif; font-weight: 300;
+    color: var(--text); background: var(--night);
+    background-image:
+      radial-gradient(ellipse at 50% -10%, #3a2470 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 60%, rgba(185, 138, 62, 0.12) 0%, transparent 45%),
+      radial-gradient(ellipse at 0% 90%, rgba(217, 103, 122, 0.10) 0%, transparent 45%);
+    background-attachment: fixed;
+    min-height: 100vh; overflow-x: hidden; line-height: 1.5;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; opacity: .6; animation: twinkle 3s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100% { opacity: .15 } 50% { opacity: .9 } }
+
+  /* Desktop presentation: exactly one screen, no scrolling */
+  html, body { height: 100%; overflow: hidden; }
+  .wrap { position: relative; z-index: 1; height: 100vh; padding: 14px 32px 24px; display: flex; flex-direction: column; }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .top a, .top button { font-size: .85rem; color: var(--muted); text-decoration: none; background: none; border: 0; padding: 6px 2px; }
+  .top a:hover, .top button:hover { color: var(--gold); }
+  .top span { display: flex; gap: 16px; }
+
+  header { text-align: center; }
+  .eyebrow { font-size: .78rem; letter-spacing: .35em; text-transform: uppercase; color: var(--gold); }
+  h1 {
+    font-family: "Cinzel Decorative", serif; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; margin-top: 4px;
+    background: linear-gradient(180deg, var(--gold-2), var(--gold) 55%, var(--gold-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  /* Game picker */
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 1.6vh; }
+  .chip {
+    display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px; border-radius: 999px;
+    background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .12); text-align: left;
+    transition: .2s;
+  }
+  .chip:hover { border-color: var(--card-border); }
+  .chip .n {
+    width: 24px; height: 24px; flex: none; border-radius: 50%; display: grid; place-items: center;
+    font-size: .72rem; font-weight: 600; background: rgba(232, 196, 118, .14); color: var(--gold-2);
+  }
+  .chip b { display: block; font-weight: 500; font-size: .8rem; line-height: 1.2; }
+  .chip small { display: block; font-size: .68rem; color: var(--muted); line-height: 1.2; }
+  .chip[aria-selected="true"] { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night); border-color: transparent; }
+  .chip[aria-selected="true"] small { color: rgba(18, 12, 43, .7); }
+  .chip[aria-selected="true"] .n { background: rgba(18, 12, 43, .15); color: var(--night); }
+  .chip.done .n::after { content: "✓"; }
+  .chip.done .n span { display: none; }
+
+  /* Stage */
+  .stage {
+    position: relative; flex: 1; min-height: 0; margin-top: 1.8vh;
+    border-radius: 28px; overflow: hidden; border: 1px solid var(--card-border);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(246, 223, 164, .16), transparent 60%),
+      radial-gradient(ellipse at 50% 100%, rgba(232, 196, 118, .12), transparent 55%),
+      rgba(0, 0, 0, .25);
+    display: flex; flex-direction: column; padding: 2.4vh 4vw 0;
+  }
+  .game-head { text-align: center; }
+  .game-head .cat { font-size: clamp(.8rem, 1.7vh, 1.1rem); letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+  .game-head h2 {
+    font-family: "Cormorant Garamond", serif; font-weight: 600; color: var(--gold-2);
+    font-size: clamp(2rem, 5.4vh, 3.6rem); line-height: 1.15;
+  }
+  .game-head h2 .e { font-size: .85em; }
+
+  .podium { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 2.4vw; align-items: end; margin-top: 1vh; }
+  .place { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; min-width: 0; }
+  .slot { position: relative; width: 100%; perspective: 1200px; margin-bottom: 1.6vh; }
+  .flip { position: relative; height: clamp(90px, 19vh, 200px); transform-style: preserve-3d; transition: transform 1s cubic-bezier(.3, 1.4, .5, 1); }
+  .shown .flip { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0; border-radius: 22px; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    display: grid; place-items: center; text-align: center; padding: 12px 16px;
+    border: 1px solid var(--card-border); background: rgba(255, 255, 255, .05);
+  }
+  .face.back { transform: rotateY(180deg); background: linear-gradient(180deg, rgba(246, 223, 164, .14), rgba(232, 196, 118, .05)); }
+  .q { font-family: "Cinzel Decorative", serif; font-size: clamp(3rem, 9vh, 6rem); color: rgba(246, 223, 164, .35); animation: qpulse 2.4s ease-in-out infinite; }
+  @keyframes qpulse { 50% { color: rgba(246, 223, 164, .7); } }
+  .face .name {
+    font-family: "Cinzel Decorative", serif; line-height: 1.12; word-break: break-word;
+    font-size: clamp(1.6rem, 5.2vh, 3.6rem);
+    background: linear-gradient(180deg, #fff6d8, var(--gold-2) 40%, var(--gold) 70%, var(--gold-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .p1 .face .name { font-size: clamp(1.9rem, 6.4vh, 4.4rem); filter: drop-shadow(0 0 22px rgba(232, 196, 118, .45)); }
+  .p1.shown .face .name { animation: glow 2.4s ease-in-out 1s infinite; }
+  @keyframes glow { 50% { filter: drop-shadow(0 0 44px rgba(246, 223, 164, .8)); } }
+
+  .block {
+    width: 100%; border-radius: 18px 18px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    padding-top: 2vh; border: 1px solid var(--card-border); border-bottom: 0;
+    background: linear-gradient(180deg, rgba(232, 196, 118, .18), rgba(232, 196, 118, .04));
+  }
+  /* block heights are shares of the podium, so it always fits the stage */
+  .p1 .block { height: 46%; background: linear-gradient(180deg, rgba(232, 196, 118, .34), rgba(185, 138, 62, .08)); }
+  .p2 .block { height: 33%; background: linear-gradient(180deg, rgba(215, 219, 230, .22), rgba(215, 219, 230, .04)); }
+  .p3 .block { height: 22%; background: linear-gradient(180deg, rgba(212, 154, 106, .24), rgba(212, 154, 106, .04)); }
+  .medal { font-size: clamp(2rem, 6vh, 4rem); line-height: 1; transition: transform .6s cubic-bezier(.3, 1.8, .5, 1); }
+  .shown .medal { transform: scale(1.25) rotate(-8deg); }
+  .rank { font-family: "Cormorant Garamond", serif; font-weight: 600; font-size: clamp(1.1rem, 2.8vh, 1.9rem); margin-top: .6vh; }
+  .p1 .rank { color: var(--gold-2); }
+  .p2 .rank { color: var(--silver); }
+  .p3 .rank { color: var(--bronze); }
+
+  /* Controls over the podium */
+  .ctrl { position: absolute; right: 22px; top: 18px; z-index: 5; display: flex; gap: 10px; align-items: center; }
+  .go {
+    padding: 13px 30px; border: 0; border-radius: 999px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night);
+    font-weight: 600; font-size: 1.05rem; box-shadow: 0 10px 34px rgba(232, 196, 118, .3);
+    animation: breathe 2.4s ease-in-out infinite;
+  }
+  .go:disabled { opacity: .5; animation: none; cursor: default; }
+  @keyframes breathe { 50% { box-shadow: 0 10px 50px rgba(232, 196, 118, .55); } }
+  .link { background: none; border: 0; color: var(--muted); font-size: .85rem; text-decoration: underline; text-underline-offset: 3px; }
+  .link:hover { color: var(--gold); }
+  .keys { position: absolute; left: 22px; top: 22px; z-index: 5; font-size: .75rem; color: var(--muted); opacity: .7; }
+  .keys kbd { font: inherit; padding: 1px 6px; border-radius: 5px; border: 1px solid rgba(255, 255, 255, .2); }
+
+  /* Confetti */
+  .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 20; overflow: hidden; }
+  .confetti i { position: absolute; top: -14px; width: 9px; height: 15px; border-radius: 2px; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translate3d(var(--dx), 105vh, 0) rotate(var(--r)); } }
+
+  /* Hidden edit button — invisible, bottom-left corner */
+  .ghost { position: fixed; left: 0; bottom: 0; width: 56px; height: 56px; z-index: 30; opacity: 0; border: 0; background: none; cursor: default; }
+
+  /* Edit dialog */
+  dialog {
+    margin: auto; width: min(860px, calc(100% - 32px)); max-height: calc(100vh - 40px); border-radius: 20px; padding: 0;
+    background: #1c1442; color: var(--text); border: 1px solid var(--card-border);
+  }
+  dialog[open] { display: flex; flex-direction: column; }
+  dialog::backdrop { background: rgba(5, 3, 15, .7); backdrop-filter: blur(4px); }
+  dialog form { display: flex; flex-direction: column; min-height: 0; }
+  .dlg-head { padding: 22px 26px 10px; }
+  dialog h2 { font-family: "Cormorant Garamond", serif; color: var(--gold-2); font-size: 1.6rem; }
+  dialog p { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+  .dlg-body { overflow-y: auto; padding: 6px 26px 10px; }
+  .eg { padding: 14px 0; border-top: 1px dashed rgba(232, 196, 118, .2); }
+  .eg h3 { font-weight: 500; font-size: .95rem; color: var(--gold-2); }
+  .eg h3 small { font-weight: 300; color: var(--muted); font-size: .78rem; margin-left: 6px; }
+  .eg .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 8px; }
+  .eg label { display: block; font-size: .74rem; color: var(--muted); }
+  dialog input {
+    width: 100%; margin-top: 4px; padding: 9px 12px; border-radius: 10px; font: inherit; font-size: .95rem;
+    background: rgba(0, 0, 0, .3); color: var(--text); border: 1px solid var(--card-border); outline: none;
+  }
+  dialog input:focus { border-color: var(--gold); }
+  .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 26px 20px; border-top: 1px solid rgba(232, 196, 118, .15); }
+  .dlg-actions button { padding: 10px 20px; border-radius: 999px; border: 1px solid var(--card-border); background: none; }
+  .dlg-actions .primary { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night); font-weight: 600; border: 0; }
+  .dlg-actions .danger { margin-right: auto; color: var(--accent); border-color: rgba(217, 103, 122, .4); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; }
+  }
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<div class="wrap">
+  <nav class="top">
+    <a href="./">← Laman utama</a>
+    <span>
+      <button id="snd" type="button">🔊 Bunyi</button>
+      <button id="fs" type="button">⛶ Skrin penuh</button>
+    </span>
+  </nav>
+
+  <header>
+    <p class="eyebrow">Family Day Pak Din 2026 · Acara Games</p>
+    <h1>Pemenang Permainan</h1>
+  </header>
+
+  <div class="chips" id="chips" role="tablist"></div>
+
+  <section class="stage" aria-live="polite">
+    <div class="game-head">
+      <p class="cat" id="gCat"></p>
+      <h2 id="gName"></h2>
+    </div>
+    <div class="podium" id="podium"></div>
+    <div class="keys"><kbd>Space</kbd> dedah · <kbd>←</kbd><kbd>→</kbd> tukar permainan</div>
+    <div class="ctrl">
+      <button class="link" id="again" type="button" hidden>↺ Tutup semula</button>
+      <button class="go" id="go" type="button"></button>
+    </div>
+  </section>
+</div>
+
+<div class="confetti" id="confetti"></div>
+
+<!-- Hidden: click the invisible bottom-left corner (or press Shift+E) to key in the winners -->
+<button class="ghost" id="ghost" type="button" aria-label="Kemaskini pemenang" tabindex="-1"></button>
+
+<dialog id="dlg">
+  <form method="dialog" id="form">
+    <div class="dlg-head">
+      <h2>🏆 Kemaskini Pemenang Permainan</h2>
+      <p>Disimpan pada peranti ini sahaja — tidak kelihatan kepada orang lain. Untuk permainan team, tulis nama team atau nama ahli.</p>
+    </div>
+    <div class="dlg-body" id="dlgBody"></div>
+    <div class="dlg-actions">
+      <button type="button" class="danger" id="clear">Padam semua</button>
+      <button type="button" id="cancel">Batal</button>
+      <button type="submit" class="primary">Simpan</button>
+    </div>
+  </form>
+</dialog>
+<datalist id="people"></datalist>
+
+<script src="assets/names.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+
+  // Games, in the order they are played (Susunan Permainan)
+  const GAMES = [
+    { id: 'cups', e: '🥤', name: 'Susun Paper Cups', cat: 'Sek Ren / Tadika' },
+    { id: 'gula', e: '🍭', name: 'Cari Gula-gula dalam Tepung', cat: 'Sek Ren / Tadika' },
+    { id: 'belon', e: '🎈', name: 'Rally Pass Belon', cat: 'Muda-Mudi' },
+    { id: 'bola', e: '⚽️', name: 'Pass Bola Guna Kain Pelikat', cat: 'Muda-Mudi' },
+    { id: 'belon-air', e: '🎈', name: 'Rally Pass Belon Berisi Air', cat: 'Dewasa' },
+    { id: 'suara', e: '🎙️', name: 'Teka Suara', cat: 'Warga Emas' },
+    { id: 'mc-muda', e: '🪑', name: 'Musical Chair', cat: 'Muda-Mudi' },
+    { id: 'mc-dewasa', e: '🪑', name: 'Musical Chair', cat: 'Dewasa' },
+    { id: 'mc-adik', e: '🩴', name: 'Musical Chair / Sandals', cat: 'Adik-beradik' },
+    { id: 'itik', e: '🐥', name: 'Tangkap Itik dalam Kolam', cat: 'Sek Ren / Tadika' }
+  ];
+  const PLACES = [
+    { cls: 'p1', medal: '🥇', rank: 'Tempat Pertama', word: 'pertama' },
+    { cls: 'p2', medal: '🥈', rank: 'Tempat Kedua', word: 'kedua' },
+    { cls: 'p3', medal: '🥉', rank: 'Tempat Ketiga', word: 'ketiga' }
+  ];
+
+  // Stars
+  (function () {
+    const box = $('stars');
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('span');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.animationDelay = Math.random() * 3 + 's';
+      box.appendChild(s);
+    }
+  })();
+
+  // Winners — kept in this browser only: { gameId: ['1st', '2nd', '3rd'] }
+  const KEY = 'fd-game-prizes';
+  let winners = {};
+  try { winners = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  const saveWinners = () => { try { localStorage.setItem(KEY, JSON.stringify(winners)); } catch (e) {} };
+  const namesOf = g => (winners[g.id] || []).map(s => (s || '').trim());
+
+  // How many places are revealed per game (3rd first, then 2nd, then 1st)
+  const shown = {};
+  let cur = 0, busy = false;
+
+  // Sound (shares the mute + voice choice with the Lucky Draw page)
+  const SND_KEY = 'fd-lucky-draw-sound', VOICE_KEY = 'fd-lucky-draw-voice';
+  let soundOn = true, ctx;
+  try { soundOn = localStorage.getItem(SND_KEY) !== 'off'; } catch (e) {}
+  function ac() {
+    if (!ctx) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; ctx = new A(); }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  function note(freq, start, dur, type, vol) {
+    const c = soundOn && ac(); if (!c) return;
+    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + start;
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(c.destination);
+    o.start(t); o.stop(t + dur + 0.05);
+  }
+  const sfx = {
+    shimmer() { for (let i = 0; i < 10; i++) note(880 * Math.pow(2, i / 12), i * 0.06, 0.3, 'sine', 0.05); },
+    ding() { [659.25, 987.77].forEach((f, i) => note(f, i * 0.12, 0.6, 'triangle', 0.16)); },
+    fanfare() {
+      [293.66, 311.13, 369.99, 392, 440, 392, 369.99, 440].forEach((f, i) => note(f * 2, i * 0.08, 0.24, 'triangle', 0.17));
+      [587.33, 739.99, 880, 1174.66].forEach(f => note(f, 0.68, 1.8, 'triangle', 0.12));
+      [1760, 2349.32, 2637.02, 3520].forEach((f, i) => note(f, 0.75 + i * 0.08, 0.6, 'sine', 0.045));
+    }
+  };
+  function pickVoice() {
+    if (!window.speechSynthesis) return null;
+    const score = v => {
+      const l = v.lang.toLowerCase();
+      const base = l.startsWith('ms') ? 20 : l.startsWith('id') ? 10 : 0;
+      return base && base + (/natural|online|google/i.test(v.name) ? 5 : 0);
+    };
+    const list = speechSynthesis.getVoices().filter(score).sort((a, b) => score(b) - score(a));
+    let chosen = null;
+    try { chosen = localStorage.getItem(VOICE_KEY); } catch (e) {}
+    return list.find(v => v.name === chosen) || list[0] || null;
+  }
+  function say(text) {
+    if (!soundOn || !window.speechSynthesis) return;
+    const u = new SpeechSynthesisUtterance(text);
+    const v = pickVoice();
+    if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'ms-MY';
+    u.rate = 0.9;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }
+  if (window.speechSynthesis) speechSynthesis.getVoices();
+  const spoken = s => s.replace(/\bAbg\b/g, 'Abang').replace(/&/g, ' dan ');
+
+  // Render
+  function renderChips() {
+    $('chips').innerHTML = GAMES.map((g, i) => {
+      const done = shown[g.id] === 3;
+      return `<button type="button" class="chip${done ? ' done' : ''}" role="tab" aria-selected="${i === cur}" data-i="${i}">
+        <span class="n"><span>${i + 1}</span></span><span><b>${g.e} ${g.name}</b><small>${g.cat}</small></span></button>`;
+    }).join('');
+  }
+  function render() {
+    const g = GAMES[cur], names = namesOf(g), n = shown[g.id] || 0;
+    $('gCat').textContent = g.cat;
+    $('gName').innerHTML = `<span class="e">${g.e}</span> ${g.name}`;
+    // podium order on screen: 2nd, 1st, 3rd
+    $('podium').innerHTML = [1, 0, 2].map(p => {
+      const P = PLACES[p], isShown = n >= 3 - p;
+      return `<div class="place ${P.cls}${isShown ? ' shown' : ''}">
+        <div class="slot"><div class="flip">
+          <div class="face front"><span class="q">?</span></div>
+          <div class="face back"><span class="name">${esc(names[p] || '—')}</span></div>
+        </div></div>
+        <div class="block"><span class="medal">${P.medal}</span><span class="rank">${P.rank}</span></div>
+      </div>`;
+    }).join('');
+    $('go').disabled = busy || n >= 3;
+    $('go').textContent = n >= 3 ? '🏆 Semua telah didedahkan' : `✨ Dedahkan ${PLACES[2 - n].rank} ✨`;
+    $('again').hidden = !n;
+    renderChips();
+  }
+  const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+  // Reveal the next place: 3rd → 2nd → 1st
+  async function revealNext() {
+    const g = GAMES[cur], names = namesOf(g), n = shown[g.id] || 0;
+    if (busy || n >= 3) return;
+    if (!names.some(Boolean)) return openEdit(g.id);
+    busy = true;
+    goFullscreen();
+    ac(); // unlock audio inside the click
+    const p = 2 - n;
+    shown[g.id] = n + 1;
+    sfx.shimmer();
+    document.querySelector('.podium .' + PLACES[p].cls).classList.add('shown'); // flip the card in place
+    $('go').disabled = true;
+    await wait(700);
+    const who = names[p] || '';
+    if (p === 0) {
+      sfx.fanfare();
+      confetti(170);
+      setTimeout(() => confetti(90), 1400);
+      await wait(1200);
+      if (who) say('Dan tempat pertama, tahniah kepada ' + spoken(who) + '!');
+    } else {
+      sfx.ding();
+      confetti(40);
+      if (who) say(`Tempat ${PLACES[p].word}, ${spoken(who)}`);
+    }
+    await wait(900);
+    busy = false;
+    render();
+  }
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+
+  function pick(i) {
+    if (busy) return;
+    cur = (i + GAMES.length) % GAMES.length;
+    if (window.speechSynthesis) speechSynthesis.cancel();
+    render();
+  }
+  function resetGame() {
+    if (busy) return;
+    shown[GAMES[cur].id] = 0;
+    if (window.speechSynthesis) speechSynthesis.cancel();
+    render();
+  }
+
+  function confetti(n) {
+    const box = $('confetti'), colors = ['#e8c476', '#f6dfa4', '#d9677a', '#b98a3e', '#ffffff', '#8f7cf0'];
+    for (let i = 0; i < n; i++) {
+      const c = document.createElement('i');
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[i % colors.length];
+      c.style.setProperty('--dx', (Math.random() * 200 - 100) + 'px');
+      c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg');
+      c.style.animationDuration = 2.4 + Math.random() * 2.2 + 's';
+      c.style.animationDelay = Math.random() * .5 + 's';
+      box.appendChild(c);
+      c.addEventListener('animationend', () => c.remove());
+    }
+  }
+
+  // Hidden editor: all games, 1st/2nd/3rd each
+  $('people').innerHTML = (window.FD ? FD.gift.dewasa.concat(FD.gift.muda, FD.gift.kanak) : [])
+    .map(n => `<option value="${esc(n)}">`).join('');
+  function openEdit(focusId) {
+    if (busy || $('dlg').open) return;
+    $('dlgBody').innerHTML = GAMES.map((g, gi) => {
+      const names = namesOf(g);
+      return `<div class="eg" id="eg-${g.id}"><h3>${gi + 1}. ${g.e} ${g.name}<small>${g.cat}</small></h3><div class="row">${
+        PLACES.map((P, p) => `<label>${P.medal} ${P.rank}
+          <input data-g="${g.id}" data-p="${p}" list="people" autocomplete="off" value="${esc(names[p] || '')}"></label>`).join('')
+      }</div></div>`;
+    }).join('');
+    $('dlg').showModal();
+    const sec = $('eg-' + (focusId || GAMES[cur].id));
+    sec.scrollIntoView({ block: 'start' });
+    sec.querySelector('input').focus();
+  }
+  $('form').addEventListener('submit', () => {
+    const next = {};
+    $('dlgBody').querySelectorAll('input').forEach(inp => {
+      (next[inp.dataset.g] = next[inp.dataset.g] || ['', '', ''])[+inp.dataset.p] = inp.value.trim();
+    });
+    // a game whose names changed goes back to hidden
+    GAMES.forEach(g => { if ((winners[g.id] || []).join('|') !== next[g.id].join('|')) shown[g.id] = 0; });
+    winners = next;
+    saveWinners();
+    render();
+  });
+  $('clear').onclick = () => {
+    if (!confirm('Padam semua nama pemenang?')) return;
+    $('dlgBody').querySelectorAll('input').forEach(inp => inp.value = '');
+  };
+  $('cancel').onclick = () => $('dlg').close();
+  $('ghost').onclick = () => openEdit();
+
+  // buttons drop focus after a click so Space never re-clicks them
+  $('chips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { b.blur(); pick(+b.dataset.i); } });
+  $('go').onclick = e => { e.currentTarget.blur(); revealNext(); };
+  $('again').onclick = e => { e.currentTarget.blur(); resetGame(); };
+  document.addEventListener('keydown', e => {
+    if ($('dlg').open) return;
+    if (e.shiftKey && (e.key === 'E' || e.key === 'e')) { e.preventDefault(); openEdit(); }
+    else if (e.key === ' ') { e.preventDefault(); revealNext(); }
+    else if (e.key === 'ArrowRight') pick(cur + 1);
+    else if (e.key === 'ArrowLeft') pick(cur - 1);
+  });
+
+  // Sound + fullscreen toggles
+  function sndLabel() { $('snd').textContent = soundOn ? '🔊 Bunyi' : '🔇 Senyap'; }
+  $('snd').onclick = () => {
+    soundOn = !soundOn;
+    try { localStorage.setItem(SND_KEY, soundOn ? 'on' : 'off'); } catch (e) {}
+    if (!soundOn && window.speechSynthesis) speechSynthesis.cancel();
+    sndLabel();
+  };
+  sndLabel();
+  function goFullscreen() {
+    if (document.fullscreenElement) return;
+    try { document.documentElement.requestFullscreen()?.catch(() => {}); } catch (e) {}
+  }
+  $('fs').onclick = () => {
+    if (document.fullscreenElement) { try { document.exitFullscreen(); } catch (e) {} } else goFullscreen();
+  };
+  function fsLabel() { $('fs').textContent = document.fullscreenElement ? '⤢ Keluar skrin penuh' : '⛶ Skrin penuh'; }
+  document.addEventListener('fullscreenchange', fsLabel);
+
+  render();
+</script>
+</body>
+</html>
