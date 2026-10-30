@@ -193,29 +193,18 @@
 <script src="assets/names.js"></script>
 <script src="assets/offline.js"></script>
 <script src="assets/music/music.js"></script>
+<script src="assets/common.js"></script>
 <script>
   const $ = id => document.getElementById(id);
-
-  // Stars
-  (function () {
-    const box = $('stars');
-    for (let i = 0; i < 70; i++) {
-      const s = document.createElement('span');
-      s.className = 'star';
-      s.style.left = Math.random() * 100 + '%';
-      s.style.top = Math.random() * 100 + '%';
-      s.style.animationDelay = Math.random() * 3 + 's';
-      box.appendChild(s);
-    }
-  })();
+  const { sound, voice } = FDK;
+  FDK.stars(70);
 
   const store = {
-    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+    get: FDK.store.get,
+    set: FDK.store.set,
     del(k) { try { localStorage.removeItem(k); } catch (e) {} },
     keys() { try { return Object.keys(localStorage).filter(k => k.startsWith('fd-')); } catch (e) { return []; } }
   };
-  const SND_KEY = 'fd-lucky-draw-sound', VOICE_KEY = 'fd-lucky-draw-voice';
   // results (cleared by "Padam"); everything else fd-* is a preference (sound, voice, music)
   const RESULT_KEYS = ['fd-lucky-draw-v1', 'fd-game-prizes', 'fd-best-dress-winner'];
   const st = (id, ok) => { $(id).className = 'st ' + (ok ? 'ok' : 'bad'); };
@@ -243,62 +232,30 @@
   offline(); setTimeout(offline, 3000);
 
   // Sound on/off (shared with all event screens)
-  let ctx;
-  const soundOn = () => store.get(SND_KEY) !== 'off';
   function snd() {
-    st('sndSt', soundOn());
-    $('sndTx').textContent = soundOn() ? 'Hidup' : 'Senyap — tiada bunyi, suara & muzik pada skrin acara';
-    $('sndToggle').textContent = soundOn() ? '🔇 Senyapkan' : '🔊 Hidupkan';
+    st('sndSt', sound.on);
+    $('sndTx').textContent = sound.on ? 'Hidup' : 'Senyap — tiada bunyi, suara & muzik pada skrin acara';
+    $('sndToggle').textContent = sound.on ? '🔇 Senyapkan' : '🔊 Hidupkan';
   }
-  $('sndToggle').onclick = () => { store.set(SND_KEY, soundOn() ? 'off' : 'on'); snd(); };
+  $('sndToggle').onclick = () => { sound.toggle(); snd(); };
   snd();
-  function note(freq, start, dur, type, vol) {
-    if (!ctx) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return; ctx = new A(); }
-    if (ctx.state === 'suspended') ctx.resume();
-    const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + start;
-    o.type = type; o.frequency.value = freq;
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(vol, t + 0.015);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g).connect(ctx.destination);
-    o.start(t); o.stop(t + dur + 0.05);
-  }
-  $('beep').onclick = () => {
-    [293.66, 311.13, 369.99, 392, 440, 392, 369.99, 440].forEach((f, i) => note(f * 2, i * 0.08, 0.24, 'triangle', 0.17));
-    [587.33, 739.99, 880, 1174.66].forEach(f => note(f, 0.68, 1.8, 'triangle', 0.12));
-  };
+  // a test turns the sound back on if it was muted
+  const soundUp = () => { if (!sound.on) { sound.toggle(); snd(); } };
+  $('beep').onclick = () => { soundUp(); sound.fanfare(); };
 
   // Malay voices (same choice as the Lucky Draw page)
-  function malayVoices() {
-    if (!window.speechSynthesis) return [];
-    const score = v => {
-      const l = v.lang.toLowerCase();
-      const base = l.startsWith('ms') ? 20 : l.startsWith('id') ? 10 : 0;
-      return base && base + (/natural|online|google/i.test(v.name) ? 5 : 0);
-    };
-    return speechSynthesis.getVoices().filter(score).sort((a, b) => score(b) - score(a));
-  }
-  const voiceLabel = v => v.name.replace(/^(Microsoft|Google)\s+/, '').replace(/\s*-\s*/, ' · ')
-    .replace(/\s*\((Natural)\)/, '') + (/^ms/i.test(v.lang) ? ' 🇲🇾' : ' 🇮🇩');
   function voices() {
-    const list = malayVoices(), chosen = store.get(VOICE_KEY);
+    const list = voice.list(), cur = voice.pick();
     st('vSt', list.length);
     $('vTx').textContent = !window.speechSynthesis ? 'Browser ini tidak boleh membaca nama'
       : list.length ? `${list.length} suara dijumpai` : 'Tiada suara Melayu — guna Microsoft Edge atau Google Chrome';
     $('vRow').hidden = !list.length;
-    const cur = list.find(v => v.name === chosen) || list[0];
     $('voice').innerHTML = list.map(v =>
-      `<option value="${v.name.replace(/"/g, '&quot;')}"${v === cur ? ' selected' : ''}>${voiceLabel(v)}</option>`).join('');
+      `<option value="${v.name.replace(/"/g, '&quot;')}"${v === cur ? ' selected' : ''}>${voice.label(v)}</option>`).join('');
   }
-  $('voice').onchange = e => store.set(VOICE_KEY, e.target.value);
-  $('vtest').onclick = () => {
-    const v = malayVoices().find(x => x.name === $('voice').value);
-    const u = new SpeechSynthesisUtterance('Tahniah kepada Keluarga Osman. Selamat datang ke Family Day Pak Din!');
-    if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'ms-MY';
-    u.rate = 0.9;
-    speechSynthesis.cancel(); speechSynthesis.speak(u);
-  };
-  if (window.speechSynthesis) { speechSynthesis.getVoices(); speechSynthesis.addEventListener?.('voiceschanged', voices); }
+  $('voice').onchange = e => voice.choose(e.target.value);
+  $('vtest').onclick = () => { soundUp(); voice.say('Tahniah kepada Keluarga Osman. Selamat datang ke Family Day Pak Din!'); };
+  if (window.speechSynthesis) speechSynthesis.addEventListener?.('voiceschanged', voices);
   setTimeout(voices, 600); voices();
 
   // MP3 songs from assets/music

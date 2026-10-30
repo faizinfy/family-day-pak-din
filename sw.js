@@ -6,7 +6,7 @@ const CACHE = 'fd-v1';
 const FONTS = 'https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap';
 const FILES = [
   './', 'lucky-draw', 'game-prizes', 'best-dress', 'result', 'settings', 'qr',
-  'assets/names.js', 'assets/offline.js', 'assets/music/music.js',
+  'assets/names.js', 'assets/common.js', 'assets/offline.js', 'assets/music/music.js',
   'assets/icon-192.png', 'assets/logo.webp',
   ...Array.from({ length: 10 }, (_, i) => `assets/prizes/prize-${String(i + 1).padStart(2, '0')}.${i === 1 ? 'png' : 'jpg'}`),
   'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js'

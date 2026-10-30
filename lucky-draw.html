@@ -342,105 +342,25 @@
 <script src="assets/names.js"></script>
 <script src="assets/offline.js"></script>
 <script src="assets/music/music.js"></script>
+<script src="assets/common.js"></script>
 <script>
-  // Stars
-  (function () {
-    const box = document.getElementById('stars');
-    for (let i = 0; i < 70; i++) {
-      const s = document.createElement('span');
-      s.className = 'star';
-      s.style.left = Math.random() * 100 + '%';
-      s.style.top = Math.random() * 100 + '%';
-      s.style.animationDelay = Math.random() * 3 + 's';
-      box.appendChild(s);
-    }
-  })();
+  FDK.stars(70);
+  const { voice } = FDK;
 
-  // Malay voices: Edge has "Microsoft Yasmin/Osman Online (Natural)", Android has Google Malay,
-  // Chrome desktop has "Google Bahasa Indonesia". Natural/online voices sound best.
-  // The viewer can pick any of them from the dropdown; the choice is remembered on this device.
-  const VOICE_KEY = 'fd-lucky-draw-voice';
-  function malayVoices() {
-    if (!window.speechSynthesis) return [];
-    const score = v => {
-      const l = v.lang.toLowerCase();
-      const base = l.startsWith('ms') ? 20 : l.startsWith('id') ? 10 : 0;
-      return base && base + (/natural|online|google/i.test(v.name) ? 5 : 0);
-    };
-    return speechSynthesis.getVoices().filter(score).sort((a, b) => score(b) - score(a));
-  }
-  function pickVoice() {
-    const list = malayVoices();
-    let chosen = null;
-    try { chosen = localStorage.getItem(VOICE_KEY); } catch (e) {}
-    return list.find(v => v.name === chosen) || list[0] || null;
-  }
-
-  // Sound — synthesized with Web Audio, no files
-  const SND_KEY = 'fd-lucky-draw-sound';
-  const sound = (function () {
-    let ctx, on = true;
-    try { on = localStorage.getItem(SND_KEY) !== 'off'; } catch (e) {}
-    function ac() {
-      if (!ctx) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; ctx = new A(); }
-      if (ctx.state === 'suspended') ctx.resume();
-      return ctx;
-    }
-    function note(freq, start, dur, type, vol) {
-      const c = ac(); if (!c) return;
-      const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + start;
-      o.type = type; o.frequency.value = freq;
-      g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(vol, t + 0.012);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      o.connect(g).connect(c.destination);
-      o.start(t); o.stop(t + dur + 0.05);
-    }
-    return {
-      get on() { return on; },
-      ctx: ac,
-      toggle() { on = !on; try { localStorage.setItem(SND_KEY, on ? 'on' : 'off'); } catch (e) {} if (on) ac(); return on; },
-      unlock() { if (on) ac(); },
-      // short blip per name while rolling; pitch rises as it slows
-      tick(p) { if (on) note(520 + p * 380, 0, 0.06, 'square', 0.05); },
-      // Hijaz flourish (D Eb F# G A) then a bright chord
-      win() {
-        if (!on) return;
-        [293.66, 311.13, 369.99, 392, 440, 392, 369.99, 440].forEach((f, i) => note(f * 2, i * 0.075, 0.22, 'triangle', 0.16));
-        [587.33, 739.99, 880, 1174.66].forEach(f => note(f, 0.62, 1.4, 'triangle', 0.12));
-        [1760, 2349.32, 2637.02, 3520].forEach((f, i) => note(f, 0.7 + i * 0.07, 0.5, 'sine', 0.04));
-      },
-      undo() { if (on) { note(392, 0, 0.12, 'sine', 0.1); note(293.66, 0.1, 0.2, 'sine', 0.1); } },
-      // read text aloud with the best Malay voice the browser has (else Indonesian).
-      // Resolves when speech ends (or straight away when muted), so callers can wait on it.
-      say(text, delay) {
-        return new Promise(resolve => {
-          if (!on || !window.speechSynthesis) return resolve();
-          const speak = () => {
-            const u = new SpeechSynthesisUtterance(text);
-            const voice = pickVoice();
-            if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = 'ms-MY';
-            u.rate = 0.9;
-            let done = false;
-            const finish = () => { if (!done) { done = true; resolve(); } };
-            u.onend = u.onerror = finish;
-            setTimeout(finish, 1500 + text.length * 110); // some browsers never fire onend
-            speechSynthesis.cancel();
-            speechSynthesis.speak(u);
-          };
-          delay ? setTimeout(speak, delay) : speak(); // speak synchronously inside a tap for iOS
-        });
-      },
-      // iOS only allows speech that starts inside a tap, so prime it on the Cabut! tap
-      unlockSpeech() {
-        if (!on || !window.speechSynthesis) return;
-        speechSynthesis.getVoices();
-        const u = new SpeechSynthesisUtterance(' ');
-        u.volume = 0;
-        speechSynthesis.speak(u);
-      }
-    };
-  })();
+  // Sound — synthesized with Web Audio, no files (on/off, notes & voice shared in assets/common.js)
+  const sound = {
+    get on() { return FDK.sound.on; },
+    ctx: () => FDK.sound.ctx(),
+    toggle: () => FDK.sound.toggle(),
+    unlock: () => FDK.sound.unlock(),
+    // short blip per name while rolling; pitch rises as it slows
+    tick(p) { FDK.sound.note(520 + p * 380, 0, 0.06, 'square', 0.05); },
+    win: () => FDK.sound.fanfare(),
+    undo() { FDK.sound.note(392, 0, 0.12, 'sine', 0.1); FDK.sound.note(293.66, 0.1, 0.2, 'sine', 0.1); },
+    // resolves when speech ends, so the draw can wait for the announcement
+    say: (text, delay) => voice.say(text, delay),
+    unlockSpeech: () => voice.unlock()
+  };
 
   // Celebration music for the family Lucky Draw — synthesized loops, no audio files.
   // Each tune is 4 bars of 16 steps: drum patterns (per bar), a melody and a bass line.
@@ -837,7 +757,7 @@
         el.innerHTML = `<span class="badge">🎉 ${badge} 🎉</span>${winner}`;
         confetti();
         sound.win();
-        const spoken = winner.replace(/\bAbg\b/g, 'Abang');
+        const spoken = voice.spoken(winner);
         sound.say('Tahniah kepada ' + spoken, 1300).then(() => {
           // family Lucky Draw: celebrate until the next Cabut (unless a new draw already started)
           if (prize && !rolling && sound.on) { musicReady = true; music.start(); }
@@ -846,20 +766,7 @@
     }
   }
 
-  function confetti() {
-    const box = $('confetti'), colors = ['#e8c476', '#f6dfa4', '#d9677a', '#b98a3e', '#ffffff', '#8f7cf0'];
-    for (let i = 0; i < 90; i++) {
-      const c = document.createElement('i');
-      c.style.left = Math.random() * 100 + 'vw';
-      c.style.background = colors[i % colors.length];
-      c.style.setProperty('--dx', (Math.random() * 160 - 80) + 'px');
-      c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg');
-      c.style.animationDuration = 2 + Math.random() * 2 + 's';
-      c.style.animationDelay = Math.random() * .4 + 's';
-      box.appendChild(c);
-      c.addEventListener('animationend', () => c.remove());
-    }
-  }
+  const confetti = () => FDK.confetti(90);
 
   $('draw').onclick = roll;
   // Winner not here: record them as absent and draw again for the same prize
@@ -918,12 +825,10 @@
     music.start();
   };
   // Voices load asynchronously; offer a dropdown of Malay/Indonesian voices, or a hint if there's none
-  const voiceLabel = v => v.name.replace(/^(Microsoft|Google)\s+/, '').replace(/\s*-\s*/, ' · ')
-    .replace(/\s*\((Natural)\)/, '') + (/^ms/i.test(v.lang) ? ' 🇲🇾' : ' 🇮🇩');
   function voiceHint() {
     const el = $('vhint');
     if (!window.speechSynthesis) { el.textContent = '🗣️ Pelayar ini tidak boleh membaca nama.'; el.hidden = false; return; }
-    const list = malayVoices(), cur = pickVoice();
+    const list = voice.list(), cur = voice.pick();
     el.hidden = false;
     el.classList.toggle('warn', !list.length);
     if (!list.length) {
@@ -932,13 +837,10 @@
     }
     el.innerHTML = '<label for="voice">🗣️ Suara</label> <select id="voice"></select>';
     $('voice').innerHTML = list.map(v =>
-      `<option value="${v.name.replace(/"/g, '&quot;')}"${v === cur ? ' selected' : ''}>${voiceLabel(v)}</option>`).join('');
-    $('voice').onchange = e => { try { localStorage.setItem(VOICE_KEY, e.target.value); } catch (err) {} };
+      `<option value="${v.name.replace(/"/g, '&quot;')}"${v === cur ? ' selected' : ''}>${voice.label(v)}</option>`).join('');
+    $('voice').onchange = e => voice.choose(e.target.value);
   }
-  if (window.speechSynthesis) {
-    speechSynthesis.getVoices();
-    speechSynthesis.addEventListener?.('voiceschanged', voiceHint);
-  }
+  if (window.speechSynthesis) speechSynthesis.addEventListener?.('voiceschanged', voiceHint);
   setTimeout(voiceHint, 600);
   sndLabel();
   $('reset').onclick = () => {

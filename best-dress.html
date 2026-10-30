@@ -266,21 +266,11 @@
 </dialog>
 
 <script src="assets/offline.js"></script>
+<script src="assets/common.js"></script>
 <script>
   const $ = id => document.getElementById(id);
-
-  // Stars
-  (function () {
-    const box = $('stars');
-    for (let i = 0; i < 80; i++) {
-      const s = document.createElement('span');
-      s.className = 'star';
-      s.style.left = Math.random() * 100 + '%';
-      s.style.top = Math.random() * 100 + '%';
-      s.style.animationDelay = Math.random() * 3 + 's';
-      box.appendChild(s);
-    }
-  })();
+  const { sound, voice, confetti, fullscreen, wait } = FDK;
+  FDK.stars(80);
 
   // Winner — kept in this browser only
   const KEY = 'fd-best-dress-winner';
@@ -288,67 +278,22 @@
   try { winner = Object.assign(winner, JSON.parse(localStorage.getItem(KEY)) || {}); } catch (e) {}
   const saveWinner = () => { try { localStorage.setItem(KEY, JSON.stringify(winner)); } catch (e) {} };
 
-  // Sound (shares the mute + voice choice with the Lucky Draw page)
-  const SND_KEY = 'fd-lucky-draw-sound', VOICE_KEY = 'fd-lucky-draw-voice';
-  let soundOn = true, ctx;
-  try { soundOn = localStorage.getItem(SND_KEY) !== 'off'; } catch (e) {}
-  function ac() {
-    if (!ctx) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; ctx = new A(); }
-    if (ctx.state === 'suspended') ctx.resume();
-    return ctx;
-  }
-  function note(freq, start, dur, type, vol) {
-    const c = soundOn && ac(); if (!c) return;
-    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + start;
-    o.type = type; o.frequency.value = freq;
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(vol, t + 0.015);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g).connect(c.destination);
-    o.start(t); o.stop(t + dur + 0.05);
-  }
+  const note = (...a) => sound.note(...a);
   const sfx = {
     shimmer() { for (let i = 0; i < 14; i++) note(880 * Math.pow(2, i / 12), i * 0.07, 0.3, 'sine', 0.05); },
     count(n) { note(n === 1 ? 784 : 587, 0, 0.35, 'triangle', 0.18); },
-    whoosh() { [220, 247, 277, 311, 349, 392].forEach((f, i) => note(f, i * 0.12, 0.5, 'sawtooth', 0.025)); },
-    fanfare() {
-      [293.66, 311.13, 369.99, 392, 440, 392, 369.99, 440].forEach((f, i) => note(f * 2, i * 0.08, 0.24, 'triangle', 0.17));
-      [587.33, 739.99, 880, 1174.66].forEach(f => note(f, 0.68, 1.8, 'triangle', 0.12));
-      [1760, 2349.32, 2637.02, 3520].forEach((f, i) => note(f, 0.75 + i * 0.08, 0.6, 'sine', 0.045));
-    }
+    whoosh() { [220, 247, 277, 311, 349, 392].forEach((f, i) => note(f, i * 0.12, 0.5, 'sawtooth', 0.025)); }
   };
-  function pickVoice() {
-    if (!window.speechSynthesis) return null;
-    const score = v => {
-      const l = v.lang.toLowerCase();
-      const base = l.startsWith('ms') ? 20 : l.startsWith('id') ? 10 : 0;
-      return base && base + (/natural|online|google/i.test(v.name) ? 5 : 0);
-    };
-    const list = speechSynthesis.getVoices().filter(score).sort((a, b) => score(b) - score(a));
-    let chosen = null;
-    try { chosen = localStorage.getItem(VOICE_KEY); } catch (e) {}
-    return list.find(v => v.name === chosen) || list[0] || null;
-  }
-  function say(text) {
-    if (!soundOn || !window.speechSynthesis) return;
-    const u = new SpeechSynthesisUtterance(text);
-    const v = pickVoice();
-    if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'ms-MY';
-    u.rate = 0.9;
-    speechSynthesis.cancel(); speechSynthesis.speak(u);
-  }
-  if (window.speechSynthesis) speechSynthesis.getVoices();
 
   // Reveal sequence: rub the lamp + smoke → 3-2-1 → curtains open → crown, name, confetti, fanfare, voice
-  const wait = ms => new Promise(r => setTimeout(r, ms));
   let busy = false;
 
   async function reveal() {
     if (busy) return;
     if (!winner.name) return openEdit();
     busy = true;
-    ac(); // unlock audio inside the click
-    if (window.speechSynthesis) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); }
+    sound.unlock(); // unlock audio + speech inside the click
+    voice.unlock();
 
     $('wName').textContent = winner.name;
     $('wNote').textContent = winner.note || '';
@@ -373,11 +318,11 @@
     await wait(900);
     stage.classList.add('revealed');
     await wait(800);
-    sfx.fanfare();
+    sound.fanfare();
     confetti(160);
     setTimeout(() => confetti(90), 1400);
     await wait(1600);
-    say('Tahniah kepada ' + winner.name.replace(/\bAbg\b/g, 'Abang') + '. Pemenang Best Dress, Arabian Nights!');
+    voice.say('Tahniah kepada ' + voice.spoken(winner.name) + '. Pemenang Best Dress, Arabian Nights!');
     $('again').hidden = false;
     busy = false;
   }
@@ -405,21 +350,6 @@
     p.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
     $('stage').appendChild(p);
     p.addEventListener('animationend', () => p.remove());
-  }
-
-  function confetti(n) {
-    const box = $('confetti'), colors = ['#e8c476', '#f6dfa4', '#d9677a', '#b98a3e', '#ffffff', '#8f7cf0'];
-    for (let i = 0; i < n; i++) {
-      const c = document.createElement('i');
-      c.style.left = Math.random() * 100 + 'vw';
-      c.style.background = colors[i % colors.length];
-      c.style.setProperty('--dx', (Math.random() * 200 - 100) + 'px');
-      c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg');
-      c.style.animationDuration = 2.4 + Math.random() * 2.2 + 's';
-      c.style.animationDelay = Math.random() * .5 + 's';
-      box.appendChild(c);
-      c.addEventListener('animationend', () => c.remove());
-    }
   }
 
   function resetStage() {
@@ -455,22 +385,11 @@
   $('again').onclick = resetStage;
 
   // Sound + fullscreen toggles
-  function sndLabel() { $('snd').textContent = soundOn ? '🔊 Bunyi' : '🔇 Senyap'; }
-  $('snd').onclick = () => {
-    soundOn = !soundOn;
-    try { localStorage.setItem(SND_KEY, soundOn ? 'on' : 'off'); } catch (e) {}
-    if (!soundOn && window.speechSynthesis) speechSynthesis.cancel();
-    sndLabel();
-  };
+  function sndLabel() { $('snd').textContent = sound.on ? '🔊 Bunyi' : '🔇 Senyap'; }
+  $('snd').onclick = () => { sound.toggle(); sndLabel(); };
   sndLabel();
-  function goFullscreen() {
-    if (document.fullscreenElement) return;
-    try { document.documentElement.requestFullscreen()?.catch(() => {}); } catch (e) {}
-  }
-  $('fs').onclick = () => {
-    if (document.fullscreenElement) { try { document.exitFullscreen(); } catch (e) {} } else goFullscreen();
-  };
-  function fsLabel() { $('fs').textContent = document.fullscreenElement ? '⤢ Keluar skrin penuh' : '⛶ Skrin penuh'; }
+  $('fs').onclick = () => fullscreen.toggle();
+  function fsLabel() { $('fs').textContent = fullscreen.on ? '⤢ Keluar skrin penuh' : '⛶ Skrin penuh'; }
   document.addEventListener('fullscreenchange', fsLabel);
 
   // winner restored / cleared from the Tetapan page in another tab
