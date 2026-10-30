@@ -5,7 +5,7 @@ window.FD = {
 
   // Shared photo album (Google Photos etc.). Leave url empty until it's ready —
   // the main page then says the link is coming soon, and /qr shows only the site QR.
-  album: { url: '', name: 'Album Family Day Pak Din 2026' },
+  album: { url: 'https://photos.app.goo.gl/WbjyKHk9gxvnGcdJ6', name: 'Album Family Day Pak Din 2026' },
 
   // Tukar-Tukar Hadiah participants, by category
   gift: {
