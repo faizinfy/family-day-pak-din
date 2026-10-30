@@ -313,6 +313,32 @@
   .qs { display: grid; gap: 8px; margin-top: 20px; font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 1.2rem; color: var(--gold-2); }
 
   /* CTA */
+  /* Aturcara */
+  .key-times { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; }
+  .key-times div { padding: 12px 4px; border-radius: 14px; background: rgba(232, 196, 118, .08); border: 1px solid var(--card-border); }
+  .key-times span { display: block; font-size: 1.2rem; }
+  .key-times b { display: block; font-family: "Cormorant Garamond", serif; font-size: 1.7rem; font-weight: 600; line-height: 1.1; color: var(--gold-2); }
+  .key-times small { display: block; font-size: .7rem; line-height: 1.3; color: var(--muted); }
+  .apanel[hidden] { display: none; }
+  .apanel .when { margin-top: 14px; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+  .apanel .when b { letter-spacing: 0; text-transform: none; color: var(--gold-2); font-weight: 500; }
+  .timeline { list-style: none; margin-top: 10px; position: relative; }
+  .timeline::before { content: ""; position: absolute; left: 92px; /* time 64 + gap 14 + half dot 15 */ top: 8px; bottom: 8px; width: 1px; background: rgba(232, 196, 118, .25); }
+  .timeline li { position: relative; display: flex; gap: 14px; align-items: flex-start; padding: 9px 0; }
+  .timeline .t { flex: none; width: 64px; text-align: right; line-height: 1.15; padding-top: 2px; }
+  .timeline .t b { display: block; font-weight: 600; color: var(--gold-2); font-size: .95rem; }
+  .timeline .t small { font-size: .66rem; color: var(--muted); }
+  .timeline .dot {
+    flex: none; width: 30px; height: 30px; margin-left: -1px; border-radius: 50%; display: grid; place-items: center; font-size: .95rem;
+    background: var(--night-2); border: 1px solid var(--card-border); position: relative; z-index: 1;
+  }
+  .timeline .what { min-width: 0; padding-top: 4px; font-size: .9rem; }
+  .timeline .what small { display: block; color: var(--muted); font-size: .8rem; margin-top: 2px; }
+  .timeline li.hl .dot { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); border-color: transparent; }
+  .timeline li.hl .what { color: var(--gold-2); font-weight: 500; }
+  .bye { text-align: center; margin-top: 12px; font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 1.3rem; color: var(--gold-2); }
+  @media (max-width: 420px) { .key-times b { font-size: 1.4rem; } .timeline .t { width: 56px; } .timeline::before { left: 84px; } }
+
   /* Album */
   .album { text-align: center; }
   .album .e { font-size: 2.2rem; }
@@ -382,11 +408,18 @@
   <section class="reveal">
     <div class="sec-head">
       <div class="num">1</div>
-      <h2>Pendaftaran &amp; Check-in</h2>
+      <h2>Aturcara 🗓️</h2>
+      <p class="sub">Ahad 8 Nov – Isnin 9 Nov 2026</p>
     </div>
-    <div class="card" style="text-align:center">
-      <span class="time-pill">⏰ 2.00 petang</span>
-      <p>Pendaftaran dan check-in dibuka mulai jam <b>2.00 petang</b> pada <b>8 November</b>.</p>
+    <div class="card">
+      <div class="key-times">
+        <div><span>🕐</span><b>1.00</b><small>Berkumpul<br>tengah hari</small></div>
+        <div><span>📝</span><b>2.00</b><small>Pendaftaran<br>&amp; t-shirt</small></div>
+        <div><span>🔑</span><b>5.30</b><small>Check-in<br>petang</small></div>
+        <div><span>🌙</span><b>7.45</b><small>Dinner<br>Arabian Night</small></div>
+      </div>
+      <div class="gtabs" id="atabs" role="tablist"></div>
+      <div id="apanels"></div>
     </div>
   </section>
 
@@ -452,7 +485,7 @@
     <div class="sec-head">
       <div class="num">3</div>
       <h2>Minum Petang · Potluck 🍩</h2>
-      <p class="sub">Selepas acara games</p>
+      <p class="sub">6.00 petang · Hi-tea selepas acara games</p>
     </div>
     <div class="card">
       <ul class="menu">
@@ -623,9 +656,65 @@
     }
   })();
 
-  // Countdown to 8 Nov 2026, 2.00pm Malaysia time
+  // Aturcara: edit here. [time, period, emoji, what, note?]; hl = highlight
+  const ATURCARA = [
+    { id: 'siang', tab: '☀️ Ahad · Siang', when: 'Hari Keluarga Pak Din', date: 'Ahad, 8 Nov 2026', items: [
+      ['1.00', 'tengah hari', '🕐', 'Berkumpul di dewan makan & solat di Villa'],
+      ['2.00', 'petang', '📝', 'Pendaftaran ahli keluarga & agihan t-shirt', 'Persalinan di Villa', 'hl'],
+      ['2.30', 'petang', '📸', 'Sesi bergambar keluarga'],
+      ['3.00', 'petang', '🎯', 'Sukaneka bermula', 'Kategori kanak-kanak, dewasa, muda-mudi, adik-beradik, warga emas & acara mewarna untuk kanak-kanak', 'hl'],
+      ['5.00', 'petang', '🐥', 'Sukaneka air untuk kanak-kanak (tangkap itik) & acara santai / bebas', 'Mandi pool'],
+      ['5.30', 'petang', '🔑', 'Penyerahan kunci bilik / check-in & solat', '', 'hl'],
+      ['6.00', 'petang', '🍩', 'Rehat & minum petang (Hi-tea)', 'Juadah ringan yang dibawa oleh ahli keluarga'],
+      ['7.00', 'malam', '🕌', 'Solat & persiapan untuk majlis makan malam'] ] },
+    { id: 'malam', tab: '🌙 Ahad · Dinner', when: 'Majlis Makan Malam · Tema Arabian Night', date: 'Ahad, 8 Nov 2026', items: [
+      ['7.45', 'malam', '🚶', 'Ketibaan ahli keluarga ke dewan makan & pendaftaran'],
+      ['8.00', 'malam', '✨', 'Majlis bermula', '', 'hl'],
+      ['8.10', 'malam', '🤲', 'Bacaan doa'],
+      ['8.20', 'malam', '🎤', 'Ucapan alu-aluan daripada Pengerusi Majlis'],
+      ['8.30', 'malam', '🍽️', 'Makan malam bermula — dijemput makan', '', 'hl'],
+      ['8.45', 'malam', '🏅', 'Penyampaian hadiah sukaneka', 'Kategori warga emas & adik-beradik'],
+      ['9.00', 'malam', '🎁', 'Pertukaran hadiah (gift exchange)', 'Kategori kanak-kanak'],
+      ['9.15', 'malam', '🏅', 'Penyampaian hadiah sukaneka', 'Kategori dewasa & muda-mudi'],
+      ['9.30', 'malam', '🎁', 'Pertukaran hadiah (gift exchange)', 'Kategori muda-mudi'],
+      ['9.45', 'malam', '🎟️', 'Cabutan bertuah', '5 cabutan', 'hl'],
+      ['10.00', 'malam', '🏅', 'Penyampaian hadiah sukaneka', 'Kategori kanak-kanak'],
+      ['10.15', 'malam', '🎁', 'Pertukaran hadiah (gift exchange)', 'Kategori dewasa'],
+      ['10.30', 'malam', '🏆', 'Cabutan bertuah — Grand Prize', '5 cabutan', 'hl'],
+      ['10.45', 'malam', '👑', 'Penyampaian hadiah Best Dress', '', 'hl'],
+      ['11.00', 'malam', '📸', 'Sesi bergambar keluarga'],
+      ['11.15', 'malam', '🎶', 'Acara bebas / karaoke'],
+      ['12.00', 'malam', '🕌', 'Bersurai & solat'] ] },
+    { id: 'isnin', tab: '🌅 Isnin', when: 'Hari Keluarga Pak Din', date: 'Isnin, 9 Nov 2026', items: [
+      ['6.00', 'pagi', '🕌', 'Solat'],
+      ['7.00', 'pagi', '🤲', 'Berkumpul di dewan makan untuk Tahlil', 'Arwah Kamarudin, Mariah, Zainal Abidin, Intan Zarina & semua ahli keluarga yang telah pergi', 'hl'],
+      ['7.30', 'pagi', '🚚', 'Katering sampai untuk sarapan pagi'],
+      ['8.00', 'pagi', '🍳', 'Sarapan pagi'],
+      ['10.30', 'pagi', '🧳', 'Bersiap & berkemas'],
+      ['12.00', 'tengah hari', '🔑', 'Check-out', '', 'hl'] ], bye: 'Jumpa lagi! 👋' }
+  ];
   (function () {
-    const target = new Date('2026-11-08T14:00:00+08:00').getTime();
+    const tabs = document.getElementById('atabs'), panels = document.getElementById('apanels');
+    tabs.innerHTML = ATURCARA.map((d, i) =>
+      `<button class="gtab" role="tab" aria-selected="${i === 0}" data-a="${d.id}">${d.tab}</button>`).join('');
+    panels.innerHTML = ATURCARA.map((d, i) => `
+      <div class="apanel" id="a-${d.id}" role="tabpanel" ${i ? 'hidden' : ''}>
+        <p class="when">${d.date} · <b>${d.when}</b></p>
+        <ol class="timeline">${d.items.map(([t, p, e, what, note, hl]) => `
+          <li class="${hl || ''}"><span class="t"><b>${t}</b><small>${p}</small></span><span class="dot">${e}</span>
+            <span class="what">${what}${note ? `<small>${note}</small>` : ''}</span></li>`).join('')}</ol>
+        ${d.bye ? `<p class="bye">${d.bye}</p>` : ''}
+      </div>`).join('');
+    tabs.addEventListener('click', e => {
+      const b = e.target.closest('.gtab'); if (!b) return;
+      tabs.querySelectorAll('.gtab').forEach(t => t.setAttribute('aria-selected', t === b));
+      panels.querySelectorAll('.apanel').forEach(p => p.hidden = p.id !== 'a-' + b.dataset.a);
+    });
+  })();
+
+  // Countdown to 8 Nov 2026, 1.00pm Malaysia time (berkumpul)
+  (function () {
+    const target = new Date('2026-11-08T13:00:00+08:00').getTime();
     const el = id => document.getElementById(id);
     const pad = v => String(v).padStart(2, '0');
     function tick() {
