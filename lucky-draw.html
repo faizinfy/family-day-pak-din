@@ -219,6 +219,13 @@
     background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .1); transition: .3s;
   }
   .pool span.out { opacity: .3; text-decoration: line-through; }
+  .pool span.away { border-color: var(--accent); }
+  .away-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .away-btn:disabled { opacity: .45; cursor: not-allowed; }
+  .absent { margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(217, 103, 122, .35); display: flex; flex-wrap: wrap; gap: 6px; }
+  .absent p { width: 100%; font-size: .8rem; color: var(--accent); }
+  .absent button { padding: 4px 12px; border-radius: 999px; font-size: .84rem; background: rgba(217, 103, 122, .1); border: 1px solid rgba(217, 103, 122, .35); }
+  .absent button:hover { border-color: var(--gold); color: var(--gold-2); }
   .pool span.hot { background: rgba(232, 196, 118, .3); border-color: var(--gold); }
 
   /* Confetti */
@@ -265,6 +272,7 @@
     <span>
       <button id="snd" type="button" aria-pressed="true">🔊 Bunyi</button>
       <button id="fs" type="button">⛶ Skrin penuh</button>
+      <a href="settings">⚙️ Tetapan</a>
     </span>
   </nav>
 
@@ -287,6 +295,7 @@
         <div class="actions">
           <button class="draw" id="draw" type="button">🎲 Cabut!</button>
           <button class="music-btn" id="musicBtn" type="button" hidden>⏸ Henti Muzik</button>
+          <button class="music-btn away-btn" id="redraw" type="button" hidden>🚫 Tiada di sini — cabut semula</button>
         </div>
         <p class="count" id="count"></p>
         <div class="vhint" id="vhint" hidden></div>
@@ -307,6 +316,7 @@
       <p class="side-sub" id="winSub"></p>
       <ol class="winners" id="winners"></ol>
       <p class="empty" id="empty">Belum ada cabutan.</p>
+      <div class="absent" id="absent" hidden></div>
     </aside>
   </div>
 </div>
@@ -674,7 +684,10 @@
   let draw = DRAWS[0], pool = draw.pools[0], rolling = false;
   const $ = id => document.getElementById(id);
   const won = () => (state[pool.id] = state[pool.id] || []);
-  const left = () => pool.names.filter(n => !won().includes(n));
+  // winners who weren't there: recorded, and left out of the next draws
+  const absent = () => (state['absent:' + pool.id] = state['absent:' + pool.id] || []);
+  const left = () => pool.names.filter(n => !won().includes(n) && !absent().includes(n));
+  let lastWin = null; // { pool, name } of the draw just shown — the one "Tiada di sini" applies to
   // Lucky Draw prizes count down: 1st family drawn wins hadiah #10, last wins #1
   const prizeNo = i => draw.id === 'lucky' ? pool.names.length - i : 0;
   const malayNum = n => ['kosong', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'lapan', 'sembilan', 'sepuluh'][n] || String(n);
@@ -700,10 +713,14 @@
 
     $('poolLabel').textContent = draw.name + (draw.pools.length > 1 ? ' · ' + pool.name : '');
     $('poolNote').textContent = pool.note || '';
-    const w = won(), l = left();
-    $('count').innerHTML = `Baki <b>${l.length}</b> / ${pool.names.length} · Dicabut <b>${w.length}</b>`;
+    const w = won(), l = left(), a = absent();
+    $('count').innerHTML = `Baki <b>${l.length}</b> / ${pool.names.length} · Dicabut <b>${w.length}</b>` +
+      (a.length ? ` · Tiada <b>${a.length}</b>` : '');
     $('draw').disabled = rolling || !l.length;
     $('draw').textContent = l.length ? '🎲 Cabut!' : '✅ Semua telah dicabut';
+    // Special only: in the family draw every family gets a prize, so a redraw would leave hadiah #1 unclaimed
+    $('redraw').hidden = rolling || draw.id !== 'special' || !lastWin || lastWin.pool !== pool.id || w[w.length - 1] !== lastWin.name;
+    $('redraw').disabled = !l.length;
 
     $('winTitle').textContent = draw.win;
     $('winSub').textContent = $('poolLabel').textContent;
@@ -714,10 +731,14 @@
     }).join('');
     renderPrizeBar();
     $('empty').hidden = w.length > 0;
-    $('reset').hidden = !w.length;
+    $('reset').hidden = !w.length && !a.length;
+    $('absent').hidden = !a.length;
+    $('absent').innerHTML = `<p>🚫 Tiada di sini</p>` +
+      a.map((n, i) => `<button type="button" data-a="${i}" title="Masukkan semula ke cabutan">${n} ↩</button>`).join('');
 
     $('poolCount').textContent = `(${pool.names.length})`;
-    $('pool').innerHTML = pool.names.map(n => `<span class="${w.includes(n) ? 'out' : ''}">${n}</span>`).join('');
+    $('pool').innerHTML = pool.names.map(n =>
+      `<span class="${w.includes(n) ? 'out' : a.includes(n) ? 'out away' : ''}">${n}</span>`).join('');
   }
 
   // Prize bar: follows Baki — the prize number always equals the families left to draw
@@ -765,6 +786,7 @@
   }, true);
 
   function idle() {
+    lastWin = null;
     const el = $('name');
     el.className = 'name idle';
     el.textContent = 'Tekan “Cabut!” untuk mula';
@@ -806,6 +828,7 @@
         chips.forEach(c => c.classList.remove('hot'));
         won().push(winner); save();
         const n = won().length;
+        lastWin = { pool: pool.id, name: winner };
         rolling = false;
         render();
         el.className = 'name win';
@@ -838,6 +861,25 @@
   }
 
   $('draw').onclick = roll;
+  // Winner not here: record them as absent and draw again for the same prize
+  $('redraw').onclick = () => {
+    if (rolling || !lastWin) return;
+    const n = lastWin.name;
+    if (!confirm(`“${n}” tiada di sini?\nNama ini akan direkod sebagai tiada, dan cabutan semula dibuat untuk hadiah yang sama.`)) return;
+    const w = won();
+    if (w[w.length - 1] === n) w.pop();
+    absent().push(n); save();
+    lastWin = null;
+    if (window.speechSynthesis) speechSynthesis.cancel();
+    roll();
+  };
+  $('absent').onclick = e => {
+    const i = e.target.dataset.a;
+    if (i == null || rolling) return;
+    const n = absent()[i];
+    if (!confirm(`Masukkan semula “${n}” ke dalam cabutan?`)) return;
+    absent().splice(i, 1); save(); render();
+  };
   document.addEventListener('keydown', e => {
     if ((e.code === 'Space' || e.code === 'Enter') && e.target === document.body) { e.preventDefault(); roll(); }
   });
@@ -911,7 +953,7 @@
   $('reset').onclick = () => {
     if (rolling) return;
     if (!confirm(`Reset semua cabutan untuk ${$('poolLabel').textContent}?`)) return;
-    state[pool.id] = []; save(); idle(); render();
+    state[pool.id] = []; state['absent:' + pool.id] = []; save(); idle(); render();
   };
   $('fs').onclick = () => {
     document.body.classList.toggle('big');
@@ -920,6 +962,13 @@
   };
   document.addEventListener('fullscreenchange', () => {
     if (!document.fullscreenElement) document.body.classList.remove('big');
+  });
+
+  // results restored / cleared from the Tetapan page in another tab
+  addEventListener('storage', e => {
+    if (e.key !== KEY && e.key !== null) return;
+    try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (err) { state = {}; }
+    if (!rolling) { idle(); render(); }
   });
 
   render();

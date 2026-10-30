@@ -216,6 +216,7 @@
     <span>
       <button id="snd" type="button">🔊 Bunyi</button>
       <button id="fs" type="button">⛶ Skrin penuh</button>
+      <a href="settings">⚙️ Tetapan</a>
     </span>
   </nav>
 
@@ -265,19 +266,8 @@
 <script>
   const $ = id => document.getElementById(id);
 
-  // Games, in the order they are played (Susunan Permainan)
-  const GAMES = [
-    { id: 'cups', e: '🥤', name: 'Susun Paper Cups', cat: 'Sek Ren / Tadika' },
-    { id: 'gula', e: '🍭', name: 'Cari Gula-gula dalam Tepung', cat: 'Sek Ren / Tadika' },
-    { id: 'belon', e: '🎈', name: 'Rally Pass Belon', cat: 'Muda-Mudi', team: 'Team' },
-    { id: 'bola', e: '⚽️', name: 'Pass Bola Guna Kain Pelikat', cat: 'Muda-Mudi', team: 'Team' },
-    { id: 'belon-air', e: '🎈', name: 'Rally Pass Belon Berisi Air', cat: 'Dewasa', team: 'Berpasangan' },
-    { id: 'suara', e: '🎙️', name: 'Teka Suara', cat: 'Warga Emas' },
-    { id: 'mc-muda', e: '🪑', name: 'Musical Chair', cat: 'Muda-Mudi' },
-    { id: 'mc-dewasa', e: '🪑', name: 'Musical Chair', cat: 'Dewasa' },
-    { id: 'mc-adik', e: '🩴', name: 'Musical Chair / Sandals', cat: 'Adik-beradik' },
-    { id: 'itik', e: '🐥', name: 'Tangkap Itik dalam Kolam', cat: 'Sek Ren / Tadika' }
-  ];
+  // Games, in the order they are played (Susunan Permainan) — edit in assets/names.js
+  const GAMES = FD.games;
   const PLACES = [
     { cls: 'p1', medal: '🥇', rank: 'Tempat Pertama', word: 'pertama' },
     { cls: 'p2', medal: '🥈', rank: 'Tempat Kedua', word: 'kedua' },
@@ -551,6 +541,13 @@
   };
   function fsLabel() { $('fs').textContent = document.fullscreenElement ? '⤢ Keluar skrin penuh' : '⛶ Skrin penuh'; }
   document.addEventListener('fullscreenchange', fsLabel);
+
+  // results restored / cleared from the Tetapan page in another tab
+  addEventListener('storage', e => {
+    if (e.key !== KEY && e.key !== null) return;
+    try { winners = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (err) { winners = {}; }
+    if (!busy) { GAMES.forEach(g => shown[g.id] = 0); render(); }
+  });
 
   render();
 </script>

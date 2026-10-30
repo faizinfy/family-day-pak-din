@@ -12,15 +12,18 @@ Laman web untuk **Family Day Keluarga Pak Din 2026** — tema *Arabian Nights*, 
 | `/lucky-draw` | `lucky-draw.html` | Cabutan bertuah: Lucky Draw 10 keluarga (dengan hadiah #10 → #1), Tukar Hadiah (Dewasa / Muda-Mudi / Kanak-kanak), Special Lucky Draw (semua peserta) |
 | `/best-dress` | `best-dress.html` | Skrin dedah pemenang Best Dress (tirai, kiraan 3-2-1, confetti, suara) |
 | `/game-prizes` | `game-prizes.html` | Skrin dedah pemenang tempat 1, 2, 3 bagi setiap permainan |
+| `/result` | `result.html` | Semua pemenang dalam satu halaman — salin ke WhatsApp atau cetak / PDF |
+| `/settings` | `settings.html` | Kawalan acara: pautan ke semua skrin, ujian bunyi / suara / lagu, simpan & pulih keputusan, padam keputusan ujian |
 
 Halaman cabutan & dedah pemenang direka untuk **skrin desktop / projektor** (skrin penuh).
 
 ## Kemaskini data
 
-- **Nama peserta, keluarga & hadiah Lucky Draw** — `assets/names.js` (dikongsi oleh `index.html` dan `lucky-draw.html`).
+- **Nama peserta, keluarga & hadiah Lucky Draw** — `assets/names.js` (dikongsi oleh semua halaman).
 - **Permainan & peraturan** — senarai `GAMES` dalam `index.html`.
-- **Senarai permainan untuk skrin pemenang** — senarai `GAMES` dalam `game-prizes.html` (tambah `team: 'Team'` atau `team: 'Berpasangan'` untuk benarkan beberapa nama setiap tempat).
+- **Senarai permainan untuk skrin pemenang** — `games` dalam `assets/names.js` (tambah `team: 'Team'` atau `team: 'Berpasangan'` untuk benarkan beberapa nama setiap tempat).
 - **Gambar hadiah** — `assets/prizes/prize-01` hingga `prize-10`.
+- **Lagu MP3** — letak fail dalam `assets/music/` dan tambah dalam `assets/music/music.js` (`start` / `end` dalam saat untuk main bahagian korus sahaja).
 
 ## Kawalan tersembunyi (hari acara)
 
@@ -30,8 +33,9 @@ Halaman cabutan & dedah pemenang direka untuk **skrin desktop / projektor** (skr
 | `/game-prizes` | `Shift+E` atau klik sudut kiri bawah | Masukkan nama pemenang 🥇🥈🥉 bagi semua permainan. Permainan team & berpasangan boleh ada beberapa nama: pilih / taip nama dan tekan `Enter` (atau pisahkan dengan koma), `×` untuk buang |
 | `/game-prizes` | `Space` · `←` `→` | Dedah tempat seterusnya · tukar permainan |
 | `/lucky-draw` | `Space` / `Enter` | Cabut |
+| `/lucky-draw` | 🚫 Tiada di sini — cabut semula | Special Lucky Draw: pemenang tiada → direkod sebagai tiada, cabutan semula. Klik nama dalam senarai "Tiada" untuk masukkan semula |
 
-Nama pemenang dan keputusan cabutan disimpan dalam **browser itu sahaja** (localStorage). Gunakan laptop yang sama untuk masukkan nama dan untuk paparan pada hari acara.
+Nama pemenang dan keputusan cabutan disimpan dalam **browser itu sahaja** (localStorage). Gunakan laptop yang sama untuk masukkan nama dan untuk paparan pada hari acara. Di `/settings`, **⬇ Simpan ke fail** untuk backup (atau pindah ke laptop lain dengan **⬆ Muat naik fail**), dan **🗑️ Padam semua keputusan** untuk buang cabutan ujian sebelum acara.
 
 Bunyi & suara (Web Audio + Web Speech) — gunakan Microsoft Edge atau Chrome untuk suara Bahasa Melayu online.
 

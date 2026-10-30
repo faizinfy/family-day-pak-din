@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Keputusan · Family Day Pak Din 2026</title>
+<meta name="description" content="Semua pemenang · Family Day Pak Din 2026">
+<meta name="theme-color" content="#120c2b">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #120c2b;
+    --card: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(232, 196, 118, 0.22);
+    --gold: #e8c476;
+    --gold-2: #f6dfa4;
+    --gold-deep: #b98a3e;
+    --text: #f3ecdc;
+    --muted: #b9b0cc;
+    --accent: #d9677a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Poppins", system-ui, sans-serif; font-weight: 300;
+    color: var(--text); background: var(--night);
+    background-image:
+      radial-gradient(ellipse at 50% -10%, #3a2470 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 60%, rgba(185, 138, 62, 0.12) 0%, transparent 45%),
+      radial-gradient(ellipse at 0% 90%, rgba(217, 103, 122, 0.10) 0%, transparent 45%);
+    background-attachment: fixed;
+    min-height: 100vh; overflow-x: hidden; line-height: 1.55;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; opacity: .6; animation: twinkle 3s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100% { opacity: .15 } 50% { opacity: .9 } }
+
+  .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 32px 56px; }
+  .top { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 0; }
+  .top a { font-size: .85rem; color: var(--muted); text-decoration: none; padding: 6px 2px; }
+  .top a:hover { color: var(--gold); }
+  .top span { display: flex; gap: 16px; }
+
+  header { text-align: center; padding: 14px 0 6px; }
+  .eyebrow { font-size: .78rem; letter-spacing: .35em; text-transform: uppercase; color: var(--gold); }
+  h1 {
+    font-family: "Cinzel Decorative", serif; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; margin-top: 4px;
+    background: linear-gradient(180deg, var(--gold-2), var(--gold) 55%, var(--gold-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+
+  .tools { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .btn {
+    padding: 10px 22px; border-radius: 999px; font-weight: 500; font-size: .92rem;
+    background: rgba(255, 255, 255, .06); border: 1px solid var(--card-border);
+  }
+  .btn:hover { border-color: var(--gold); color: var(--gold-2); }
+  .btn.primary { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night); border: 0; font-weight: 600; }
+  .toast { text-align: center; font-size: .82rem; color: var(--gold-2); min-height: 1.4em; margin-top: 6px; }
+
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 14px; align-items: start; }
+  .card {
+    background: var(--card); border: 1px solid var(--card-border); border-radius: 20px;
+    padding: 20px 22px; backdrop-filter: blur(6px);
+  }
+  .card.wide { grid-column: 1 / -1; }
+  .card h2 { font-family: "Cormorant Garamond", serif; font-weight: 600; color: var(--gold-2); font-size: 1.5rem; line-height: 1.2; }
+  .card h2 small { font-family: "Poppins", sans-serif; font-weight: 300; font-size: .8rem; color: var(--muted); margin-left: 8px; }
+  .none { margin-top: 10px; font-size: .88rem; color: var(--muted); font-style: italic; }
+
+  .list { list-style: none; margin-top: 12px; display: grid; gap: 6px; }
+  .list li { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 12px; background: rgba(232, 196, 118, .07); }
+  .list .no {
+    flex: none; min-width: 30px; height: 30px; padding: 0 6px; border-radius: 999px; display: grid; place-items: center;
+    font-size: .78rem; font-weight: 600; border: 1px solid var(--gold); color: var(--gold);
+  }
+  .list .who { font-weight: 500; }
+  .list .what { display: block; font-size: .78rem; color: var(--muted); line-height: 1.3; }
+  .list .thumb { width: 40px; height: 40px; flex: none; border-radius: 8px; background: #fff center / contain no-repeat; margin-left: auto; }
+  .list li.wait .who { color: var(--muted); font-weight: 300; font-style: italic; }
+
+  .games { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-top: 12px; }
+  .game { padding: 12px 14px; border-radius: 14px; background: rgba(0, 0, 0, .18); border: 1px solid rgba(255, 255, 255, .08); }
+  .game b { display: block; font-weight: 500; line-height: 1.3; }
+  .game small { color: var(--muted); font-size: .75rem; }
+  .game ol { list-style: none; margin-top: 8px; display: grid; gap: 3px; font-size: .9rem; }
+  .game ol li { display: flex; gap: 8px; }
+  .game ol li span:last-child { min-width: 0; }
+  .game ol li.empty { color: var(--muted); font-style: italic; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; counter-reset: c; }
+  .chips span { padding: 4px 12px; border-radius: 999px; font-size: .84rem; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .1); }
+  .chips span::before { counter-increment: c; content: counter(c) ". "; color: var(--gold); }
+  .cat { margin-top: 14px; font-size: .8rem; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); }
+  .cat em { font-style: normal; letter-spacing: 0; text-transform: none; color: var(--muted); }
+  .away { margin-top: 10px; font-size: .82rem; color: var(--accent); }
+
+  .best { text-align: center; padding: 6px 0; }
+  .best .crown { font-size: 2.4rem; }
+  .best b { display: block; font-family: "Cinzel Decorative", serif; font-size: 1.9rem; color: var(--gold-2); line-height: 1.2; }
+  .best small { color: var(--muted); }
+
+  .foot { text-align: center; font-size: .78rem; color: var(--muted); margin-top: 22px; }
+
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .wrap { padding: 0 16px 48px; } }
+  @media print {
+    body { background: #fff; color: #000; }
+    .stars, .top, .tools, .toast { display: none; }
+    .card { border-color: #ccc; background: none; break-inside: avoid; }
+    h1, .card h2, .best b { color: #000; background: none; -webkit-text-fill-color: #000; }
+  }
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<div class="wrap">
+  <nav class="top">
+    <a href="./">← Laman utama</a>
+    <span><a href="settings">⚙️ Tetapan</a></span>
+  </nav>
+
+  <header>
+    <p class="eyebrow">Family Day Pak Din 2026</p>
+    <h1>Keputusan</h1>
+    <p class="sub">Semua pemenang · 🐪 Arabian Nights ✨</p>
+  </header>
+
+  <div class="tools">
+    <button class="btn primary" id="copy" type="button">📋 Salin untuk WhatsApp</button>
+    <button class="btn" id="print" type="button">🖨️ Cetak / PDF</button>
+  </div>
+  <p class="toast" id="toast"></p>
+
+  <div class="grid" id="grid"></div>
+  <p class="foot">Keputusan diambil dari browser ini (laptop yang digunakan untuk cabutan). Halaman ini dikemaskini sendiri bila ada cabutan baru.</p>
+</div>
+
+<script src="assets/names.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const read = k => { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } };
+
+  // Stars
+  (function () {
+    const box = $('stars');
+    for (let i = 0; i < 70; i++) {
+      const s = document.createElement('span');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.animationDelay = Math.random() * 3 + 's';
+      box.appendChild(s);
+    }
+  })();
+
+  const PLACES = ['🥇', '🥈', '🥉'];
+  // a couple reads "A & B", a team "A, B, C"
+  const joinNames = l => l.join(l.length < 3 ? ' & ' : ', ');
+  const GIFT = [['gift-dewasa', 'Dewasa'], ['gift-muda', 'Muda-Mudi'], ['gift-kanak', 'Kanak-kanak']];
+
+  // Everything the result pages show, read fresh from this browser's storage
+  function data() {
+    const draw = read('fd-lucky-draw-v1') || {}, games = read('fd-game-prizes') || {}, best = read('fd-best-dress-winner') || {};
+    const n = FD.families.length;
+    return {
+      // Lucky Draw: 1st family drawn wins hadiah #10 … last wins #1
+      lucky: Array.from({ length: n }, (_, i) => ({ no: n - i, who: (draw.lucky || [])[i] || '', prize: FD.prizes[n - i - 1] || {} })),
+      luckyAway: draw['absent:lucky'] || [],
+      special: draw['sp-all'] || [],
+      specialAway: draw['absent:sp-all'] || [],
+      gift: GIFT.map(([id, name]) => ({ name, list: draw[id] || [] })),
+      games: FD.games.map(g => ({ g, places: [0, 1, 2].map(p => [].concat((games[g.id] || [])[p] || []).filter(Boolean)) })),
+      best
+    };
+  }
+
+  function render() {
+    const d = data();
+    const nameOf = l => esc(joinNames(l));
+    const html = [];
+
+    // Lucky Draw — show #1 (top prize) first
+    const lucky = d.lucky.slice().reverse();
+    html.push(`<section class="card"><h2>🎟️ Lucky Draw Keluarga<small>${d.lucky.filter(x => x.who).length} / ${d.lucky.length}</small></h2>
+      <ul class="list">${lucky.map(x => `<li class="${x.who ? '' : 'wait'}"><span class="no">#${x.no}</span>
+        <span><span class="who">${x.who ? esc(x.who) : 'Belum dicabut'}</span><span class="what">${esc(x.prize.name || '')}</span></span>
+        ${x.prize.img ? `<span class="thumb" style="background-image:url('${x.prize.img}')"></span>` : ''}</li>`).join('')}</ul>
+      ${d.luckyAway.length ? `<p class="away">🚫 Tiada di sini: ${d.luckyAway.map(esc).join(', ')}</p>` : ''}</section>`);
+
+    // Right column: Best Dress + Special
+    html.push(`<div style="display:grid;gap:16px">
+      <section class="card"><h2>👑 Best Dress</h2>${d.best.name
+        ? `<div class="best"><div class="crown">👑</div><b>${esc(d.best.name)}</b>${d.best.note ? `<small>${esc(d.best.note)}</small>` : ''}</div>`
+        : '<p class="none">Belum ditetapkan.</p>'}</section>
+      <section class="card"><h2>✨ Special Lucky Draw<small>${d.special.length} pemenang</small></h2>${d.special.length
+        ? `<ul class="list">${d.special.map((w, i) => `<li><span class="no">${i + 1}</span><span class="who">${esc(w)}</span></li>`).join('')}</ul>`
+        : '<p class="none">Belum ada cabutan.</p>'}
+        ${d.specialAway.length ? `<p class="away">🚫 Tiada di sini: ${d.specialAway.map(esc).join(', ')}</p>` : ''}</section>
+    </div>`);
+
+    // Games
+    html.push(`<section class="card wide"><h2>🏆 Pemenang Permainan</h2><div class="games">${d.games.map(({ g, places }) =>
+      `<div class="game"><b>${g.e} ${esc(g.name)}</b><small>${esc(g.cat)}${g.team ? ' · ' + g.team : ''}</small><ol>${
+        places.some(l => l.length) ? places.map((l, p) => `<li class="${l.length ? '' : 'empty'}"><span>${PLACES[p]}</span><span>${nameOf(l) || '—'}</span></li>`).join('')
+          : '<li class="empty">Belum ada keputusan</li>'}</ol></div>`).join('')}</div></section>`);
+
+    // Tukar Hadiah order
+    html.push(`<section class="card wide"><h2>🎁 Tukar Hadiah · Urutan Cabutan</h2>${d.gift.map(c =>
+      `<p class="cat">${c.name} <em>(${c.list.length})</em></p>${c.list.length
+        ? `<div class="chips">${c.list.map(n => `<span>${esc(n)}</span>`).join('')}</div>` : '<p class="none">Belum ada cabutan.</p>'}`).join('')}</section>`);
+
+    $('grid').innerHTML = html.join('');
+  }
+
+  // Plain text for the family WhatsApp group (*bold* works there)
+  function asText() {
+    const d = data(), out = ['*🐪 FAMILY DAY PAK DIN 2026 — KEPUTUSAN ✨*', ''];
+    out.push('*🎟️ Lucky Draw Keluarga*');
+    d.lucky.slice().reverse().forEach(x => out.push(`#${x.no} ${x.who || '(belum dicabut)'} — ${x.prize.name || ''}`));
+    if (d.luckyAway.length) out.push('Tiada di sini: ' + d.luckyAway.join(', '));
+    out.push('', '*✨ Special Lucky Draw*');
+    out.push(...(d.special.length ? d.special.map((w, i) => `${i + 1}. ${w}`) : ['(belum ada cabutan)']));
+    if (d.best.name) out.push('', '*👑 Best Dress*', d.best.name + (d.best.note ? ` (${d.best.note})` : ''));
+    out.push('', '*🏆 Pemenang Permainan*');
+    d.games.forEach(({ g, places }) => {
+      if (!places.some(l => l.length)) return;
+      out.push(`${g.e} ${g.name} (${g.cat})`);
+      places.forEach((l, p) => { if (l.length) out.push(`  ${PLACES[p]} ${joinNames(l)}`); });
+    });
+    return out.join('\n');
+  }
+
+  $('copy').onclick = async () => {
+    const text = asText();
+    try { await navigator.clipboard.writeText(text); toast('✅ Disalin — tampal dalam WhatsApp'); }
+    catch (e) {
+      const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); toast('✅ Disalin — tampal dalam WhatsApp'); } catch (err) { toast('Tidak dapat menyalin'); }
+      t.remove();
+    }
+  };
+  $('print').onclick = () => print();
+  let tt;
+  function toast(s) { $('toast').textContent = s; clearTimeout(tt); tt = setTimeout(() => $('toast').textContent = '', 3000); }
+
+  // other tabs (Lucky Draw / Game Prizes / Best Dress) update the results live
+  addEventListener('storage', e => { if (!e.key || e.key.startsWith('fd-')) render(); });
+  render();
+</script>
+</body>
+</html>

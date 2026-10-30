@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tetapan · Family Day Pak Din 2026</title>
+<meta name="description" content="Kawalan acara, ujian bunyi & simpanan keputusan · Family Day Pak Din 2026">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#120c2b">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #120c2b;
+    --card: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(232, 196, 118, 0.22);
+    --gold: #e8c476;
+    --gold-2: #f6dfa4;
+    --gold-deep: #b98a3e;
+    --text: #f3ecdc;
+    --muted: #b9b0cc;
+    --accent: #d9677a;
+    --ok: #7fd1a0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Poppins", system-ui, sans-serif; font-weight: 300;
+    color: var(--text); background: var(--night);
+    background-image:
+      radial-gradient(ellipse at 50% -10%, #3a2470 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 60%, rgba(185, 138, 62, 0.12) 0%, transparent 45%),
+      radial-gradient(ellipse at 0% 90%, rgba(217, 103, 122, 0.10) 0%, transparent 45%);
+    background-attachment: fixed;
+    min-height: 100vh; overflow-x: hidden; line-height: 1.55;
+  }
+  button, select { font: inherit; color: inherit; cursor: pointer; }
+
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; opacity: .6; animation: twinkle 3s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100% { opacity: .15 } 50% { opacity: .9 } }
+
+  .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 32px 56px; }
+  .top { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 0; }
+  .top a { font-size: .85rem; color: var(--muted); text-decoration: none; padding: 6px 2px; }
+  .top a:hover { color: var(--gold); }
+
+  header { text-align: center; padding: 14px 0 6px; }
+  .eyebrow { font-size: .78rem; letter-spacing: .35em; text-transform: uppercase; color: var(--gold); }
+  h1 {
+    font-family: "Cinzel Decorative", serif; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; margin-top: 4px;
+    background: linear-gradient(180deg, var(--gold-2), var(--gold) 55%, var(--gold-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--card-border); border-radius: 20px;
+    padding: 20px 22px; backdrop-filter: blur(6px); margin-top: 16px;
+  }
+  .card h2 { font-family: "Cormorant Garamond", serif; font-weight: 600; color: var(--gold-2); font-size: 1.5rem; line-height: 1.2; }
+  .card .hint { font-size: .85rem; color: var(--muted); margin-top: 2px; }
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .two > .card { margin-top: 16px; }
+
+  /* Event screens */
+  .screens { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+  .screen {
+    display: flex; flex-direction: column; gap: 4px; padding: 18px 16px; border-radius: 18px; text-decoration: none; color: inherit;
+    background: rgba(232, 196, 118, .07); border: 1px solid var(--card-border); transition: .2s;
+  }
+  .screen:hover { border-color: var(--gold); background: rgba(232, 196, 118, .14); transform: translateY(-2px); }
+  .screen .i { font-size: 2rem; line-height: 1.1; }
+  .screen b { font-weight: 600; color: var(--gold-2); }
+  .screen small { font-size: .76rem; color: var(--muted); line-height: 1.4; }
+  .screen kbd, .keys kbd { font: inherit; font-size: .72rem; padding: 0 5px; border-radius: 5px; border: 1px solid rgba(255, 255, 255, .25); }
+
+  /* Checks */
+  .checks { list-style: none; display: grid; gap: 8px; margin-top: 12px; }
+  .checks li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: rgba(0, 0, 0, .18); }
+  .checks .st { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--muted); }
+  .checks .st.ok { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+  .checks .st.bad { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  .checks .lab { flex: 1; min-width: 0; }
+  .checks .lab b { display: block; font-weight: 500; font-size: .92rem; }
+  .checks .lab small { display: block; font-size: .78rem; color: var(--muted); }
+  .btn {
+    flex: none; padding: 8px 16px; border-radius: 999px; font-size: .85rem; font-weight: 500;
+    background: rgba(255, 255, 255, .06); border: 1px solid var(--card-border);
+  }
+  .btn:hover { border-color: var(--gold); color: var(--gold-2); }
+  .btn.primary { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night); border: 0; font-weight: 600; }
+  .btn.danger { color: var(--accent); border-color: rgba(217, 103, 122, .45); }
+  .btn.danger:hover { background: rgba(217, 103, 122, .12); }
+  select.btn { background: rgba(0, 0, 0, .3); max-width: 220px; }
+  select.btn option { background: var(--night); }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+  .row[hidden] { display: none; }
+
+  /* Saved data */
+  .stored { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 14px; margin-top: 12px; font-size: .88rem; }
+  .stored b { color: var(--gold-2); font-weight: 500; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .msg { font-size: .85rem; margin-top: 10px; min-height: 1.4em; color: var(--gold-2); }
+  .msg.err { color: var(--accent); }
+
+  .keys { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: .88rem; }
+  .keys td { padding: 7px 4px; border-bottom: 1px dashed rgba(232, 196, 118, .15); vertical-align: top; }
+  .keys td:first-child { color: var(--gold-2); white-space: nowrap; width: 150px; }
+  .keys td:nth-child(2) { white-space: nowrap; width: 200px; }
+
+  @media (max-width: 900px) { .screens { grid-template-columns: repeat(2, 1fr); } .two { grid-template-columns: 1fr; } .wrap { padding: 0 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<div class="wrap">
+  <nav class="top">
+    <a href="./">← Laman utama</a>
+  </nav>
+
+  <header>
+    <p class="eyebrow">Family Day Pak Din 2026</p>
+    <h1>Tetapan</h1>
+    <p class="sub">Kawalan acara · ujian bunyi · simpan keputusan</p>
+  </header>
+
+  <section class="card">
+    <h2>🎬 Skrin Acara</h2>
+    <p class="hint">Buka skrin untuk ditayangkan pada projektor / TV.</p>
+    <div class="screens">
+      <a class="screen" href="lucky-draw"><span class="i">🎟️</span><b>Lucky Draw</b><small>Keluarga, Tukar Hadiah & Special · <kbd>Space</kbd> cabut</small></a>
+      <a class="screen" href="game-prizes"><span class="i">🏆</span><b>Pemenang Permainan</b><small>🥇🥈🥉 setiap permainan · <kbd>Shift+E</kbd> isi nama</small></a>
+      <a class="screen" href="best-dress"><span class="i">👑</span><b>Best Dress</b><small>Dedah pemenang · <kbd>Shift+E</kbd> isi nama</small></a>
+      <a class="screen" href="result"><span class="i">📋</span><b>Keputusan</b><small>Semua pemenang · salin ke WhatsApp</small></a>
+      <a class="screen" href="./"><span class="i">🏠</span><b>Laman Utama</b><small>Jemputan, aturcara & info</small></a>
+    </div>
+  </section>
+
+  <div class="two">
+    <section class="card">
+      <h2>🔊 Ujian Bunyi & Suara</h2>
+      <p class="hint">Uji sebelum acara bermula, dengan speaker yang akan digunakan.</p>
+      <ul class="checks">
+        <li><span class="st" id="netSt"></span><span class="lab"><b>Internet</b><small id="netTx"></small></span></li>
+        <li><span class="st" id="sndSt"></span><span class="lab"><b>Bunyi</b><small id="sndTx"></small></span>
+          <button class="btn" id="sndToggle" type="button"></button><button class="btn primary" id="beep" type="button">🔔 Uji</button></li>
+        <li><span class="st" id="vSt"></span><span class="lab"><b>Suara Bahasa Melayu</b><small id="vTx"></small></span></li>
+      </ul>
+      <div class="row" id="vRow" hidden>
+        <select class="btn" id="voice" aria-label="Suara"></select>
+        <button class="btn primary" id="vtest" type="button">🗣️ Uji suara</button>
+      </div>
+      <div class="row" id="mRow" hidden>
+        <select class="btn" id="song" aria-label="Lagu"></select>
+        <button class="btn primary" id="mtest" type="button">🎵 Uji lagu</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>💾 Simpan & Pulih Keputusan</h2>
+      <p class="hint">Semua cabutan & nama pemenang disimpan dalam browser ini sahaja. Simpan ke fail sebagai backup, atau untuk pindah ke laptop lain.</p>
+      <ul class="stored" id="stored"></ul>
+      <div class="actions">
+        <button class="btn primary" id="backup" type="button">⬇ Simpan ke fail</button>
+        <button class="btn" id="restoreBtn" type="button">⬆ Muat naik fail</button>
+        <input type="file" id="restore" accept=".json,application/json" hidden>
+        <button class="btn danger" id="wipe" type="button">🗑️ Padam semua keputusan</button>
+      </div>
+      <p class="msg" id="msg"></p>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>⌨️ Kekunci</h2>
+    <table class="keys">
+      <tr><td>🎟️ Lucky Draw</td><td><kbd>Space</kbd> / <kbd>Enter</kbd></td><td>Cabut</td></tr>
+      <tr><td></td><td>🚫 Tiada di sini</td><td>Pemenang tiada — direkod, dan cabutan semula untuk hadiah yang sama</td></tr>
+      <tr><td></td><td>✕ pada senarai</td><td>Batal cabutan (nama dimasukkan semula)</td></tr>
+      <tr><td>🏆 Pemenang Permainan</td><td><kbd>Shift+E</kbd></td><td>Isi nama pemenang (atau klik sudut kiri bawah)</td></tr>
+      <tr><td></td><td><kbd>Space</kbd></td><td>Dedah tempat seterusnya (ke-3 → ke-2 → pertama)</td></tr>
+      <tr><td></td><td><kbd>←</kbd> <kbd>→</kbd></td><td>Tukar permainan</td></tr>
+      <tr><td>👑 Best Dress</td><td><kbd>Shift+E</kbd></td><td>Isi nama pemenang (atau klik sudut kiri bawah)</td></tr>
+    </table>
+  </section>
+</div>
+
+<script src="assets/names.js"></script>
+<script src="assets/music/music.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+
+  // Stars
+  (function () {
+    const box = $('stars');
+    for (let i = 0; i < 70; i++) {
+      const s = document.createElement('span');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.animationDelay = Math.random() * 3 + 's';
+      box.appendChild(s);
+    }
+  })();
+
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+    keys() { try { return Object.keys(localStorage).filter(k => k.startsWith('fd-')); } catch (e) { return []; } }
+  };
+  const SND_KEY = 'fd-lucky-draw-sound', VOICE_KEY = 'fd-lucky-draw-voice';
+  // results (cleared by "Padam"); everything else fd-* is a preference (sound, voice, music)
+  const RESULT_KEYS = ['fd-lucky-draw-v1', 'fd-game-prizes', 'fd-best-dress-winner'];
+  const st = (id, ok) => { $(id).className = 'st ' + (ok ? 'ok' : 'bad'); };
+
+  // Internet — the Malay voices in Edge are online voices
+  function net() {
+    st('netSt', navigator.onLine);
+    $('netTx').textContent = navigator.onLine ? 'Bersambung' : 'Tiada internet — suara Melayu online tidak akan berfungsi';
+  }
+  addEventListener('online', net); addEventListener('offline', net); net();
+
+  // Sound on/off (shared with all event screens)
+  let ctx;
+  const soundOn = () => store.get(SND_KEY) !== 'off';
+  function snd() {
+    st('sndSt', soundOn());
+    $('sndTx').textContent = soundOn() ? 'Hidup' : 'Senyap — tiada bunyi, suara & muzik pada skrin acara';
+    $('sndToggle').textContent = soundOn() ? '🔇 Senyapkan' : '🔊 Hidupkan';
+  }
+  $('sndToggle').onclick = () => { store.set(SND_KEY, soundOn() ? 'off' : 'on'); snd(); };
+  snd();
+  function note(freq, start, dur, type, vol) {
+    if (!ctx) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return; ctx = new A(); }
+    if (ctx.state === 'suspended') ctx.resume();
+    const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + start;
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(ctx.destination);
+    o.start(t); o.stop(t + dur + 0.05);
+  }
+  $('beep').onclick = () => {
+    [293.66, 311.13, 369.99, 392, 440, 392, 369.99, 440].forEach((f, i) => note(f * 2, i * 0.08, 0.24, 'triangle', 0.17));
+    [587.33, 739.99, 880, 1174.66].forEach(f => note(f, 0.68, 1.8, 'triangle', 0.12));
+  };
+
+  // Malay voices (same choice as the Lucky Draw page)
+  function malayVoices() {
+    if (!window.speechSynthesis) return [];
+    const score = v => {
+      const l = v.lang.toLowerCase();
+      const base = l.startsWith('ms') ? 20 : l.startsWith('id') ? 10 : 0;
+      return base && base + (/natural|online|google/i.test(v.name) ? 5 : 0);
+    };
+    return speechSynthesis.getVoices().filter(score).sort((a, b) => score(b) - score(a));
+  }
+  const voiceLabel = v => v.name.replace(/^(Microsoft|Google)\s+/, '').replace(/\s*-\s*/, ' · ')
+    .replace(/\s*\((Natural)\)/, '') + (/^ms/i.test(v.lang) ? ' 🇲🇾' : ' 🇮🇩');
+  function voices() {
+    const list = malayVoices(), chosen = store.get(VOICE_KEY);
+    st('vSt', list.length);
+    $('vTx').textContent = !window.speechSynthesis ? 'Browser ini tidak boleh membaca nama'
+      : list.length ? `${list.length} suara dijumpai` : 'Tiada suara Melayu — guna Microsoft Edge atau Google Chrome';
+    $('vRow').hidden = !list.length;
+    const cur = list.find(v => v.name === chosen) || list[0];
+    $('voice').innerHTML = list.map(v =>
+      `<option value="${v.name.replace(/"/g, '&quot;')}"${v === cur ? ' selected' : ''}>${voiceLabel(v)}</option>`).join('');
+  }
+  $('voice').onchange = e => store.set(VOICE_KEY, e.target.value);
+  $('vtest').onclick = () => {
+    const v = malayVoices().find(x => x.name === $('voice').value);
+    const u = new SpeechSynthesisUtterance('Tahniah kepada Keluarga Osman. Selamat datang ke Family Day Pak Din!');
+    if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'ms-MY';
+    u.rate = 0.9;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  };
+  if (window.speechSynthesis) { speechSynthesis.getVoices(); speechSynthesis.addEventListener?.('voiceschanged', voices); }
+  setTimeout(voices, 600); voices();
+
+  // MP3 songs from assets/music
+  const songs = window.FD_MUSIC || [];
+  let audio = null;
+  $('mRow').hidden = !songs.length;
+  $('song').innerHTML = songs.map((m, i) => `<option value="${i}">🎧 ${m.name}</option>`).join('');
+  $('mtest').onclick = () => {
+    if (audio) { audio.pause(); audio = null; $('mtest').textContent = '🎵 Uji lagu'; return; }
+    const m = songs[+$('song').value];
+    audio = new Audio('assets/music/' + encodeURIComponent(m.file));
+    audio.volume = m.volume ?? 0.8;
+    audio.addEventListener('loadedmetadata', () => { audio && (audio.currentTime = m.start || 0); }, { once: true });
+    audio.onended = audio.onerror = () => { audio = null; $('mtest').textContent = '🎵 Uji lagu'; };
+    audio.play().catch(() => {});
+    $('mtest').textContent = '⏹ Henti';
+  };
+
+  // What is stored right now
+  function stored() {
+    const parse = k => { try { return JSON.parse(store.get(k)) || {}; } catch (e) { return {}; } };
+    const d = parse('fd-lucky-draw-v1'), g = parse('fd-game-prizes'), b = parse('fd-best-dress-winner');
+    const len = k => (d[k] || []).length;
+    const gift = len('gift-dewasa') + len('gift-muda') + len('gift-kanak');
+    const games = FD.games.filter(x => [].concat(...(g[x.id] || [])).some(Boolean)).length;
+    $('stored').innerHTML = [
+      ['🎟️ Lucky Draw Keluarga', `${len('lucky')} / ${FD.families.length}`],
+      ['✨ Special Lucky Draw', `${len('sp-all')} pemenang`],
+      ['🎁 Tukar Hadiah', `${gift} dicabut`],
+      ['🏆 Permainan', `${games} / ${FD.games.length} ada nama`],
+      ['👑 Best Dress', b.name ? b.name : '—']
+    ].map(([k, v]) => `<li>${k}: <b>${v.replace(/</g, '&lt;')}</b></li>`).join('');
+  }
+  addEventListener('storage', stored);
+  stored();
+
+  function msg(text, err) { $('msg').textContent = text; $('msg').classList.toggle('err', !!err); }
+
+  // Backup: every fd-* key, as a JSON file
+  $('backup').onclick = () => {
+    const data = {};
+    store.keys().forEach(k => data[k] = store.get(k));
+    const file = { app: 'family-day-pak-din', saved: new Date().toISOString(), data };
+    const stamp = new Date().toLocaleString('sv').replace(/[: ]/g, '-').slice(0, 16);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' }));
+    a.download = `family-day-keputusan-${stamp}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    msg('✅ Fail disimpan dalam folder Downloads.');
+  };
+
+  // Restore: replaces this browser's results with the file's
+  $('restoreBtn').onclick = () => $('restore').click();
+  $('restore').onchange = async e => {
+    const f = e.target.files[0]; e.target.value = '';
+    if (!f) return;
+    let file;
+    try { file = JSON.parse(await f.text()); } catch (err) { return msg('Fail tidak sah.', true); }
+    if (!file || file.app !== 'family-day-pak-din' || typeof file.data !== 'object') return msg('Ini bukan fail keputusan Family Day.', true);
+    const when = file.saved ? new Date(file.saved).toLocaleString('ms-MY') : 'tidak diketahui';
+    if (!confirm(`Pulihkan keputusan dari fail ini (disimpan ${when})?\nKeputusan sedia ada dalam browser ini akan diganti.`)) return;
+    RESULT_KEYS.forEach(store.del);
+    Object.entries(file.data).forEach(([k, v]) => { if (k.startsWith('fd-') && typeof v === 'string') store.set(k, v); });
+    stored(); snd(); voices();
+    msg('✅ Keputusan dipulihkan.');
+  };
+
+  // Clear test draws before the event (preferences are kept)
+  $('wipe').onclick = () => {
+    if (!confirm('Padam SEMUA keputusan cabutan, pemenang permainan & Best Dress dalam browser ini?')) return;
+    if (!confirm('Pasti? Ini tidak boleh dibatalkan. (Simpan ke fail dahulu jika perlu.)')) return;
+    RESULT_KEYS.forEach(store.del);
+    stored();
+    msg('🗑️ Semua keputusan dipadam. Tetapan bunyi & suara dikekalkan.');
+  };
+</script>
+</body>
+</html>

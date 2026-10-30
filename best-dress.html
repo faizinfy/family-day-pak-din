@@ -210,6 +210,7 @@
     <span>
       <button id="snd" type="button">🔊 Bunyi</button>
       <button id="fs" type="button">⛶ Skrin penuh</button>
+      <a href="settings">⚙️ Tetapan</a>
     </span>
   </nav>
 
@@ -470,6 +471,14 @@
   };
   function fsLabel() { $('fs').textContent = document.fullscreenElement ? '⤢ Keluar skrin penuh' : '⛶ Skrin penuh'; }
   document.addEventListener('fullscreenchange', fsLabel);
+
+  // winner restored / cleared from the Tetapan page in another tab
+  addEventListener('storage', e => {
+    if (e.key !== KEY && e.key !== null) return;
+    winner = { name: '', note: '' };
+    try { winner = Object.assign(winner, JSON.parse(localStorage.getItem(KEY)) || {}); } catch (err) {}
+    resetStage();
+  });
 </script>
 </body>
 </html>

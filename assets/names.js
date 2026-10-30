@@ -23,5 +23,20 @@ window.FD = {
     { name: 'PERYSMITH High Speed Blender EasyCooking Series PS3250', img: 'assets/prizes/prize-08.jpg' },
     { name: 'PENSONIC Coffee Machine PCM-1902', img: 'assets/prizes/prize-09.jpg' },
     { name: 'PENSONIC Bread Toaster PT-929', img: 'assets/prizes/prize-10.jpg' }
+  ],
+
+  // Games with 1st/2nd/3rd winners (game-prizes.html, result.html), in the order they are played.
+  // team: several names per place (Team / Berpasangan)
+  games: [
+    { id: 'cups', e: '🥤', name: 'Susun Paper Cups', cat: 'Sek Ren / Tadika' },
+    { id: 'gula', e: '🍭', name: 'Cari Gula-gula dalam Tepung', cat: 'Sek Ren / Tadika' },
+    { id: 'belon', e: '🎈', name: 'Rally Pass Belon', cat: 'Muda-Mudi', team: 'Team' },
+    { id: 'bola', e: '⚽️', name: 'Pass Bola Guna Kain Pelikat', cat: 'Muda-Mudi', team: 'Team' },
+    { id: 'belon-air', e: '🎈', name: 'Rally Pass Belon Berisi Air', cat: 'Dewasa', team: 'Berpasangan' },
+    { id: 'suara', e: '🎙️', name: 'Teka Suara', cat: 'Warga Emas' },
+    { id: 'mc-muda', e: '🪑', name: 'Musical Chair', cat: 'Muda-Mudi' },
+    { id: 'mc-dewasa', e: '🪑', name: 'Musical Chair', cat: 'Dewasa' },
+    { id: 'mc-adik', e: '🩴', name: 'Musical Chair / Sandals', cat: 'Adik-beradik' },
+    { id: 'itik', e: '🐥', name: 'Tangkap Itik dalam Kolam', cat: 'Sek Ren / Tadika' }
   ]
 };
