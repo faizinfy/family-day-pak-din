@@ -176,6 +176,7 @@
   .dlg-head { padding: 22px 26px 10px; }
   dialog h2 { font-family: "Cormorant Garamond", serif; color: var(--gold-2); font-size: 1.6rem; }
   dialog p { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+  dialog .dlg-err { color: var(--accent); font-weight: 500; min-height: 1.3em; }
   .dlg-body { overflow-y: auto; padding: 6px 26px 10px; }
   .eg { padding: 14px 0; border-top: 1px dashed rgba(232, 196, 118, .2); }
   .eg h3 { font-weight: 500; font-size: .95rem; color: var(--gold-2); }
@@ -278,7 +279,8 @@
   <form method="dialog" id="form">
     <div class="dlg-head">
       <h2>🏆 Kemaskini Pemenang Permainan</h2>
-      <p>Disimpan pada peranti ini sahaja — tidak kelihatan kepada orang lain. Untuk permainan team, tulis nama team atau nama ahli.</p>
+      <p>Disimpan pada peranti ini sahaja — tidak kelihatan kepada orang lain. Untuk permainan team, tulis nama team atau nama ahli. Satu nama hanya boleh menang satu tempat bagi setiap permainan.</p>
+      <p class="dlg-err" id="dlgErr" role="alert"></p>
     </div>
     <div class="dlg-body" id="dlgBody"></div>
     <div class="dlg-actions">
@@ -289,6 +291,7 @@
   </form>
 </dialog>
 <datalist id="people"></datalist>
+<datalist id="pick"></datalist>
 
 <script src="assets/names.js"></script>
 <script src="assets/offline.js"></script>
@@ -478,13 +481,46 @@
   // Team / berpasangan places: names become tags — pick from the list, press Enter, or type with commas
   const tagHtml = n => `<span class="tag" data-n="${esc(n)}">${esc(n)}<button type="button" aria-label="Buang ${esc(n)}">×</button></span>`;
   function addTags(inp) {
-    const box = inp.parentNode, have = [...box.querySelectorAll('.tag')].map(t => t.dataset.n);
-    inp.value.split(',').map(s => s.trim()).filter(s => s && !have.includes(s)).forEach(s => {
+    const box = inp.parentNode, have = [...box.querySelectorAll('.tag')].map(t => t.dataset.n), taken = takenElsewhere(inp);
+    inp.value.split(',').map(s => s.trim()).filter(s => s && !have.some(h => same(h, s))).forEach(s => {
+      if (taken.some(t => same(t, s))) return warn(`“${s}” sudah ada di tempat lain dalam permainan ini.`);
       inp.insertAdjacentHTML('beforebegin', tagHtml(s)); have.push(s);
     });
     inp.value = '';
   }
   const tagInput = t => t.matches && t.matches('.tags input');
+
+  // A name can win only one place per game: names already in another place of the same game
+  // are left out of the suggestions, and refused if typed
+  const ALL = FD.gift.dewasa.concat(FD.gift.muda, FD.gift.kanak);
+  const same = (a, b) => a.trim().toLowerCase() === b.trim().toLowerCase();
+  function takenElsewhere(inp) {
+    const sec = inp.closest('.eg');
+    if (!sec || sec.id === 'eg-' + ROSTER.id) return [];
+    const own = inp.closest('.tags') || inp, names = [];
+    sec.querySelectorAll('input[data-g]').forEach(i => { if (i !== own && i.value.trim()) names.push(i.value.trim()); });
+    sec.querySelectorAll('.tags').forEach(b => { if (b !== own) b.querySelectorAll('.tag').forEach(t => names.push(t.dataset.n)); });
+    return names;
+  }
+  function warn(text) {
+    $('dlgErr').textContent = text;
+    clearTimeout(warn.t); warn.t = setTimeout(() => $('dlgErr').textContent = '', 4000);
+  }
+  $('dlgBody').addEventListener('focusin', e => {
+    const inp = e.target;
+    if (inp.tagName !== 'INPUT' || inp.closest('#eg-' + ROSTER.id)) return;
+    const taken = takenElsewhere(inp), mine = [...(inp.closest('.tags')?.querySelectorAll('.tag') || [])].map(t => t.dataset.n);
+    $('pick').innerHTML = ALL.filter(n => !taken.concat(mine).some(t => same(t, n))).map(n => `<option value="${esc(n)}">`).join('');
+    inp.setAttribute('list', 'pick');
+  });
+  $('dlgBody').addEventListener('change', e => {
+    const inp = e.target;
+    if (!inp.matches('input[data-g]') || !inp.value.trim()) return;
+    if (takenElsewhere(inp).some(t => same(t, inp.value))) {
+      warn(`“${inp.value.trim()}” sudah ada di tempat lain dalam permainan ini.`);
+      inp.value = '';
+    }
+  });
   $('dlgBody').addEventListener('click', e => {
     const x = e.target.closest('.tag button');
     if (x) x.parentNode.remove();
@@ -501,7 +537,7 @@
   });
   $('dlgBody').addEventListener('focusout', e => { if (tagInput(e.target)) addTags(e.target); });
 
-  $('form').addEventListener('submit', () => {
+  $('form').addEventListener('submit', e => {
     const next = {};
     SCREENS.forEach(g => next[g.id] = ['', '', '']);
     next[ROSTER.id] = [[]];
@@ -510,6 +546,17 @@
       addTags(box.querySelector('input'));
       next[box.dataset.g][+box.dataset.p] = [...box.querySelectorAll('.tag')].map(t => t.dataset.n);
     });
+    // last check: the same name in two places of one game keeps the dialog open
+    for (const g of SCREENS) {
+      const names = next[g.id].flatMap(v => [].concat(v)).filter(Boolean);
+      const dup = names.find((n, i) => names.findIndex(m => same(m, n)) !== i);
+      if (dup) {
+        e.preventDefault();
+        warn(`${g.name} (${g.cat}): nama “${dup}” ada di lebih dari satu tempat.`);
+        $('eg-' + g.id).scrollIntoView({ block: 'start' });
+        return;
+      }
+    }
     // a game whose names changed goes back to hidden; a changed roster re-hides the saguhati step
     const rosterChanged = JSON.stringify(roster()) !== JSON.stringify(next[ROSTER.id][0]);
     SCREENS.forEach(g => {
