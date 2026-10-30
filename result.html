@@ -97,7 +97,7 @@
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; counter-reset: c; }
   .chips span { padding: 4px 12px; border-radius: 999px; font-size: .84rem; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .1); }
   .chips span::before { counter-increment: c; content: counter(c) ". "; color: var(--gold); }
-  .chips.plain span::before { content: "🎁 "; }
+  .game .sag { margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(232, 196, 118, .2); font-size: .8rem; color: var(--muted); }
   .cat { margin-top: 14px; font-size: .8rem; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); }
   .cat em { font-style: normal; letter-spacing: 0; text-transform: none; color: var(--muted); }
   .away { margin-top: 10px; font-size: .82rem; color: var(--accent); }
@@ -168,9 +168,13 @@
       special: draw['sp-all'] || [],
       specialAway: draw['absent:sp-all'] || [],
       gift: GIFT.map(([id, name]) => ({ name, list: draw[id] || [] })),
-      games: FD.games.map(g => ({ g, places: [0, 1, 2].map(p => [].concat((games[g.id] || [])[p] || []).filter(Boolean)) })),
-      // every Sek Ren / Tadika child — the Kanak-kanak list until edited on /game-prizes
-      saguhati: games.saguhati ? [].concat(games.saguhati[0] || []).filter(Boolean) : FD.gift.kanak.slice(),
+      games: FD.games.map(g => {
+        const places = [0, 1, 2].map(p => [].concat((games[g.id] || [])[p] || []).filter(Boolean));
+        // Sek Ren / Tadika: every other child gets a hadiah saguhati (roster = Kanak-kanak list until edited)
+        const roster = games.saguhati ? [].concat(games.saguhati[0] || []).filter(Boolean) : FD.gift.kanak;
+        const sag = g.saguhati && places.some(l => l.length) ? roster.filter(n => !places.flat().includes(n)) : [];
+        return { g, places, sag };
+      }),
       best
     };
   }
@@ -200,12 +204,11 @@
     </div>`);
 
     // Games
-    html.push(`<section class="card wide"><h2>🏆 Pemenang Permainan</h2><div class="games">${d.games.map(({ g, places }) =>
+    html.push(`<section class="card wide"><h2>🏆 Pemenang Permainan</h2><div class="games">${d.games.map(({ g, places, sag }) =>
       `<div class="game"><b>${g.e} ${esc(g.name)}</b><small>${esc(g.cat)}${g.team ? ' · ' + g.team : ''}</small><ol>${
         places.some(l => l.length) ? places.map((l, p) => `<li class="${l.length ? '' : 'empty'}"><span>${PLACES[p]}</span><span>${nameOf(l) || '—'}</span></li>`).join('')
-          : '<li class="empty">Belum ada keputusan</li>'}</ol></div>`).join('')}</div>
-      <p class="cat">🎁 Hadiah Saguhati · Sek Ren / Tadika <em>(${d.saguhati.length})</em></p>
-      <div class="chips plain">${d.saguhati.map(n => `<span>${esc(n)}</span>`).join('')}</div></section>`);
+          : '<li class="empty">Belum ada keputusan</li>'}</ol>${
+        sag.length ? `<p class="sag">🎁 Saguhati (${sag.length}): ${sag.map(esc).join(', ')}</p>` : ''}</div>`).join('')}</div></section>`);
 
     // Tukar Hadiah order
     html.push(`<section class="card wide"><h2>🎁 Tukar Hadiah · Urutan Cabutan</h2>${d.gift.map(c =>
@@ -225,12 +228,12 @@
     out.push(...(d.special.length ? d.special.map((w, i) => `${i + 1}. ${w}`) : ['(belum ada cabutan)']));
     if (d.best.name) out.push('', '*👑 Best Dress*', d.best.name + (d.best.note ? ` (${d.best.note})` : ''));
     out.push('', '*🏆 Pemenang Permainan*');
-    d.games.forEach(({ g, places }) => {
+    d.games.forEach(({ g, places, sag }) => {
       if (!places.some(l => l.length)) return;
       out.push(`${g.e} ${g.name} (${g.cat})`);
       places.forEach((l, p) => { if (l.length) out.push(`  ${PLACES[p]} ${joinNames(l)}`); });
+      if (sag.length) out.push(`  🎁 Saguhati: ${sag.join(', ')}`);
     });
-    if (d.saguhati.length) out.push(`🎁 Hadiah Saguhati (Sek Ren / Tadika): ${d.saguhati.join(', ')}`);
     return out.join('\n');
   }
 

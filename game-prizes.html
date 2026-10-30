@@ -221,7 +221,8 @@
   .sagu.shown .sc .gift { opacity: 0; transform: scale(1.7) rotate(-12deg); }
   .sagu.shown .sc .nm { opacity: 1; transform: none; }
   .sagu.shown .sc { border-color: var(--gold); }
-  .chip.sag .n { background: rgba(217, 103, 122, .2); }
+  .sag-top { width: 100%; text-align: center; margin-bottom: 1.5vh; font-weight: 500; font-size: clamp(1rem, 2.6vh, 1.6rem); color: var(--gold-2); }
+  .sag-top span { margin: 0 .8em; color: var(--muted); }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; }
@@ -294,9 +295,9 @@
 
   // Games, in the order they are played (Susunan Permainan) — edit in assets/names.js
   const GAMES = FD.games;
-  // last screen: every Sek Ren / Tadika child gets a hadiah saguhati
-  const SAG = { id: 'saguhati', e: '🎁', name: 'Hadiah Saguhati', cat: 'Sek Ren / Tadika', sag: true };
-  const SCREENS = GAMES.concat(SAG);
+  const SCREENS = GAMES;
+  // Sek Ren / Tadika children: in games marked saguhati, everyone not in the top 3 gets a hadiah saguhati
+  const ROSTER = { id: 'saguhati' };
   const PLACES = [
     { cls: 'p1', medal: '🥇', rank: 'Tempat Pertama', word: 'pertama' },
     { cls: 'p2', medal: '🥈', rank: 'Tempat Kedua', word: 'kedua' },
@@ -310,14 +311,16 @@
   try { winners = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
   const saveWinners = () => { try { localStorage.setItem(KEY, JSON.stringify(winners)); } catch (e) {} };
   const placeOf = (g, p) => [].concat((winners[g.id] || [])[p] || []).map(s => s.trim()).filter(Boolean);
-  // saguhati starts as the Kanak-kanak list until the names are edited
-  const sagList = () => winners.saguhati ? placeOf(SAG, 0) : FD.gift.kanak.slice();
+  // the roster starts as the Kanak-kanak list until the names are edited
+  const roster = () => winners.saguhati ? placeOf(ROSTER, 0) : FD.gift.kanak.slice();
+  const sagOf = g => { const top = [0, 1, 2].flatMap(p => placeOf(g, p)); return roster().filter(n => !top.includes(n)); };
   const joinNames = l => l.length < 2 ? l.join('') : l.slice(0, -1).join(', ') + ' dan ' + l[l.length - 1];
 
-  // How many places are revealed per game (3rd first, then 2nd, then 1st); saguhati: 0 or 1
+  // Reveal steps per game: 3rd → 2nd → 1st (1–3), then the saguhati list (4) for Sek Ren / Tadika games
   const shown = {};
   let cur = 0, busy = false;
-  const isDone = s => s.sag ? shown[s.id] === 1 : shown[s.id] === 3;
+  const steps = g => g.saguhati ? 4 : 3;
+  const isDone = g => (shown[g.id] || 0) >= steps(g);
 
   const note = (...a) => sound.note(...a);
   const sfx = {
@@ -329,17 +332,17 @@
   // Render
   function renderChips() {
     $('chips').innerHTML = SCREENS.map((g, i) =>
-      `<button type="button" class="chip${isDone(g) ? ' done' : ''}${g.sag ? ' sag' : ''}" role="tab" aria-selected="${i === cur}" data-i="${i}">
-        <span class="n"><span>${g.sag ? '🎁' : i + 1}</span></span><span><b>${g.e} ${g.name}</b><small>${g.cat}</small></span></button>`).join('');
+      `<button type="button" class="chip${isDone(g) ? ' done' : ''}" role="tab" aria-selected="${i === cur}" data-i="${i}">
+        <span class="n"><span>${i + 1}</span></span><span><b>${g.e} ${g.name}</b><small>${g.cat}</small></span></button>`).join('');
   }
   function render() {
-    const g = SCREENS[cur];
+    const g = SCREENS[cur], n = shown[g.id] || 0;
     $('gCat').textContent = g.cat + (g.team ? ' · ' + g.team : '');
     $('gName').innerHTML = `<span class="e">${g.e}</span> ${g.name}`;
-    $('podium').hidden = !!g.sag;
-    $('sagu').hidden = !g.sag;
-    if (g.sag) return renderSag();
-    const n = shown[g.id] || 0;
+    const sag = n >= 4;
+    $('podium').hidden = sag;
+    $('sagu').hidden = !sag;
+    if (sag) return renderSag(g, true);
     // podium order on screen: 2nd, 1st, 3rd
     $('podium').innerHTML = [1, 0, 2].map(p => {
       const P = PLACES[p], isShown = n >= 3 - p;
@@ -351,20 +354,25 @@
         <div class="block"><span class="medal">${P.medal}</span><span class="rank">${P.rank}</span></div>
       </div>`;
     }).join('');
-    $('go').disabled = busy || n >= 3;
-    $('go').textContent = n >= 3 ? '🏆 Semua telah didedahkan' : `✨ Dedahkan ${PLACES[2 - n].rank} ✨`;
+    const sagNext = n === 3 && g.saguhati;
+    $('go').disabled = busy || isDone(g) || (sagNext && !sagOf(g).length);
+    $('go').textContent = isDone(g) ? '🏆 Semua telah didedahkan'
+      : sagNext ? `🎁 Dedahkan Hadiah Saguhati (${sagOf(g).length}) 🎁` : `✨ Dedahkan ${PLACES[2 - n].rank} ✨`;
     $('again').hidden = !n;
     renderChips();
   }
-  function renderSag() {
-    const list = sagList(), n = shown[SAG.id] || 0;
-    $('gCat').textContent = `${SAG.cat} · ${list.length} orang`;
-    $('sagu').classList.toggle('shown', n > 0);
-    $('sagu').innerHTML = list.map((s, i) =>
+  // the other children of this game, as gift boxes that open into names
+  function renderSag(g, open) {
+    const list = sagOf(g);
+    $('gCat').textContent = `${g.cat} · 🎁 Hadiah Saguhati · ${list.length} orang`;
+    $('sagu').classList.toggle('shown', open);
+    // the top 3 stay on screen as a small line above the saguhati names
+    const top = [0, 1, 2].map(p => placeOf(g, p).length ? `${PLACES[p].medal} ${esc(joinNames(placeOf(g, p)))}` : '').filter(Boolean);
+    $('sagu').innerHTML = `<p class="sag-top">${top.join('<span>·</span>')}</p>` + list.map((s, i) =>
       `<div class="sc" style="--i:${i}"><span class="gift">🎁</span><span class="nm">${esc(s)}</span></div>`).join('');
-    $('go').disabled = busy || n > 0 || !list.length;
-    $('go').textContent = n ? '🏆 Semua telah didedahkan' : '🎁 Dedahkan Penerima Saguhati';
-    $('again').hidden = !n;
+    $('go').disabled = true;
+    $('go').textContent = '🏆 Semua telah didedahkan';
+    $('again').hidden = false;
     renderChips();
   }
   // 1–2 names in the big title font (a couple reads "A & B"); a whole team as a list
@@ -375,8 +383,8 @@
   // Reveal the next place: 3rd → 2nd → 1st
   async function revealNext() {
     const g = SCREENS[cur];
-    if (g.sag) return revealSag();
     const n = shown[g.id] || 0;
+    if (n === 3 && g.saguhati) return revealSag(g);
     if (busy || n >= 3) return;
     if (![0, 1, 2].some(p => placeOf(g, p).length)) return openEdit(g.id);
     busy = true;
@@ -405,24 +413,25 @@
     render();
   }
 
-  // Saguhati: the gift boxes open one by one into names, then a fanfare for everyone
-  async function revealSag() {
-    const list = sagList();
-    if (busy || shown[SAG.id]) return;
-    if (!list.length) return openEdit(SAG.id);
+  // After the top 3: the podium makes way for the other children's gift boxes, which open one by one
+  async function revealSag(g) {
+    const list = sagOf(g);
+    if (busy || !list.length) return;
     busy = true;
     sound.unlock();
     voice.unlock();
-    shown[SAG.id] = 1;
-    $('go').disabled = true;
+    shown[g.id] = 4;
+    $('podium').hidden = true;
+    $('sagu').hidden = false;
+    renderSag(g, false);
+    await wait(60);
     $('sagu').classList.add('shown');
     list.forEach((_, i) => setTimeout(sfx.pop, i * 140 + 150));
     await wait(list.length * 140 + 700);
-    sound.fanfare();
-    confetti(170);
-    setTimeout(() => confetti(90), 1400);
-    await wait(1200);
-    voice.say('Tahniah kepada semua adik-adik Sek Ren dan Tadika! Semua menerima hadiah saguhati!');
+    sfx.ding();
+    confetti(120);
+    await wait(500);
+    voice.say('Hadiah saguhati untuk semua peserta yang lain. Tahniah adik-adik semua!');
     busy = false;
     render();
   }
@@ -440,7 +449,7 @@
     render();
   }
 
-  // Hidden editor: all games, 1st/2nd/3rd each, then the saguhati list
+  // Hidden editor: all games, 1st/2nd/3rd each, then the Sek Ren / Tadika children (for saguhati)
   $('people').innerHTML = FD.gift.dewasa.concat(FD.gift.muda, FD.gift.kanak)
     .map(n => `<option value="${esc(n)}">`).join('');
   function openEdit(focusId) {
@@ -454,8 +463,8 @@
           <input data-g="${g.id}" data-p="${p}" list="people" autocomplete="off" value="${esc(placeOf(g, p)[0] || '')}"></label>`).join('')
       }</div></div>`;
     }).join('') +
-      `<div class="eg" id="eg-${SAG.id}"><h3>${SAG.e} ${SAG.name}<small>${SAG.cat} — semua kanak-kanak yang menerima saguhati</small></h3>
-        <div class="tags" data-g="${SAG.id}" data-p="0">${sagList().map(tagHtml).join('')}<input list="people" autocomplete="off" placeholder="Tambah nama…"></div></div>`;
+      `<div class="eg" id="eg-${ROSTER.id}"><h3>🎁 Peserta Sek Ren / Tadika<small>semua kanak-kanak — selain 3 pemenang, yang lain menerima hadiah saguhati</small></h3>
+        <div class="tags" data-g="${ROSTER.id}" data-p="0">${roster().map(tagHtml).join('')}<input list="people" autocomplete="off" placeholder="Tambah nama…"></div></div>`;
     $('dlg').showModal();
     const sec = $('eg-' + (focusId || SCREENS[cur].id));
     sec.scrollIntoView({ block: 'start' });
@@ -489,14 +498,19 @@
 
   $('form').addEventListener('submit', () => {
     const next = {};
-    SCREENS.forEach(g => next[g.id] = g.sag ? [[]] : ['', '', '']);
+    SCREENS.forEach(g => next[g.id] = ['', '', '']);
+    next[ROSTER.id] = [[]];
     $('dlgBody').querySelectorAll('input[data-g]').forEach(inp => { next[inp.dataset.g][+inp.dataset.p] = inp.value.trim(); });
     $('dlgBody').querySelectorAll('.tags').forEach(box => {
       addTags(box.querySelector('input'));
       next[box.dataset.g][+box.dataset.p] = [...box.querySelectorAll('.tag')].map(t => t.dataset.n);
     });
-    // a game whose names changed goes back to hidden
-    SCREENS.forEach(g => { if (JSON.stringify(winners[g.id] || null) !== JSON.stringify(next[g.id])) shown[g.id] = 0; });
+    // a game whose names changed goes back to hidden; a changed roster re-hides the saguhati step
+    const rosterChanged = JSON.stringify(roster()) !== JSON.stringify(next[ROSTER.id][0]);
+    SCREENS.forEach(g => {
+      if (JSON.stringify(winners[g.id] || null) !== JSON.stringify(next[g.id])) shown[g.id] = 0;
+      else if (rosterChanged && g.saguhati) shown[g.id] = Math.min(shown[g.id] || 0, 3);
+    });
     winners = next;
     saveWinners();
     render();
