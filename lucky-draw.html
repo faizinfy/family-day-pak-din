@@ -330,6 +330,7 @@
 </div>
 
 <script src="assets/names.js"></script>
+<script src="assets/music/music.js"></script>
 <script>
   // Stars
   (function () {
@@ -487,9 +488,12 @@
         .concat([48, 52, 56, 60].flatMap(s => [[s, 'C2', 2], [s + 2, 'C3', 2]])) }
   ];
 
+  // MP3 songs from assets/music/music.js join the list after the built-in tunes
+  (window.FD_MUSIC || []).forEach(m => TUNES.push({ id: 'mp3:' + m.id, name: '🎧 ' + m.name, mp3: m }));
+
   const MUSIC_KEY = 'fd-lucky-draw-music';
   const music = (function () {
-    let tune = TUNES[0];
+    let tune = TUNES[0], audio = null;
     try { tune = TUNES.find(t => t.id === localStorage.getItem(MUSIC_KEY)) || TUNES[0]; } catch (e) {}
     let bus = null, timer = null, nextT = 0, step = 0, noiseBuf = null, onChange = () => {};
 
@@ -583,18 +587,43 @@
       }
     }
 
+    // MP3: play from start, loop back at end or when the song finishes
+    function fade(a, to, ms, done) {
+      const from = a.volume, t0 = performance.now();
+      const id = setInterval(() => {
+        const k = Math.min((performance.now() - t0) / ms, 1);
+        a.volume = from + (to - from) * k;
+        if (k === 1) { clearInterval(id); if (done) done(); }
+      }, 30);
+    }
+    function startMp3() {
+      const m = tune.mp3, from = m.start || 0;
+      const a = audio = new Audio('assets/music/' + encodeURIComponent(m.file));
+      a.volume = 0;
+      a.addEventListener('loadedmetadata', () => { a.currentTime = from; }, { once: true });
+      a.addEventListener('timeupdate', () => { if (m.end && a.currentTime >= m.end) a.currentTime = from; });
+      a.addEventListener('ended', () => { a.currentTime = from; a.play().catch(() => {}); });
+      a.addEventListener('error', () => {
+        console.warn('Muzik tidak dijumpai: assets/music/' + m.file);
+        if (audio === a) { audio = null; onChange(); }
+      });
+      a.play().then(() => fade(a, m.volume ?? 0.8, 600)).catch(() => {});
+      onChange();
+    }
+
     return {
       tunes: TUNES,
       get tune() { return tune; },
-      get playing() { return !!timer; },
+      get playing() { return !!timer || !!audio; },
       set onChange(fn) { onChange = fn; },
       setTune(id) {
         tune = TUNES.find(t => t.id === id) || TUNES[0];
         try { localStorage.setItem(MUSIC_KEY, tune.id); } catch (e) {}
-        if (timer) { this.stop(); this.start(); }
+        if (this.playing) { this.stop(); this.start(); }
       },
       start() {
-        const c = sound.on && sound.ctx(); if (!c || timer) return;
+        if (tune.mp3) { if (sound.on && !audio && !timer) startMp3(); return; }
+        const c = sound.on && sound.ctx(); if (!c || timer || audio) return;
         bus = c.createGain();
         bus.gain.setValueAtTime(0.0001, c.currentTime);
         bus.gain.exponentialRampToValueAtTime(0.7, c.currentTime + 0.6);
@@ -604,6 +633,12 @@
         onChange();
       },
       stop() {
+        if (audio) {
+          const a = audio; audio = null;
+          fade(a, 0, 400, () => a.pause());
+          onChange();
+          return;
+        }
         if (!timer) return;
         clearInterval(timer); timer = null;
         const c = sound.ctx(), old = bus; bus = null;
