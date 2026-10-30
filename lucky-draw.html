@@ -299,7 +299,7 @@
         </div>
         <p class="count" id="count"></p>
         <div class="vhint" id="vhint" hidden></div>
-        <div class="vhint" id="mhint"><label for="tune">🎵 Muzik</label> <select id="tune"></select> <button type="button" id="ttest">▶ Cuba</button></div>
+        <div class="vhint" id="mhint"><label for="tune">🎵 Muzik</label> <select id="tune"></select></div>
       </section>
 
       <section class="card">
@@ -911,12 +911,6 @@
   $('tune').innerHTML = music.tunes.map(t =>
     `<option value="${t.id}"${t === music.tune ? ' selected' : ''}>${t.name}</option>`).join('');
   $('tune').onchange = e => music.setTune(e.target.value);
-  $('ttest').onclick = () => {
-    if (rolling) return;
-    if (!sound.on) { sound.toggle(); sndLabel(); }
-    musicReady = true;
-    music.stop(); music.start();
-  };
   $('musicBtn').onclick = () => {
     if (music.playing) return music.stop();
     if (!sound.on) { sound.toggle(); sndLabel(); }
@@ -935,14 +929,10 @@
       el.textContent = '🗣️ Tiada suara Bahasa Melayu dalam pelayar ini — buka laman ini di Microsoft Edge atau Google Chrome untuk sebutan Melayu.';
       return;
     }
-    el.innerHTML = '<label for="voice">🗣️ Suara</label> <select id="voice"></select> <button type="button" id="vtest">▶ Cuba</button>';
+    el.innerHTML = '<label for="voice">🗣️ Suara</label> <select id="voice"></select>';
     $('voice').innerHTML = list.map(v =>
       `<option value="${v.name.replace(/"/g, '&quot;')}"${v === cur ? ' selected' : ''}>${voiceLabel(v)}</option>`).join('');
     $('voice').onchange = e => { try { localStorage.setItem(VOICE_KEY, e.target.value); } catch (err) {} };
-    $('vtest').onclick = () => {
-      if (!sound.on) { sound.toggle(); sndLabel(); }
-      sound.say('Tahniah kepada Keluarga Osman');
-    };
   }
   if (window.speechSynthesis) {
     speechSynthesis.getVoices();
