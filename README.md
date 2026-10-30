@@ -13,7 +13,8 @@ Laman web untuk **Family Day Keluarga Pak Din 2026** — tema *Arabian Nights*, 
 | `/best-dress` | `best-dress.html` | Skrin dedah pemenang Best Dress (tirai, kiraan 3-2-1, confetti, suara) |
 | `/game-prizes` | `game-prizes.html` | Skrin dedah pemenang tempat 1, 2, 3 bagi setiap permainan |
 | `/result` | `result.html` | Semua pemenang dalam satu halaman — salin ke WhatsApp atau cetak / PDF |
-| `/settings` | `settings.html` | Kawalan acara: pautan ke semua skrin, ujian bunyi / suara / lagu, simpan & pulih keputusan, padam keputusan ujian |
+| `/settings` | `settings.html` | Kawalan acara: pautan ke semua skrin, ujian bunyi / suara / lagu, status mod luar talian, simpan & pulih keputusan, padam keputusan ujian |
+| `/qr` | `qr.html` | Poster kod QR saiz A4 untuk dicetak (laman web, dan album gambar jika ada) |
 
 Halaman cabutan & dedah pemenang direka untuk **skrin desktop / projektor** (skrin penuh).
 
@@ -24,6 +25,13 @@ Halaman cabutan & dedah pemenang direka untuk **skrin desktop / projektor** (skr
 - **Senarai permainan untuk skrin pemenang** — `games` dalam `assets/names.js` (tambah `team: 'Team'` atau `team: 'Berpasangan'` untuk benarkan beberapa nama setiap tempat).
 - **Gambar hadiah** — `assets/prizes/prize-01` hingga `prize-10`.
 - **Lagu MP3** — letak fail dalam `assets/music/` dan tambah dalam `assets/music/music.js` (`start` / `end` dalam saat untuk main bahagian korus sahaja).
+- **Album gambar** — isi `album.url` dalam `assets/names.js`. Laman utama akan tunjuk butang album, dan `/qr` akan tambah kod QR album.
+
+## Mod luar talian
+
+`sw.js` (service worker) menyimpan semua halaman, gambar hadiah, lagu & font dalam browser selepas lawatan pertama, supaya skrin acara masih berfungsi jika Wi-Fi chalet terputus. Buka `/settings` dengan internet sebelum acara — status **Mod luar talian** akan tunjuk "Sedia". Suara Bahasa Melayu (Edge / Chrome online voice) tetap perlukan internet.
+
+Halaman & skrip sentiasa diambil baru bila ada internet. Jika **gambar atau lagu diganti dengan nama fail yang sama**, naikkan versi `CACHE` dalam `sw.js` (cth. `fd-v1` → `fd-v2`) supaya fail lama dibuang.
 
 ## Kawalan tersembunyi (hari acara)
 

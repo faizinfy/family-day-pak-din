@@ -66,7 +66,7 @@
   .two > .card { margin-top: 16px; }
 
   /* Event screens */
-  .screens { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+  .screens { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
   .screen {
     display: flex; flex-direction: column; gap: 4px; padding: 18px 16px; border-radius: 18px; text-decoration: none; color: inherit;
     background: rgba(232, 196, 118, .07); border: 1px solid var(--card-border); transition: .2s;
@@ -137,6 +137,7 @@
       <a class="screen" href="best-dress"><span class="i">👑</span><b>Best Dress</b><small>Dedah pemenang · <kbd>Shift+E</kbd> isi nama</small></a>
       <a class="screen" href="result"><span class="i">📋</span><b>Keputusan</b><small>Semua pemenang · salin ke WhatsApp</small></a>
       <a class="screen" href="./"><span class="i">🏠</span><b>Laman Utama</b><small>Jemputan, aturcara & info</small></a>
+      <a class="screen" href="qr"><span class="i">🔳</span><b>Poster Kod QR</b><small>Cetak A4 untuk ditampal di chalet</small></a>
     </div>
   </section>
 
@@ -146,6 +147,7 @@
       <p class="hint">Uji sebelum acara bermula, dengan speaker yang akan digunakan.</p>
       <ul class="checks">
         <li><span class="st" id="netSt"></span><span class="lab"><b>Internet</b><small id="netTx"></small></span></li>
+        <li><span class="st" id="offSt"></span><span class="lab"><b>Mod luar talian</b><small id="offTx"></small></span></li>
         <li><span class="st" id="sndSt"></span><span class="lab"><b>Bunyi</b><small id="sndTx"></small></span>
           <button class="btn" id="sndToggle" type="button"></button><button class="btn primary" id="beep" type="button">🔔 Uji</button></li>
         <li><span class="st" id="vSt"></span><span class="lab"><b>Suara Bahasa Melayu</b><small id="vTx"></small></span></li>
@@ -189,6 +191,7 @@
 </div>
 
 <script src="assets/names.js"></script>
+<script src="assets/offline.js"></script>
 <script src="assets/music/music.js"></script>
 <script>
   const $ = id => document.getElementById(id);
@@ -223,6 +226,21 @@
     $('netTx').textContent = navigator.onLine ? 'Bersambung' : 'Tiada internet — suara Melayu online tidak akan berfungsi';
   }
   addEventListener('online', net); addEventListener('offline', net); net();
+
+  // Offline readiness: pages, images, songs & fonts saved on this device by sw.js
+  async function offline() {
+    let n = 0;
+    try {
+      const name = (await caches.keys()).find(k => k.startsWith('fd-')); // the version named in sw.js
+      if (name) n = (await (await caches.open(name)).keys()).length;
+    } catch (e) {}
+    const ready = !!navigator.serviceWorker?.controller && n > 20;
+    st('offSt', ready);
+    $('offTx').textContent = ready ? `Sedia — ${n} fail disimpan dalam laptop ini`
+      : 'Sedang disediakan… buka semula halaman ini sekejap lagi (perlu internet kali pertama)';
+  }
+  navigator.serviceWorker?.addEventListener('controllerchange', offline);
+  offline(); setTimeout(offline, 3000);
 
   // Sound on/off (shared with all event screens)
   let ctx;

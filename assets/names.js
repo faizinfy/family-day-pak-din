@@ -1,6 +1,12 @@
 // Shared name lists for index.html (Tukar-Tukar Hadiah) and lucky-draw.html.
 // Edit names here only — both pages read from this file.
 window.FD = {
+  site: 'https://family-day-pak-din.vercel.app',
+
+  // Shared photo album (Google Photos etc.). Leave url empty until it's ready —
+  // the main page then says the link is coming soon, and /qr shows only the site QR.
+  album: { url: '', name: 'Album Family Day Pak Din 2026' },
+
   // Tukar-Tukar Hadiah participants, by category
   gift: {
     dewasa: ['Asma', 'Azila', "Ca'e", 'Wan Nyah', 'Kak Long', 'Along', 'Mak Uda', 'Pak Uda', 'Ana', 'Paeh', 'Dayah', 'Mirul', 'Emy', 'Rahim', 'Ain', 'Heidi', 'Aya', 'Mak Lang', 'Pak Lang', 'Hanim', 'Hisham', 'Azim', 'Syuhada', 'Naim', 'Abg Man', 'Kak Mah', 'Syahirah', 'Syahir', 'Illiyana', 'Zamri', 'Ayu', 'Kay', "Le'a", 'Mak Long', 'Rahmat'],

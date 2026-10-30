@@ -313,6 +313,18 @@
   .qs { display: grid; gap: 8px; margin-top: 20px; font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 1.2rem; color: var(--gold-2); }
 
   /* CTA */
+  /* Album */
+  .album { text-align: center; }
+  .album .e { font-size: 2.2rem; }
+  .album p { color: var(--muted); font-size: .92rem; max-width: 440px; margin: 8px auto 0; }
+  .album-btn {
+    display: inline-block; margin-top: 16px; padding: 12px 26px; border-radius: 999px; text-decoration: none;
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: var(--night); font-weight: 600;
+    box-shadow: 0 8px 26px rgba(232, 196, 118, .25);
+  }
+  .album-btn[hidden], .album .soon[hidden] { display: none; }
+  .album .soon { margin-top: 14px; color: var(--gold-2); font-size: .88rem; }
+
   .cta { text-align: center; }
   .cta ul { list-style: none; display: grid; gap: 8px; margin: 16px auto 0; max-width: 420px; text-align: left; font-size: .92rem; }
   .cta li { display: flex; gap: 10px; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,.04); }
@@ -522,6 +534,21 @@
   <section class="reveal">
     <div class="sec-head">
       <div class="num">6</div>
+      <h2>Album Gambar 📸</h2>
+      <p class="sub">Kongsi gambar &amp; video sepanjang Family Day</p>
+    </div>
+    <div class="card album">
+      <span class="e">📷</span>
+      <p>Ambil gambar sebanyak mungkin dan muat naik ke album bersama, supaya semua keluarga dapat menyimpan kenangan ini 🥰</p>
+      <a class="album-btn" id="albumBtn" target="_blank" rel="noopener" hidden>📸 Buka album &amp; muat naik gambar</a>
+      <p class="soon" id="albumSoon">⏳ Pautan album akan dikongsi tidak lama lagi.</p>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="reveal">
+    <div class="sec-head">
+      <div class="num">7</div>
       <h2>AJK Family Day 🤝</h2>
       <p class="sub">Barisan jawatankuasa Family Day Pak Din 2026</p>
     </div>
@@ -572,7 +599,15 @@
 </footer>
 
 <script src="assets/names.js"></script>
+<script src="assets/offline.js"></script>
 <script>
+  // Photo album link (set in assets/names.js)
+  if (FD.album.url) {
+    const a = document.getElementById('albumBtn');
+    a.href = FD.album.url; a.hidden = false;
+    document.getElementById('albumSoon').hidden = true;
+  }
+
   // Stars
   (function () {
     const box = document.getElementById('stars');
