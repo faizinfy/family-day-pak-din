@@ -401,7 +401,6 @@
     if (busy || n >= 3) return;
     if (![0, 1, 2].some(p => placeOf(g, p).length)) return openEdit(g.id);
     busy = true;
-    goFullscreen();
     ac(); // unlock audio inside the click
     const p = 2 - n;
     shown[g.id] = n + 1;

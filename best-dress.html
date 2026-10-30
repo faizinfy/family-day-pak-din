@@ -345,7 +345,6 @@
     if (busy) return;
     if (!winner.name) return openEdit();
     busy = true;
-    goFullscreen();
     ac(); // unlock audio inside the click
     if (window.speechSynthesis) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); }
 
