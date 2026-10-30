@@ -206,23 +206,28 @@
   .podium[hidden], .sagu[hidden] { display: none; }
   .sagu { flex: 1; min-height: 0; display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 2vh 1.4vw; padding: 1vh 2vw 6vh; }
   .sc {
-    position: relative; min-width: 8vw; padding: 1.6vh 1.8vw; border-radius: 18px; text-align: center;
+    position: relative; min-width: 6vw; padding: 1.1vh 1.4vw; border-radius: 18px; text-align: center;
     border: 1px solid var(--card-border); background: linear-gradient(180deg, rgba(246, 223, 164, .12), rgba(232, 196, 118, .04));
   }
   .sc .nm {
     display: block; white-space: nowrap; opacity: 0; transform: scale(.5);
-    font-family: "Cinzel Decorative", serif; font-size: clamp(1.1rem, 3.6vh, 2.6rem); line-height: 1.2; color: var(--gold-2);
+    font-family: "Poppins", sans-serif; font-weight: 500; font-size: clamp(1.05rem, 3vh, 2rem); line-height: 1.2; color: var(--text);
     transition: opacity .4s ease, transform .6s cubic-bezier(.2, 1.5, .4, 1); transition-delay: calc(var(--i) * .14s + .15s);
   }
   .sc .gift {
-    position: absolute; inset: 0; display: grid; place-items: center; font-size: clamp(1.6rem, 4.4vh, 3rem);
+    position: absolute; inset: 0; display: grid; place-items: center; font-size: clamp(1.2rem, 3.2vh, 2.2rem);
     transition: opacity .3s ease, transform .4s ease; transition-delay: calc(var(--i) * .14s);
   }
   .sagu.shown .sc .gift { opacity: 0; transform: scale(1.7) rotate(-12deg); }
   .sagu.shown .sc .nm { opacity: 1; transform: none; }
   .sagu.shown .sc { border-color: var(--gold); }
-  .sag-top { width: 100%; text-align: center; margin-bottom: 1.5vh; font-weight: 500; font-size: clamp(1rem, 2.6vh, 1.6rem); color: var(--gold-2); }
-  .sag-top span { margin: 0 .8em; color: var(--muted); }
+  /* winners stay the stars of the screen: bigger than the saguhati names below */
+  .sag-top {
+    width: 100%; text-align: center; margin-bottom: 2.4vh;
+    font-family: "Cinzel Decorative", serif; font-size: clamp(1.5rem, 4.6vh, 3.2rem); line-height: 1.2; color: var(--gold-2);
+    filter: drop-shadow(0 0 18px rgba(232, 196, 118, .35));
+  }
+  .sag-top span { margin: 0 .7em; color: var(--muted); }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; }
