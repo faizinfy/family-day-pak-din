@@ -152,7 +152,7 @@
   const read = k => { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } };
   FDK.stars(70);
 
-  const PLACES = ['🥇', '🥈', '🥉'];
+  const PLACES = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
   // a couple reads "A & B", a team "A, B, C"
   const joinNames = l => l.join(l.length < 3 ? ' & ' : ', ');
   const GIFT = [['gift-dewasa', 'Dewasa'], ['gift-muda', 'Muda-Mudi'], ['gift-kanak', 'Kanak-kanak']];
@@ -169,7 +169,7 @@
       specialAway: draw['absent:sp-all'] || [],
       gift: GIFT.map(([id, name]) => ({ name, list: draw[id] || [] })),
       games: FD.games.map(g => {
-        const places = [0, 1, 2].map(p => [].concat((games[g.id] || [])[p] || []).filter(Boolean));
+        const places = PLACES.slice(0, g.places || 3).map((_, p) => [].concat((games[g.id] || [])[p] || []).filter(Boolean));
         // Sek Ren / Tadika: every other child gets a hadiah saguhati (roster = Kanak-kanak list until edited)
         const roster = games.saguhati ? [].concat(games.saguhati[0] || []).filter(Boolean) : FD.gift.kanak;
         const sag = g.saguhati && places.some(l => l.length) ? roster.filter(n => !places.flat().includes(n)) : [];

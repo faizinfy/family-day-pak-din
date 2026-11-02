@@ -141,6 +141,21 @@
   .p1 .rank { color: var(--gold-2); }
   .p2 .rank { color: var(--silver); }
   .p3 .rank { color: var(--bronze); }
+  /* 4–5 places: 4th & 5th stand lowest, on the outside */
+  .podium.five { grid-template-columns: .85fr 1fr 1.15fr 1fr .85fr; gap: 1.6vw; }
+  .five .block { padding-top: 1.2vh; }
+  .five .medal { font-size: clamp(1.6rem, 4.4vh, 3rem); }
+  .five .rank { font-size: clamp(.95rem, 2.2vh, 1.5rem); margin-top: .3vh; }
+  .five .p1 .block { height: 44%; }
+  .five .p2 .block { height: 34%; }
+  .five .p3 .block { height: 27%; }
+  .p4 .block { height: 22%; }
+  .p5 .block { height: 19%; }
+  .p4 .rank, .p5 .rank { color: var(--muted); }
+  .five .face { padding: 10px; }
+  .five .face .name { font-size: clamp(1rem, 3.2vh, 2.3rem); word-break: normal; }
+  .five .p1 .face .name { font-size: clamp(1.2rem, 4vh, 2.9rem); }
+  .five .p4 .face .name, .five .p5 .face .name { font-size: clamp(.9rem, 2.7vh, 1.9rem); }
 
   /* Controls over the podium */
   .ctrl { position: absolute; right: 22px; top: 18px; z-index: 5; display: flex; gap: 10px; align-items: center; }
@@ -309,8 +324,13 @@
   const PLACES = [
     { cls: 'p1', medal: '🥇', rank: 'Tempat Pertama', word: 'pertama' },
     { cls: 'p2', medal: '🥈', rank: 'Tempat Kedua', word: 'kedua' },
-    { cls: 'p3', medal: '🥉', rank: 'Tempat Ketiga', word: 'ketiga' }
+    { cls: 'p3', medal: '🥉', rank: 'Tempat Ketiga', word: 'ketiga' },
+    { cls: 'p4', medal: '🏅', rank: 'Tempat Keempat', word: 'keempat' },
+    { cls: 'p5', medal: '🏅', rank: 'Tempat Kelima', word: 'kelima' }
   ];
+  // most games have 3 places; a game with places: 5 adds 4th & 5th
+  const np = g => g.places || 3;
+  const placesOf = g => PLACES.slice(0, np(g));
 
   // Winners — kept in this browser only: { gameId: [1st, 2nd, 3rd], saguhati: [[names]] }
   // each place is a name, or a list of names for team / berpasangan games
@@ -324,10 +344,10 @@
   const sagOf = g => { const top = [0, 1, 2].flatMap(p => placeOf(g, p)); return roster().filter(n => !top.includes(n)); };
   const joinNames = l => l.length < 2 ? l.join('') : l.slice(0, -1).join(', ') + ' dan ' + l[l.length - 1];
 
-  // Reveal steps per game: 3rd → 2nd → 1st (1–3), then the saguhati list (4) for Sek Ren / Tadika games
+  // Reveal steps per game: last place → 1st, then the saguhati list for Sek Ren / Tadika games
   const shown = {};
   let cur = 0, busy = false;
-  const steps = g => g.saguhati ? 4 : 3;
+  const steps = g => np(g) + (g.saguhati ? 1 : 0);
   const isDone = g => (shown[g.id] || 0) >= steps(g);
 
   const note = (...a) => sound.note(...a);
@@ -347,13 +367,15 @@
     const g = SCREENS[cur], n = shown[g.id] || 0;
     $('gCat').textContent = g.cat + (g.team ? ' · ' + g.team : '');
     $('gName').innerHTML = `<span class="e">${g.e}</span> ${g.name}`;
-    const sag = n >= 4;
+    const sag = g.saguhati && n > np(g);
     $('podium').hidden = sag;
     $('sagu').hidden = !sag;
     if (sag) return renderSag(g, true);
-    // podium order on screen: 2nd, 1st, 3rd
-    $('podium').innerHTML = [1, 0, 2].map(p => {
-      const P = PLACES[p], isShown = n >= 3 - p;
+    // podium order on screen: 2nd, 1st, 3rd — with 4th & 5th on the outside (4 places: 5th column left empty, 1st stays centred)
+    $('podium').classList.toggle('five', np(g) > 3);
+    $('podium').innerHTML = (np(g) > 3 ? [3, 1, 0, 2, 4] : [1, 0, 2]).map(p => {
+      if (p >= np(g)) return '<div></div>';
+      const P = PLACES[p], isShown = n >= np(g) - p;
       return `<div class="place ${P.cls}${isShown ? ' shown' : ''}">
         <div class="slot"><div class="flip">
           <div class="face front"><span class="q">?</span></div>
@@ -362,10 +384,10 @@
         <div class="block"><span class="medal">${P.medal}</span><span class="rank">${P.rank}</span></div>
       </div>`;
     }).join('');
-    const sagNext = n === 3 && g.saguhati;
+    const sagNext = n === np(g) && g.saguhati;
     $('go').disabled = busy || isDone(g) || (sagNext && !sagOf(g).length);
     $('go').textContent = isDone(g) ? '🏆 Semua telah didedahkan'
-      : sagNext ? `🎁 Dedahkan Hadiah Saguhati (${sagOf(g).length}) 🎁` : `✨ Dedahkan ${PLACES[2 - n].rank} ✨`;
+      : sagNext ? `🎁 Dedahkan Hadiah Saguhati (${sagOf(g).length}) 🎁` : `✨ Dedahkan ${PLACES[np(g) - 1 - n].rank} ✨`;
     $('again').hidden = !n;
     renderChips();
   }
@@ -392,13 +414,13 @@
   async function revealNext() {
     const g = SCREENS[cur];
     const n = shown[g.id] || 0;
-    if (n === 3 && g.saguhati) return revealSag(g);
-    if (busy || n >= 3) return;
-    if (![0, 1, 2].some(p => placeOf(g, p).length)) return openEdit(g.id);
+    if (n === np(g) && g.saguhati) return revealSag(g);
+    if (busy || n >= np(g)) return;
+    if (!placesOf(g).some((_, p) => placeOf(g, p).length)) return openEdit(g.id);
     busy = true;
     sound.unlock(); // unlock audio + speech inside the click
     voice.unlock();
-    const p = 2 - n;
+    const p = np(g) - 1 - n;
     shown[g.id] = n + 1;
     sfx.shimmer();
     document.querySelector('.podium .' + PLACES[p].cls).classList.add('shown'); // flip the card in place
@@ -428,7 +450,7 @@
     busy = true;
     sound.unlock();
     voice.unlock();
-    shown[g.id] = 4;
+    shown[g.id] = steps(g);
     $('podium').hidden = true;
     $('sagu').hidden = false;
     renderSag(g, false);
@@ -464,7 +486,7 @@
     if (busy || $('dlg').open) return;
     $('dlgBody').innerHTML = GAMES.map((g, gi) => {
       return `<div class="eg" id="eg-${g.id}"><h3>${gi + 1}. ${g.e} ${g.name}<small>${g.cat}${g.team ? ` · ${g.team} — pilih beberapa nama` : ''}</small></h3><div class="row">${
-        PLACES.map((P, p) => g.team
+        placesOf(g).map((P, p) => g.team
           ? `<div class="lbl">${P.medal} ${P.rank}<div class="tags" data-g="${g.id}" data-p="${p}">${
               placeOf(g, p).map(tagHtml).join('')}<input list="people" autocomplete="off" placeholder="Tambah nama…"></div></div>`
           : `<label>${P.medal} ${P.rank}
@@ -539,7 +561,7 @@
 
   $('form').addEventListener('submit', e => {
     const next = {};
-    SCREENS.forEach(g => next[g.id] = ['', '', '']);
+    SCREENS.forEach(g => next[g.id] = placesOf(g).map(() => ''));
     next[ROSTER.id] = [[]];
     $('dlgBody').querySelectorAll('input[data-g]').forEach(inp => { next[inp.dataset.g][+inp.dataset.p] = inp.value.trim(); });
     $('dlgBody').querySelectorAll('.tags').forEach(box => {
@@ -561,7 +583,7 @@
     const rosterChanged = JSON.stringify(roster()) !== JSON.stringify(next[ROSTER.id][0]);
     SCREENS.forEach(g => {
       if (JSON.stringify(winners[g.id] || null) !== JSON.stringify(next[g.id])) shown[g.id] = 0;
-      else if (rosterChanged && g.saguhati) shown[g.id] = Math.min(shown[g.id] || 0, 3);
+      else if (rosterChanged && g.saguhati) shown[g.id] = Math.min(shown[g.id] || 0, np(g));
     });
     winners = next;
     saveWinners();

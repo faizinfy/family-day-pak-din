@@ -34,16 +34,18 @@ window.FD = {
   // Games with 1st/2nd/3rd winners (game-prizes.html, result.html), in the order they are played.
   // team: several names per place (Team / Berpasangan)
   // saguhati: after the top 3, every other Sek Ren / Tadika child gets a hadiah saguhati
+  // places: number of winning places (default 3, 4 or 5)
   games: [
     { id: 'cups', e: '🥤', name: 'Susun Paper Cups', cat: 'Sek Ren / Tadika', saguhati: true },
     { id: 'gula', e: '🍭', name: 'Cari Gula-gula dalam Tepung', cat: 'Sek Ren / Tadika', saguhati: true },
     { id: 'belon', e: '🎈', name: 'Rally Pass Belon', cat: 'Muda-Mudi', team: 'Team' },
     { id: 'bola', e: '⚽️', name: 'Pass Bola Guna Kain Pelikat', cat: 'Muda-Mudi', team: 'Team' },
-    { id: 'belon-air', e: '🎈', name: 'Rally Pass Belon Berisi Air', cat: 'Dewasa', team: 'Berpasangan' },
+    { id: 'belon-air', e: '🎈', name: 'Rally Pass Belon Berisi Air', cat: 'Dewasa', team: 'Berpasangan', places: 5 },
     { id: 'suara', e: '🎙️', name: 'Teka Suara', cat: 'Warga Emas' },
     { id: 'mc-muda', e: '🪑', name: 'Musical Chair', cat: 'Muda-Mudi' },
     { id: 'mc-dewasa', e: '🪑', name: 'Musical Chair', cat: 'Dewasa' },
     { id: 'mc-adik', e: '🩴', name: 'Musical Chair / Sandals', cat: 'Adik-beradik' },
-    { id: 'itik', e: '🐥', name: 'Tangkap Itik dalam Kolam', cat: 'Sek Ren / Tadika', saguhati: true }
+    { id: 'itik', e: '🐥', name: 'Tangkap Itik dalam Kolam', cat: 'Sek Ren / Tadika', saguhati: true },
+    { id: 'misteri', e: '🎁', name: 'Hadiah Misteri', cat: 'Semua', places: 4 }
   ]
 };
