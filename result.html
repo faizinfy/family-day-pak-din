@@ -153,6 +153,7 @@
   FDK.stars(70);
 
   const PLACES = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+  const NUMS = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣']; // flat games (Hadiah Misteri): numbered, no ranking
   // a couple reads "A & B", a team "A, B, C"
   const joinNames = l => l.join(l.length < 3 ? ' & ' : ', ');
   const GIFT = [['gift-dewasa', 'Dewasa'], ['gift-muda', 'Muda-Mudi'], ['gift-kanak', 'Kanak-kanak']];
@@ -206,7 +207,7 @@
     // Games
     html.push(`<section class="card wide"><h2>🏆 Pemenang Permainan</h2><div class="games">${d.games.map(({ g, places, sag }) =>
       `<div class="game"><b>${g.e} ${esc(g.name)}</b><small>${esc(g.cat)}${g.team ? ' · ' + g.team : ''}</small><ol>${
-        places.some(l => l.length) ? places.map((l, p) => `<li class="${l.length ? '' : 'empty'}"><span>${PLACES[p]}</span><span>${nameOf(l) || '—'}</span></li>`).join('')
+        places.some(l => l.length) ? places.map((l, p) => `<li class="${l.length ? '' : 'empty'}"><span>${(g.flat ? NUMS : PLACES)[p]}</span><span>${nameOf(l) || '—'}</span></li>`).join('')
           : '<li class="empty">Belum ada keputusan</li>'}</ol>${
         sag.length ? `<p class="sag">🎁 Saguhati (${sag.length}): ${sag.map(esc).join(', ')}</p>` : ''}</div>`).join('')}</div></section>`);
 
@@ -231,7 +232,7 @@
     d.games.forEach(({ g, places, sag }) => {
       if (!places.some(l => l.length)) return;
       out.push(`${g.e} ${g.name} (${g.cat})`);
-      places.forEach((l, p) => { if (l.length) out.push(`  ${PLACES[p]} ${joinNames(l)}`); });
+      places.forEach((l, p) => { if (l.length) out.push(`  ${(g.flat ? NUMS : PLACES)[p]} ${joinNames(l)}`); });
       if (sag.length) out.push(`  🎁 Saguhati: ${sag.join(', ')}`);
     });
     return out.join('\n');

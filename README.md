@@ -22,7 +22,7 @@ Halaman cabutan & dedah pemenang direka untuk **skrin desktop / projektor** (skr
 
 - **Nama peserta, keluarga & hadiah Lucky Draw** — `assets/names.js` (dikongsi oleh semua halaman).
 - **Permainan & peraturan** — senarai `GAMES` dalam `index.html`.
-- **Senarai permainan untuk skrin pemenang** — `games` dalam `assets/names.js` (tambah `team: 'Team'` atau `team: 'Berpasangan'` untuk benarkan beberapa nama setiap tempat; `saguhati: true` untuk tunjuk hadiah saguhati selepas 3 pemenang; `places: 4` / `places: 5` untuk tambah tempat ke-4 / ke-5 — kini Hadiah Misteri (4) dan Rally Pass Belon Berisi Air (5)).
+- **Senarai permainan untuk skrin pemenang** — `games` dalam `assets/names.js` (tambah `team: 'Team'` atau `team: 'Berpasangan'` untuk benarkan beberapa nama setiap tempat; `saguhati: true` untuk tunjuk hadiah saguhati selepas 3 pemenang; `places: 4` / `places: 5` untuk tambah tempat ke-4 / ke-5 — kini Hadiah Misteri (4) dan Rally Pass Belon Berisi Air (5); `flat: true` untuk pemenang bernombor 1, 2, 3… sama taraf tanpa podium — Hadiah Misteri).
 - **Gambar hadiah** — `assets/prizes/prize-01` hingga `prize-10`.
 - **Lagu MP3** — letak fail dalam `assets/music/` dan tambah dalam `assets/music/music.js` (`start` / `end` dalam saat untuk main bahagian korus sahaja).
 - **Album gambar** — isi `album.url` dalam `assets/names.js`. Laman utama akan tunjuk butang album, dan `/qr` akan tambah kod QR album.

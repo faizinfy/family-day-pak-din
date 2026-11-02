@@ -152,6 +152,11 @@
   .p4 .block { height: 22%; }
   .p5 .block { height: 19%; }
   .p4 .rank, .p5 .rank { color: var(--muted); }
+  /* flat (Hadiah Misteri): numbered winners side by side, all the same level */
+  .podium.flat { grid-template-columns: repeat(var(--n), 1fr); gap: 2vw; }
+  .pf .block { height: 26%; background: linear-gradient(180deg, rgba(232, 196, 118, .26), rgba(185, 138, 62, .06)); }
+  .pf .rank { color: var(--gold-2); }
+  .flat .face .name { font-size: clamp(1.2rem, 4vh, 2.9rem); word-break: normal; }
   .five .face { padding: 10px; }
   .five .face .name { font-size: clamp(1rem, 3.2vh, 2.3rem); word-break: normal; }
   .five .p1 .face .name { font-size: clamp(1.2rem, 4vh, 2.9rem); }
@@ -328,9 +333,15 @@
     { cls: 'p4', medal: '🏅', rank: 'Tempat Keempat', word: 'keempat' },
     { cls: 'p5', medal: '🏅', rank: 'Tempat Kelima', word: 'kelima' }
   ];
-  // most games have 3 places; a game with places: 5 adds 4th & 5th
+  // most games have 3 places; places: 4 / 5 adds 4th & 5th
   const np = g => g.places || 3;
-  const placesOf = g => PLACES.slice(0, np(g));
+  // flat games (Hadiah Misteri): no ranking — winners are just numbered, all at the same level
+  const NUMS = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
+  const placesOf = g => g.flat
+    ? NUMS.slice(0, np(g)).map((medal, p) => ({ cls: 'pf', medal, rank: 'Nombor ' + (p + 1), word: 'nombor ' + (p + 1) }))
+    : PLACES.slice(0, np(g));
+  // flat games reveal 1 → last; ranked games last place → 1st
+  const placeAt = (g, n) => g.flat ? n : np(g) - 1 - n;
 
   // Winners — kept in this browser only: { gameId: [1st, 2nd, 3rd], saguhati: [[names]] }
   // each place is a name, or a list of names for team / berpasangan games
@@ -372,11 +383,15 @@
     $('sagu').hidden = !sag;
     if (sag) return renderSag(g, true);
     // podium order on screen: 2nd, 1st, 3rd — with 4th & 5th on the outside (4 places: 5th column left empty, 1st stays centred)
-    $('podium').classList.toggle('five', np(g) > 3);
-    $('podium').innerHTML = (np(g) > 3 ? [3, 1, 0, 2, 4] : [1, 0, 2]).map(p => {
+    // flat games: 1, 2, 3, 4 in a row, all the same height
+    $('podium').classList.toggle('five', np(g) > 3 && !g.flat);
+    $('podium').classList.toggle('flat', !!g.flat);
+    $('podium').style.setProperty('--n', np(g));
+    const order = g.flat ? placesOf(g).map((_, p) => p) : np(g) > 3 ? [3, 1, 0, 2, 4] : [1, 0, 2];
+    $('podium').innerHTML = order.map(p => {
       if (p >= np(g)) return '<div></div>';
-      const P = PLACES[p], isShown = n >= np(g) - p;
-      return `<div class="place ${P.cls}${isShown ? ' shown' : ''}">
+      const P = placesOf(g)[p], isShown = g.flat ? n > p : n >= np(g) - p;
+      return `<div class="place ${P.cls}${isShown ? ' shown' : ''}" data-p="${p}">
         <div class="slot"><div class="flip">
           <div class="face front"><span class="q">?</span></div>
           <div class="face back">${nameHtml(placeOf(g, p))}</div>
@@ -387,7 +402,7 @@
     const sagNext = n === np(g) && g.saguhati;
     $('go').disabled = busy || isDone(g) || (sagNext && !sagOf(g).length);
     $('go').textContent = isDone(g) ? '🏆 Semua telah didedahkan'
-      : sagNext ? `🎁 Dedahkan Hadiah Saguhati (${sagOf(g).length}) 🎁` : `✨ Dedahkan ${PLACES[np(g) - 1 - n].rank} ✨`;
+      : sagNext ? `🎁 Dedahkan Hadiah Saguhati (${sagOf(g).length}) 🎁` : `✨ Dedahkan ${placesOf(g)[placeAt(g, n)].rank} ✨`;
     $('again').hidden = !n;
     renderChips();
   }
@@ -420,14 +435,19 @@
     busy = true;
     sound.unlock(); // unlock audio + speech inside the click
     voice.unlock();
-    const p = np(g) - 1 - n;
+    const p = placeAt(g, n);
     shown[g.id] = n + 1;
     sfx.shimmer();
-    document.querySelector('.podium .' + PLACES[p].cls).classList.add('shown'); // flip the card in place
+    document.querySelector(`.podium [data-p="${p}"]`).classList.add('shown'); // flip the card in place
     $('go').disabled = true;
     await wait(700);
     const who = joinNames(placeOf(g, p));
-    if (p === 0) {
+    if (g.flat) {
+      // same level for everyone; the last card gets the fanfare to close the game
+      const last = n + 1 === np(g);
+      if (last) { sound.fanfare(); confetti(140); } else { sfx.ding(); confetti(60); }
+      if (who) voice.say(`${g.name} nombor ${p + 1}, tahniah kepada ${voice.spoken(who)}!`);
+    } else if (p === 0) {
       sound.fanfare();
       confetti(170);
       setTimeout(() => confetti(90), 1400);

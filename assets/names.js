@@ -35,6 +35,7 @@ window.FD = {
   // team: several names per place (Team / Berpasangan)
   // saguhati: after the top 3, every other Sek Ren / Tadika child gets a hadiah saguhati
   // places: number of winning places (default 3, 4 or 5)
+  // flat: no ranking — winners numbered 1, 2, 3… at the same level (Hadiah Misteri)
   games: [
     { id: 'cups', e: '🥤', name: 'Susun Paper Cups', cat: 'Sek Ren / Tadika', saguhati: true },
     { id: 'gula', e: '🍭', name: 'Cari Gula-gula dalam Tepung', cat: 'Sek Ren / Tadika', saguhati: true },
@@ -46,6 +47,6 @@ window.FD = {
     { id: 'mc-dewasa', e: '🪑', name: 'Musical Chair', cat: 'Dewasa' },
     { id: 'mc-adik', e: '🩴', name: 'Musical Chair / Sandals', cat: 'Adik-beradik' },
     { id: 'itik', e: '🐥', name: 'Tangkap Itik dalam Kolam', cat: 'Sek Ren / Tadika', saguhati: true },
-    { id: 'misteri', e: '🎁', name: 'Hadiah Misteri', cat: 'Semua', places: 4 }
+    { id: 'misteri', e: '🎁', name: 'Hadiah Misteri', cat: 'Semua', places: 4, flat: true }
   ]
 };
