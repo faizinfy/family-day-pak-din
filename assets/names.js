@@ -34,6 +34,7 @@ window.FD = {
   // Games with 1st/2nd/3rd winners (game-prizes.html, result.html), in the order they are played.
   // team: several names per place (Team / Berpasangan)
   // saguhati: after the top 3, every other Sek Ren / Tadika child gets a hadiah saguhati
+  // roster: this game's own participants for the saguhati (instead of the shared Sek Ren / Tadika list)
   // places: number of winning places (default 3, 4 or 5)
   // flat: no ranking — winners numbered 1, 2, 3… at the same level (Hadiah Misteri)
   games: [
@@ -47,6 +48,10 @@ window.FD = {
     { id: 'mc-dewasa', e: '🪑', name: 'Musical Chair', cat: 'Dewasa' },
     { id: 'mc-adik', e: '🩴', name: 'Musical Chair / Sandals', cat: 'Adik-beradik' },
     { id: 'itik', e: '🐥', name: 'Tangkap Itik dalam Kolam', cat: 'Sek Ren / Tadika', saguhati: true },
+    { id: 'warna-6', e: '🖍️', name: 'Mewarna', cat: 'Bawah 6 tahun', saguhati: true,
+      roster: ['Medina', 'Aaira', 'Ayana', 'Aralyn', 'Ayyash', "Ir'fan", 'Izara'] },
+    { id: 'warna-12', e: '🖍️', name: 'Mewarna', cat: '7–12 tahun', saguhati: true,
+      roster: ['Haikal', 'Hafiya', 'Husna', 'Matteen', 'Ilyas', "Il'man", "I'zan"] },
     { id: 'misteri', e: '🎁', name: 'Hadiah Misteri', cat: 'Semua', places: 4, flat: true }
   ]
 };

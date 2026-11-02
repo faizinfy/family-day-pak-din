@@ -352,7 +352,8 @@
   const placeOf = (g, p) => [].concat((winners[g.id] || [])[p] || []).map(s => s.trim()).filter(Boolean);
   // the roster starts as the Kanak-kanak list until the names are edited
   const roster = () => winners.saguhati ? placeOf(ROSTER, 0) : FD.gift.kanak.slice();
-  const sagOf = g => { const top = [0, 1, 2].flatMap(p => placeOf(g, p)); return roster().filter(n => !top.includes(n)); };
+  // a game with its own roster (Mewarna) uses that; the rest share the Sek Ren / Tadika list
+  const sagOf = g => { const top = [0, 1, 2].flatMap(p => placeOf(g, p)); return (g.roster || roster()).filter(n => !top.includes(n)); };
   const joinNames = l => l.length < 2 ? l.join('') : l.slice(0, -1).join(', ') + ' dan ' + l[l.length - 1];
 
   // Reveal steps per game: last place → 1st, then the saguhati list for Sek Ren / Tadika games
@@ -505,7 +506,7 @@
   function openEdit(focusId) {
     if (busy || $('dlg').open) return;
     $('dlgBody').innerHTML = GAMES.map((g, gi) => {
-      return `<div class="eg" id="eg-${g.id}"><h3>${gi + 1}. ${g.e} ${g.name}<small>${g.cat}${g.team ? ` · ${g.team} — pilih beberapa nama` : ''}</small></h3><div class="row">${
+      return `<div class="eg" id="eg-${g.id}"><h3>${gi + 1}. ${g.e} ${g.name}<small>${g.cat}${g.team ? ` · ${g.team} — pilih beberapa nama` : ''}${g.roster ? ` · peserta: ${g.roster.map(esc).join(', ')}` : ''}</small></h3><div class="row">${
         placesOf(g).map((P, p) => g.team
           ? `<div class="lbl">${P.medal} ${P.rank}<div class="tags" data-g="${g.id}" data-p="${p}">${
               placeOf(g, p).map(tagHtml).join('')}<input list="people" autocomplete="off" placeholder="Tambah nama…"></div></div>`
@@ -552,7 +553,8 @@
     const inp = e.target;
     if (inp.tagName !== 'INPUT' || inp.closest('#eg-' + ROSTER.id)) return;
     const taken = takenElsewhere(inp), mine = [...(inp.closest('.tags')?.querySelectorAll('.tag') || [])].map(t => t.dataset.n);
-    $('pick').innerHTML = ALL.filter(n => !taken.concat(mine).some(t => same(t, n))).map(n => `<option value="${esc(n)}">`).join('');
+    const g = GAMES.find(x => x.id === (inp.closest('[data-g]') || inp).dataset.g);
+    $('pick').innerHTML = (g && g.roster || ALL).filter(n => !taken.concat(mine).some(t => same(t, n))).map(n => `<option value="${esc(n)}">`).join('');
     inp.setAttribute('list', 'pick');
   });
   $('dlgBody').addEventListener('change', e => {
@@ -603,7 +605,7 @@
     const rosterChanged = JSON.stringify(roster()) !== JSON.stringify(next[ROSTER.id][0]);
     SCREENS.forEach(g => {
       if (JSON.stringify(winners[g.id] || null) !== JSON.stringify(next[g.id])) shown[g.id] = 0;
-      else if (rosterChanged && g.saguhati) shown[g.id] = Math.min(shown[g.id] || 0, np(g));
+      else if (rosterChanged && g.saguhati && !g.roster) shown[g.id] = Math.min(shown[g.id] || 0, np(g));
     });
     winners = next;
     saveWinners();

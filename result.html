@@ -172,7 +172,7 @@
       games: FD.games.map(g => {
         const places = PLACES.slice(0, g.places || 3).map((_, p) => [].concat((games[g.id] || [])[p] || []).filter(Boolean));
         // Sek Ren / Tadika: every other child gets a hadiah saguhati (roster = Kanak-kanak list until edited)
-        const roster = games.saguhati ? [].concat(games.saguhati[0] || []).filter(Boolean) : FD.gift.kanak;
+        const roster = g.roster || (games.saguhati ? [].concat(games.saguhati[0] || []).filter(Boolean) : FD.gift.kanak);
         const sag = g.saguhati && places.some(l => l.length) ? roster.filter(n => !places.flat().includes(n)) : [];
         return { g, places, sag };
       }),
