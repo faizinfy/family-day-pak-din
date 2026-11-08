@@ -44,6 +44,7 @@ window.FD = {
     { id: 'bola', e: '⚽️', name: 'Pass Bola Guna Kain Pelikat', cat: 'Muda-Mudi', team: 'Team' },
     { id: 'belon-air', e: '🎈', name: 'Rally Pass Belon Berisi Air', cat: 'Dewasa', team: 'Berpasangan', places: 5 },
     { id: 'suara', e: '🎙️', name: 'Teka Suara', cat: 'Warga Emas' },
+    { id: 'mc-kanak', e: '🪑', name: 'Musical Chair', cat: 'Sek Ren / Tadika', saguhati: true },
     { id: 'mc-muda', e: '🪑', name: 'Musical Chair', cat: 'Muda-Mudi' },
     { id: 'mc-dewasa', e: '🪑', name: 'Musical Chair', cat: 'Dewasa' },
     { id: 'mc-adik', e: '🩴', name: 'Musical Chair / Sandals', cat: 'Adik-beradik' },
